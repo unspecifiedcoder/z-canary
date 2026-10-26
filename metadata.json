@@ -1,0 +1,6 @@
+{
+  "name": "Z-Canary",
+  "description": "A Zcash-powered cryptographic continuity vault and dead-man's switch with 3-of-5 keeper threshold release and ZIP-302 shielded memo commands.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
