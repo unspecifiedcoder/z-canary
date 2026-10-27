@@ -87,7 +87,7 @@ export const RealRunReplay: React.FC = () => {
         <p className="max-w-2xl text-xs leading-relaxed text-[#AEB8C8]">{step.body}</p>
         {step.tx && (
           <a
-            href={`https://zexplorer.app/testnet/tx/${step.tx.txid}`}
+            href={`https://testnet.cipherscan.app/tx/${step.tx.txid}`}
             target="_blank"
             rel="noreferrer"
             className="inline-flex max-w-full flex-wrap items-center gap-x-3 gap-y-1 border border-[#2A3343] px-3 py-2 text-[11px] font-mono hover:border-[#F59E0B]/60"

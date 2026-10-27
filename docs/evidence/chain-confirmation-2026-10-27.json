@@ -1,0 +1,18 @@
+{
+  "checkedAt": "2026-10-27",
+  "method": "Read-only lookups. (1) gRPC to the wallet's lightwalletd, testnet.zec.rocks:443 (ECC LightWalletD v0.5.4, chain 'test', tip 4548312): GetTransaction and GetBlock for three txids. (2) testnet.cipherscan.app transaction pages for all seven txids.",
+  "explorer": "https://testnet.cipherscan.app/tx/<txid>",
+  "explorerNote": "zexplorer.app/testnet was not used: its testnet tip was #4,495,613, below every transaction here, and it returned 'Transaction not found'.",
+  "cipherscanTipAtCheck": 4548314,
+  "transactions": [
+    { "run": "transport", "operation": "REGISTER", "txid": "4c8d93227d41f826a0f2e6b01961fe5789df6b86241f7da08feea54fce05dbcd", "block": 4546108, "confirmations": 2209, "lightwalletdConfirmed": true },
+    { "run": "transport", "operation": "POSTPONE", "txid": "eb88105b26d0a33bcf51ca4ecff29b2d608e20231ca6ce357578401481c34ef8", "block": 4546115, "confirmations": 2203 },
+    { "run": "transport", "operation": "CANCEL", "txid": "07e4e41413971119d85f282f698e52b963152d26d40224aec022df151ad1299e", "block": 4546123, "confirmations": 2196 },
+    { "run": "native", "operation": "REGISTER", "txid": "1d4797966b97aac313b4ce7db58a4e546593c1e5efacfa992b3c73519cf90ecb", "block": 4546656, "confirmations": 1663, "lightwalletdConfirmed": true },
+    { "run": "native", "operation": "REGISTER", "txid": "35bfb606f1e822215e5827dafc6f788319d798cb96fa14f368dedcdfecd56be0", "block": 4546660, "confirmations": 1659 },
+    { "run": "native", "operation": "POSTPONE", "txid": "60d30eb17342311926d39c94164393d0ce9042bb3fe5e1bb3c3311d19a002f66", "block": 4546671, "confirmations": 1648 },
+    { "run": "native", "operation": "CANCEL", "txid": "32e76a242961415eee02df615778d8ab0f26427256c47bcdf258e661fbe1d865", "block": 4546677, "confirmations": 1638, "lightwalletdConfirmed": true }
+  ],
+  "blockHashCheck": "lightwalletd's block 4546108 hash 00002bf569157d07ee70249b2d3608c35eaf607e083aaaf6cc0731cd1b6de3c9 equals the block_hash recorded in testnet-transport.json.",
+  "limits": "Cipherscan reports every transaction as a fully private shielded transaction; memo contents are not visible there, so the memo-signature check in the app remains the proof of what each command said."
+}

@@ -3,7 +3,7 @@ import { CheckCircle2, ExternalLink, XCircle } from 'lucide-react';
 import { NATIVE_RUN_TRANSACTIONS, TRANSPORT_RECEIPTS } from '../evidence/recordedRun';
 import { ReceiptVerification, verifyReceiptHex } from '../evidence/verifyReceipt';
 
-const explorerUrl = (txid: string) => `https://zexplorer.app/testnet/tx/${txid}`;
+const explorerUrl = (txid: string) => `https://testnet.cipherscan.app/tx/${txid}`;
 const shortHex = (hex: string) => `${hex.slice(0, 10)}…${hex.slice(-8)}`;
 
 const NATIVE_LABELS: Record<string, string> = {

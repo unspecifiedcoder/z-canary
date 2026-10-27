@@ -117,7 +117,7 @@ export const LocalAgentPanel: React.FC<Props> = ({ memoHex }) => {
               {run.transactions.length===0?<p className="text-xs text-[#64748B]">No transactions listed.</p>:run.transactions.map((tx,index)=>{
                 const txid=tx.txid.toLowerCase();
                 const validTxid=/^[0-9a-f]{64}$/.test(txid);
-                return <div key={`${index}-${txid}`} className="border-t border-[#222938] pt-2 text-sm space-y-1"><div className="flex flex-wrap justify-between gap-2"><span className="text-[#F8FAFC]">{tx.label}</span>{validTxid&&<a href={`https://zexplorer.app/testnet/tx/${txid}`} target="_blank" rel="noreferrer" className="text-sky-300 hover:underline">Open testnet transaction</a>}</div><code className="block break-all text-xs text-[#94A3B8]">{txid}</code>{tx.blockHeight!==undefined&&<span className="text-xs text-[#64748B]">Reported block #{tx.blockHeight.toLocaleString()}</span>}</div>;
+                return <div key={`${index}-${txid}`} className="border-t border-[#222938] pt-2 text-sm space-y-1"><div className="flex flex-wrap justify-between gap-2"><span className="text-[#F8FAFC]">{tx.label}</span>{validTxid&&<a href={`https://testnet.cipherscan.app/tx/${txid}`} target="_blank" rel="noreferrer" className="text-sky-300 hover:underline">Open testnet transaction</a>}</div><code className="block break-all text-xs text-[#94A3B8]">{txid}</code>{tx.blockHeight!==undefined&&<span className="text-xs text-[#64748B]">Reported block #{tx.blockHeight.toLocaleString()}</span>}</div>;
               })}
               <p className="text-xs text-[#64748B]">Explorer links show publicly available transaction data. The agent does not independently verify report claims, payment purpose, or shielded memo contents.</p>
             </div>}
