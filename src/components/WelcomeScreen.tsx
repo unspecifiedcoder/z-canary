@@ -19,23 +19,23 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ activeVault, curre
       <div className="canary-opening-art" aria-hidden="true"><img src="./assets/canary-vault.webp" alt="" width="1672" height="941" fetchPriority="high" /></div>
       <div className="canary-opening-inner">
         <div className="canary-opening-copy">
-          <p className="canary-eyebrow"><span/>FOR REPORTERS. FOR THE PERSON THEY TRUST.</p>
-          <h1 id="opening-title">Keep your<br/>reporting private.<br/><em>Give it a way forward.</em></h1>
-          <p className="canary-opening-description">Your editor should have a way to continue the work if you become unavailable. Canary prepares that handoff—while your check-ins keep recovery on hold.</p>
+          <p className="canary-eyebrow"><span/>A SAFETY HANDOFF FOR WHISTLEBLOWERS &amp; JOURNALISTS</p>
+          <h1 id="opening-title">Evidence should not leak.<br/><em>Or disappear with you.</em></h1>
+          <p className="canary-opening-description"><strong>Put a file in a locked box. Press “I’m okay” to keep it locked.</strong> If you stop checking in, several keepers can provide pieces of the key—but only the person you chose can open it.</p>
           <div className="canary-opening-actions">
-            <button className="canary-button primary" onClick={() => onNavigate('case')}>Try the handoff <ArrowUpRight size={19}/></button>
-            <a className="canary-watch-link" href="https://unspecifiedcoder.github.io/z-canary/#watch"><Play size={14}/> Watch the example <span>3:12</span></a>
+            <button className="canary-button primary" onClick={() => onNavigate('create')}>Create your own Canary <ArrowUpRight size={19}/></button>
+            <a className="canary-watch-link" href="#maya-noor" onClick={(event) => { event.preventDefault(); onNavigate('case'); }}><Play size={14}/> Try Maya &amp; Noor <span>guided</span></a>
           </div>
-          <p className="canary-opening-note">A fictional file. Real local encryption. No wallet needed.</p>
+          <p className="canary-opening-note">Browser lab: real local encryption · simulated blocks and keepers · no wallet needed</p>
         </div>
-        <div className="canary-object-caption"><span>01 / THE SEALED DOSSIER</span><p>One file.<br/>One chosen recipient.</p><small>Illustration · explore the working example below</small></div>
+        <div className="canary-object-caption"><span>01 / THE SAFETY HANDOFF</span><p>Private while<br/>you check in.</p><small>Recoverable only by the person you chose</small></div>
       </div>
-      <div className="canary-opening-baseline"><span>PRIVATE NOW. PREPARED FOR WHAT COMES NEXT.</span><a href="#handoff-story">The handoff, explained <ArrowRight size={14}/></a></div>
+      <div className="canary-opening-baseline"><span>KEEP CHECKING IN: PRIVATE. GO SILENT: CONTROLLED RECOVERY.</span><a href="#handoff-story">See how it works <ArrowRight size={14}/></a></div>
     </section>
 
     <section className="handoff-story" id="handoff-story" aria-labelledby="handoff-title">
       <div className="canary-section-shell">
-        <div className="handoff-story-heading"><div><span className="canary-paper-label">A PLAN FOR THE WORK</span><h2 id="handoff-title">Maya has the story.<br/><em>Noor has her trust.</em></h2></div><p>Maya is a journalist. Noor is her editor. Sending the notes today is too early. Leaving the only usable copy with Maya is not a handoff plan.</p></div>
+        <div className="handoff-story-heading"><div><span className="canary-paper-label">THE PROBLEM / MAYA IS INVESTIGATING CORRUPTION</span><h2 id="handoff-title">Share now, risk exposure.<br/><em>Keep it alone, risk losing it.</em></h2></div><p>Canary gives Maya a third choice. Her evidence stays encrypted while she checks in. If she becomes unreachable, her editor Noor gets a controlled recovery path—not automatic access.</p></div>
         <div className="handoff-illustration" aria-label="Maya's encrypted file can be recovered by Noor when the recovery conditions are met">
           <div className="handoff-person"><span className="handoff-person-initial">M</span><div><strong>Maya</strong><span>The reporter</span></div></div>
           <div className="handoff-connector"><span>Encrypted for Noor</span><i/></div>
@@ -44,11 +44,11 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ activeVault, curre
           <div className="handoff-person"><span className="handoff-person-initial">N</span><div><strong>Noor</strong><span>The chosen editor</span></div></div>
         </div>
         <div className="handoff-principles">
-          <button onClick={() => onNavigate('create')}><span className="handoff-step">01 <Fingerprint size={20}/></span><h3>Choose who comes next.</h3><p>Encrypt a file for one recipient. A separate release layer keeps access on hold.</p><span className="handoff-principle-link">Create a vault <ArrowUpRight size={17}/></span></button>
-          <button onClick={() => onNavigate('sentinel')}><span className="handoff-step">02 <Radio size={20}/></span><h3>Keep the plan on hold.</h3><p>A signed check-in extends the deadline. Cancel before release if your plans change.</p><span className="handoff-principle-link">Open Vault Sentinel <ArrowUpRight size={17}/></span></button>
-          <button onClick={() => onNavigate('recipient')}><span className="handoff-step">03 <ShieldCheck size={20}/></span><h3>Leave a way forward.</h3><p>After the deadline and grace window, recovery needs three valid shares and the recipient’s key.</p><span className="handoff-principle-link">Open Recipient Inbox <ArrowUpRight size={17}/></span></button>
+          <button onClick={() => onNavigate('create')}><span className="handoff-step">01 <Fingerprint size={20}/></span><h3>Lock the evidence now.</h3><p>Choose who may recover it. The file is encrypted locally before the handoff begins.</p><span className="handoff-principle-link">Create your own Canary <ArrowUpRight size={17}/></span></button>
+          <button onClick={() => onNavigate('sentinel')}><span className="handoff-step">02 <Radio size={20}/></span><h3>Keep saying “I’m okay.”</h3><p>Each signed check-in moves the deadline. While check-ins continue, recovery stays blocked.</p><span className="handoff-principle-link">See the owner view <ArrowUpRight size={17}/></span></button>
+          <button onClick={() => onNavigate('recipient')}><span className="handoff-step">03 <ShieldCheck size={20}/></span><h3>If silence continues, recover.</h3><p>After the deadline and safety window, enough keepers—and the chosen person’s key—are still required.</p><span className="handoff-principle-link">See the recipient view <ArrowUpRight size={17}/></span></button>
         </div>
-        <div className="handoff-story-bottom"><p>See what happens when Maya checks in, misses a deadline, changes her mind, or a keeper goes offline.</p><button className="canary-button ink" onClick={() => onNavigate('case')}>Run Maya &amp; Noor’s example <ArrowRight size={18}/></button></div>
+        <div className="handoff-story-bottom"><p>Use a harmless file and run the whole lifecycle yourself—or follow Maya and Noor’s guided example.</p><button className="canary-button ink" onClick={() => onNavigate('create')}>Create your own Canary <ArrowRight size={18}/></button></div>
       </div>
     </section>
 
@@ -66,7 +66,7 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ activeVault, curre
 
     <section className="canary-native-proof" aria-labelledby="native-proof-title">
       <div className="canary-section-shell">
-        <div className="native-proof-copy"><span className="canary-paper-label">BEYOND THE BROWSER</span><h2 id="native-proof-title">The testnet record<br/>is open to inspection.</h2><p>The native path completed shielded registration, check-in, cancellation and exact-file recovery on Zcash testnet. The recorded receipts are separate from Maya’s fictional example.</p></div>
+        <div className="native-proof-copy"><span className="canary-paper-label">WHAT IS REAL / WHAT IS SIMULATED</span><h2 id="native-proof-title">The testnet record<br/>is open to inspection.</h2><p>The browser lab uses real local encryption with simulated blocks and keepers, so anyone can test the lifecycle safely. Separately, the native path completed shielded commands and exact-file recovery on Zcash testnet.</p></div>
         <div className="native-proof-numbers"><div><strong>4</strong><span>Confirmed commands</span></div><div><strong>136<span>B</span></strong><span>Recovered, byte for byte</span></div><div><strong>3<span>/5</span></strong><span>Recovery threshold</span></div></div>
         <div className="native-proof-actions"><button className="canary-button ink" onClick={() => onNavigate('evidence')}>Inspect the evidence <ArrowUpRight size={18}/></button><button className="canary-paper-link" onClick={() => onNavigate('native')}>Connect a local native agent <ArrowRight size={17}/></button></div>
         <details className="threat-disclosure"><summary>Know the trust boundaries <span>+</span></summary><p>Five native keeper processes currently share one operator and scanner. Three colluding keepers can release early to the designated recipient. Cancellation cannot recall delivered shares. Network observers and lightwallet operators can learn metadata. No smart contract is deployed.</p><p>The browser uses X25519 and AES-GCM in a demonstration format; native encryption uses age and XChaCha20-Poly1305. This is a tested prototype, not an audited tool for sensitive reporting. Use public fictional files.</p></details>

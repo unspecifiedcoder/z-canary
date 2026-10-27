@@ -31,8 +31,9 @@ async function checkReference(from, raw, { fragment = false } = {}) {
     if ((await stat(target)).isDirectory()) target = resolve(target, 'index.html');
     if (!(await stat(target)).isFile()) throw new Error('not a file');
     checked++;
-    // #maya-noor is an application route, not a server-rendered element.
-    if (fragment && hash && !(label(target) === 'app/index.html' && hash === 'maya-noor') && extname(target) === '.html') {
+    // These hashes are application routes, not server-rendered element IDs.
+    const isAppRoute = label(target) === 'app/index.html' && ['maya-noor', 'create'].includes(hash);
+    if (fragment && hash && !isAppRoute && extname(target) === '.html') {
       const ids = htmlIds(await readFile(target, 'utf8'));
       if (!ids.includes(decodeURIComponent(hash))) fail(`${label(from)}: missing anchor ${raw}`);
     }
@@ -79,7 +80,7 @@ try {
   for (const match of chapterScript.matchAll(/getElementById\(\s*["']([^"']+)["']\s*\)/g)) {
     if (!landingIds.includes(match[1])) fail(`landing.js: missing landing element ${match[1]}`);
   }
-  if (!/href=["'](?:\.\/)?app\/(?:#maya-noor)?["']/.test(landing)) fail('Landing has no local app entry link.');
+  if (!/href=["'](?:\.\/)?app\/(?:#(?:maya-noor|create))?["']/.test(landing)) fail('Landing has no local app entry link.');
   await walk(root);
 } catch (error) { fail(error.message); }
 if (errors.length) {
