@@ -8,6 +8,7 @@ type JourneyPage = 'create' | 'sentinel' | 'recipient' | 'evidence';
 interface JudgeJourneyProps {
   vault: ContinuityVault;
   isCustomVault: boolean;
+  activePage: JourneyPage;
   onNavigate: (page: JourneyPage) => void;
   onConfirmRegistration: () => void;
   onCheckIn: () => void;
@@ -17,7 +18,7 @@ interface JudgeJourneyProps {
   onReset: () => void;
 }
 
-export function JudgeJourney({ vault, isCustomVault, onNavigate, onConfirmRegistration, onCheckIn,
+export function JudgeJourney({ vault, isCustomVault, activePage, onNavigate, onConfirmRegistration, onCheckIn,
   onEnterGrace, onReleaseBelowThreshold, onRestoreThreshold, onReset }: JudgeJourneyProps) {
   if (!isCustomVault) return null;
   const states = new Set(vault.keepers.map(keeper => keeper.lifecycleState));
@@ -50,7 +51,8 @@ export function JudgeJourney({ vault, isCustomVault, onNavigate, onConfirmRegist
       {!registering && checkedIn && !grace && !released && !complete && <><p>The deadline moved and zero shares were released. Now intentionally miss the next check-in.</p><button onClick={onEnterGrace}><FastForward size={16}/>Miss next check-in</button></>}
       {grace && !released && !complete && <><p>Grace prevents an instant release. End it with only {Math.max(1, threshold - 1)} keepers available to prove that the threshold still blocks recovery.</p><button onClick={onReleaseBelowThreshold}><FastForward size={16}/>End grace below threshold</button></>}
       {(released || delivered > 0) && delivered < threshold && !complete && <><p>{delivered} of {threshold} valid shares arrived. Recovery is still blocked. Restore the next keeper to meet the policy.</p><button onClick={onRestoreThreshold}>Restore keeper {threshold}</button></>}
-      {delivered >= threshold && !complete && <><p>The keeper threshold is met. Switch roles: the selected recipient must still supply the matching private key.</p><button onClick={() => onNavigate('recipient')}><KeyRound size={16}/>Continue as recipient</button></>}
+      {delivered >= threshold && !complete && activePage !== 'recipient' && <><p>The keeper threshold is met. Switch roles: the selected recipient must still supply the matching private key.</p><button onClick={() => onNavigate('recipient')}><KeyRound size={16}/>Continue as recipient</button></>}
+      {delivered >= threshold && !complete && activePage === 'recipient' && <><p>You are now the recipient. Use “Load a wrong key” and verify that recovery fails, then restore the selected recipient key and decrypt.</p></>}
       {complete && <><p>The downloaded bytes can now be checked against the original SHA-256 digest. Reset whenever you want to run another scenario.</p><button onClick={onReset}><RotateCcw size={16}/>Create another Canary</button><button onClick={() => onNavigate('evidence')} className="quiet">Inspect protocol evidence</button></>}
     </div>
   </section>;

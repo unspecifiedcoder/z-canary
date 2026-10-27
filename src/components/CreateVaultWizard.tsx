@@ -148,7 +148,7 @@ export const CreateVaultWizard: React.FC<CreateVaultWizardProps> = ({
     }
   };
 
-  const handleBroadcastRegistration = () => {
+  const handleSimulateRegistration = () => {
     if (!encryptedPkg || generatedShares.length !== 5 || provisionedKeepers.length < 5) return;
 
     const sourcePubKeyHex = deriveSourcePublicKey(sourceSecretHex);
@@ -278,8 +278,8 @@ export const CreateVaultWizard: React.FC<CreateVaultWizardProps> = ({
         {
           id: `ev-bcast-${Date.now()}`,
           type: 'REGISTRATION_BROADCAST',
-          title: 'Registration command broadcast (Awaiting confirmation)',
-          detail: `512-byte ZIP-302 REGISTER memo broadcast in tx ${txid.slice(0, 14)}… (1/${confirmationTarget} confirmations).`,
+          title: 'Simulated registration prepared (Awaiting confirmation)',
+          detail: `512-byte ZIP-302 REGISTER memo processed locally with synthetic transaction id ${txid.slice(0, 14)}… (1/${confirmationTarget} simulated confirmations). No network broadcast occurred.`,
           blockHeight: currentBlockHeight,
           txid,
           timestamp: new Date().toISOString().replace('T', ' ').slice(0, 19) + ' UTC',
@@ -334,9 +334,9 @@ export const CreateVaultWizard: React.FC<CreateVaultWizardProps> = ({
     <div className="max-w-4xl mx-auto space-y-8 pb-16">
       <div className="flex items-center justify-between border-b border-[#222938] pb-5">
         <div>
-          <h1 className="text-2xl font-bold text-[#F8FAFC]">Create Continuity Vault</h1>
+          <h1 className="text-2xl font-bold text-[#F8FAFC]">Create an Encrypted Safety Handoff</h1>
           <p className="text-sm text-[#94A3B8]">
-            Encrypt a confidential dossier locally, provision 5 keepers, and simulate registration using the testnet command format.
+            Protect a harmless file locally, choose who may recover it, and test every recovery condition without sending a transaction.
           </p>
         </div>
         <button
@@ -350,10 +350,10 @@ export const CreateVaultWizard: React.FC<CreateVaultWizardProps> = ({
       {/* Stepper Header */}
       <div aria-label="Creation progress" className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs font-mono">
         {[
-          { num: 1, label: '01. Dossier File' },
-          { num: 2, label: '02. Recipient Key' },
-          { num: 3, label: '03. Release Policy' },
-          { num: 4, label: '04. Provision & Sign' },
+          { num: 1, label: '01. Choose File' },
+          { num: 2, label: '02. Choose Recipient' },
+          { num: 3, label: '03. Set Recovery Rules' },
+          { num: 4, label: '04. Protect Locally' },
         ].map((s) => (
           <div
             key={s.num}
@@ -643,18 +643,18 @@ export const CreateVaultWizard: React.FC<CreateVaultWizardProps> = ({
         </div>
       )}
 
-      {/* Step 4: Keeper Acknowledgements, Backup & Registration Broadcast */}
+      {/* Step 4: simulated keeper acknowledgements and local registration */}
       {step === 4 && encryptedPkg && (
         <div className="border border-[#222938] bg-[#141820] p-6 lg:p-8 space-y-6">
           <div className="space-y-1">
             <div className="text-xs font-mono text-[#10B981]">
-              LOCAL DUAL-LAYER ENCRYPTION & 5-OF-5 KEEPER PROVISIONING COMPLETE
+              LOCAL DUAL-LAYER ENCRYPTION · 5 KEEPER RECORDS · {threshold}-OF-5 RECOVERY
             </div>
             <h2 className="text-lg font-semibold text-[#F8FAFC]">
-              Verify Keeper Acknowledgements & Broadcast Registration Memo
+              Verify Simulated Keeper Acknowledgements & Prepare Registration Memo
             </h2>
             <p className="text-xs text-[#94A3B8]">
-              This demo provisions five in-memory keeper records. Durable storage and authenticated keeper acknowledgements remain backend work.
+              This browser lab uses five in-memory keeper records. The separate native implementation uses authenticated keeper services and durable SQLite state.
             </p>
           </div>
 
@@ -678,7 +678,7 @@ export const CreateVaultWizard: React.FC<CreateVaultWizardProps> = ({
           {/* Fee Estimate & Source Recovery Instructions */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 font-mono text-xs">
             <div className="p-4 bg-[#0B0D11] border border-[#222938] space-y-1.5">
-              <div className="text-[#64748B]">Assumed simulation fee (live estimate pending)</div>
+              <div className="text-[#64748B]">Browser simulation fee assumption</div>
               <div className="text-sm font-semibold text-[#F8FAFC] tabular-nums">
                 10,000 zatoshi (0.00010000 TAZ)
               </div>
@@ -688,12 +688,12 @@ export const CreateVaultWizard: React.FC<CreateVaultWizardProps> = ({
             </div>
 
             <div className="p-4 bg-[#0B0D11] border border-[#222938] space-y-1.5">
-              <div className="text-[#64748B]">Synthetic demo signing seed (browser memory only)</div>
+              <div className="text-[#64748B]">Synthetic signing-key reference (redacted)</div>
               <div className="text-xs text-[#F59E0B] truncate tabular-nums">
-                {sourceSecretHex}
+                {sha256Hex(sourceSecretHex).slice(0, 16)}…
               </div>
               <div className="text-[#94A3B8]">
-                Required to sign future Check-In or Cancel memos.
+                The full demo key remains in browser memory and is never rendered.
               </div>
             </div>
           </div>
@@ -706,8 +706,8 @@ export const CreateVaultWizard: React.FC<CreateVaultWizardProps> = ({
               className="w-4 h-4 accent-[#F59E0B]"
             />
             <span>
-              I have backed up the Source command-signing key and understand that protection activates
-              only after the registration transaction reaches {confirmationTarget} confirmations.
+              I understand this browser-only handoff activates after {confirmationTarget} simulated
+              confirmations. Native key backup and network confirmation rules are documented separately.
             </span>
           </label>
 
@@ -720,11 +720,11 @@ export const CreateVaultWizard: React.FC<CreateVaultWizardProps> = ({
             </button>
             <button
               disabled={!backupConfirmed || provisionedKeepers.length < 5}
-              onClick={handleBroadcastRegistration}
+              onClick={handleSimulateRegistration}
               className="px-5 py-2.5 bg-[#F59E0B] disabled:opacity-40 hover:bg-[#D97706] text-[#0B0D11] font-semibold text-sm rounded transition-colors flex items-center gap-2 cursor-pointer"
             >
               <Lock className="w-4 h-4" />
-              <span>Sign 512-Byte Memo & Broadcast Registration</span>
+              <span>Sign Local Memo & Simulate Registration</span>
             </button>
           </div>
         </div>

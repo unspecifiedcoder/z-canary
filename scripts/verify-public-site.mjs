@@ -74,6 +74,14 @@ for (const required of ['index.html', 'app/index.html', 'assets/canary-vault.web
 try {
   const app = await readFile(resolve(root, 'app/index.html'), 'utf8');
   if (!/type=["']module["']/.test(app) || !/id=["']root["']/.test(app)) fail('app/index.html is not the built React entry.');
+  const assetNames = await readdir(resolve(root, 'app/assets'));
+  const appJavaScript = (await Promise.all(assetNames.filter(name => name.endsWith('.js')).map(name => readFile(resolve(root, 'app/assets', name), 'utf8')))).join('\n');
+  for (const requiredCopy of ['Create an Encrypted Safety Handoff', 'NATIVE TESTNET ACCEPTANCE RECORDED', 'Sign Local Memo & Simulate Registration']) {
+    if (!appJavaScript.includes(requiredCopy)) fail(`Built application is missing release copy: ${requiredCopy}`);
+  }
+  for (const staleCopy of ['LIVE ACCEPTANCE PENDING', 'LIVE SEND/SCAN GATE PENDING', 'Broadcast Registration']) {
+    if (appJavaScript.includes(staleCopy)) fail(`Built application still contains stale release copy: ${staleCopy}`);
+  }
   const landing = await readFile(resolve(root, 'index.html'), 'utf8');
   const chapterScript = await readFile(resolve(root, 'assets/landing.js'), 'utf8');
   const landingIds = htmlIds(landing);

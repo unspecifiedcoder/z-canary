@@ -129,8 +129,8 @@ export default function App() {
   };
 
   /**
-   * Signs and broadcasts a 512-byte ZIP-302 Check-In / Postponement command (0x02)
-   * and mines confirmation blocks so Keepers process it in canonical order.
+   * Signs a local 512-byte ZIP-302 Check-In / Postponement command (0x02)
+   * and advances synthetic confirmations so browser keeper records process it in canonical order.
    */
   const handleCheckIn = (additionalBlocks: number) => {
     if (!Number.isInteger(additionalBlocks) || additionalBlocks < 1 || additionalBlocks > vault.manifest.maxExtensionBlocks) {
@@ -216,9 +216,7 @@ export default function App() {
     );
   };
 
-  /**
-   * Signs and broadcasts an irrevocable 512-byte CANCEL command (0x03)
-   */
+  /** Signs a local 512-byte CANCEL command (0x03) for the browser simulation. */
   const handleCancelVault = () => {
     if (!vault.keepers.some(k => k.lifecycleState === 'ACTIVE' || k.lifecycleState === 'GRACE')) {
       showToast('Cancellation is available only after registration and before release or cancellation.');
@@ -427,6 +425,7 @@ export default function App() {
       <JudgeJourney
         vault={vault}
         isCustomVault={vault.id !== initialData.vault.id && ['create','sentinel','recipient','evidence'].includes(activeTab)}
+        activePage={activeTab as 'create' | 'sentinel' | 'recipient' | 'evidence'}
         onNavigate={page => setActiveTab(page)}
         onConfirmRegistration={handleConfirmRegistration}
         onCheckIn={() => { handleCheckIn(vault.manifest.initialIntervalBlocks); setActiveTab('sentinel'); }}
@@ -495,7 +494,7 @@ export default function App() {
               setSelectedTxidForMemo(regTx.txid);
               setActiveTab('sentinel');
               showToast(
-                'Demo vault encrypted and simulated REGISTER submitted. Mine simulated confirmation blocks to activate.'
+                'Demo vault encrypted and local REGISTER simulation prepared. Advance simulated confirmation blocks to activate.'
               );
             }}
             onCancel={() => setActiveTab('sentinel')}

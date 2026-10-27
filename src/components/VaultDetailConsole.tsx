@@ -106,9 +106,9 @@ export const VaultDetailConsole: React.FC<VaultDetailConsoleProps> = ({
               {vault.manifest.confirmationTarget} BLOCKS)
             </div>
             <p className="text-xs text-[#E2E8F0]">
-              Shielded command tx <span className="font-mono">{unconfirmedTxs[0].txid.slice(0, 16)}…</span> is mined
-              at height #{unconfirmedTxs[0].minedAtHeight}. Keepers require {vault.manifest.confirmationTarget}{' '}
-              confirmations before updating state.
+              Synthetic command id <span className="font-mono">{unconfirmedTxs[0].txid.slice(0, 16)}…</span> is included
+              at simulated height #{unconfirmedTxs[0].minedAtHeight}. Keeper records require {vault.manifest.confirmationTarget}{' '}
+              simulated confirmations before updating state.
             </p>
           </div>
           <button
@@ -170,7 +170,7 @@ export const VaultDetailConsole: React.FC<VaultDetailConsoleProps> = ({
                       onClick={() => onInspectMemo(ev.txid!)}
                       className="text-[11px] font-mono text-[#F59E0B] hover:underline flex items-center gap-1 pt-0.5 cursor-pointer"
                     >
-                      <span>Inspect 512B Memo (tx: {ev.txid.slice(0, 14)}…)</span>
+                      <span>Inspect Local 512B Memo (id: {ev.txid.slice(0, 14)}…)</span>
                       <ArrowUpRight className="w-3 h-3" />
                     </button>
                   )}
