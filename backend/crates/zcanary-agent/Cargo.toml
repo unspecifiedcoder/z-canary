@@ -1,0 +1,25 @@
+[package]
+name = "zcanary-agent"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+publish.workspace = true
+
+[dependencies]
+anyhow = "=1.0.104"
+base64 = "=0.22.1"
+ed25519-dalek = { version = "=2.2.0", default-features = false, features = ["std", "zeroize"] }
+axum = { version = "=0.8.9", features = ["http1", "json", "tokio"] }
+getrandom = "=0.3.3"
+hex = "=0.4.3"
+serde = { version = "=1.0.229", features = ["derive"] }
+serde_json = "=1.0.145"
+subtle = "=2.6.1"
+sha2 = "=0.10.9"
+zeroize = "=1.9.1"
+tokio = { version = "=1.53.1", features = ["macros", "net", "rt-multi-thread", "signal"] }
+zcanary-core = { path = "../zcanary-core" }
+zcanary-crypto = { path = "../zcanary-crypto" }
+
+[dev-dependencies]
+tower = { version = "=0.5.3", features = ["util"] }
