@@ -34,7 +34,7 @@ export interface AcceptanceTestResult {
 }
 
 /**
- * Executes the 12 mandatory acceptance tests defined in Section 5 of the Z-Canary build plan.
+ * Runs eight browser simulation checks. These do not establish live Zcash, persistence, or process isolation.
  * Every test performs genuine cryptographic calculations and state transitions.
  */
 export function runAllAcceptanceTests(): AcceptanceTestResult[] {
@@ -50,12 +50,12 @@ export function runAllAcceptanceTests(): AcceptanceTestResult[] {
     const relKey = hexToBytes(sha256Hex('test-release-key-32'));
 
     const pkg = encryptDossierDualLayer(plain, recPub, relKey);
-    const decrypted = decryptDossierDualLayer(pkg, relKey, recPriv, recPub);
+    const decrypted = decryptDossierDualLayer(pkg, relKey, recPriv, recPub, pkg.outerPackageDigestHex);
     const roundtripOk = new TextDecoder().decode(decrypted) === 'Confidential Whistleblower Ledger Entry #402';
 
     let wrongRecipientRejected = false;
     try {
-      decryptDossierDualLayer(pkg, relKey, wrongPriv, recPub);
+      decryptDossierDualLayer(pkg, relKey, wrongPriv, recPub, pkg.outerPackageDigestHex);
     } catch {
       wrongRecipientRejected = true;
     }
@@ -63,7 +63,7 @@ export function runAllAcceptanceTests(): AcceptanceTestResult[] {
     let tamperedRejected = false;
     try {
       const badPkg = { ...pkg, outerCiphertextBase64: 'AAAA' + pkg.outerCiphertextBase64.slice(4) };
-      decryptDossierDualLayer(badPkg, relKey, recPriv, recPub);
+      decryptDossierDualLayer(badPkg, relKey, recPriv, recPub, pkg.outerPackageDigestHex);
     } catch {
       tamperedRejected = true;
     }
@@ -139,7 +139,7 @@ export function runAllAcceptanceTests(): AcceptanceTestResult[] {
       requestedExpiryHeight: 2850000,
       manifestDigestHex: manifestDigest,
       sourcePubKeyHex: pubKey,
-    });
+    }, sha256Hex('codec-test-source'));
 
     const decodedRes = decodeAndValidateMemo(memo512, ZcashNetwork.TESTNET);
 
@@ -194,7 +194,7 @@ export function runAllAcceptanceTests(): AcceptanceTestResult[] {
       requestedExpiryHeight: newExpiry,
       manifestDigestHex: vault.manifest.manifestDigestHex,
       sourcePubKeyHex: vault.sourcePubKeyHex,
-    });
+    }, vault.sourceSecretHex);
 
     const txsWithPostpone = [
       ...transactions,
@@ -246,7 +246,7 @@ export function runAllAcceptanceTests(): AcceptanceTestResult[] {
       requestedExpiryHeight: 0,
       manifestDigestHex: vault.manifest.manifestDigestHex,
       sourcePubKeyHex: vault.sourcePubKeyHex,
-    });
+    }, vault.sourceSecretHex);
 
     const txsWithCancel = [
       ...transactions,
@@ -345,7 +345,7 @@ export function runAllAcceptanceTests(): AcceptanceTestResult[] {
 
     const containsSwitchId = zip321Uri.includes(vault.manifest.switchIdHex);
     const containsManifestDigest = zip321Uri.includes(vault.manifest.manifestDigestHex);
-    const containsFileName = zip321Uri.toLowerCase().includes('canary');
+    const containsFileName = zip321Uri.includes(vault.fileName);
     const passed = !containsSwitchId && !containsManifestDigest && !containsFileName;
 
     results.push({
@@ -354,7 +354,7 @@ export function runAllAcceptanceTests(): AcceptanceTestResult[] {
       name: 'ZIP-321 shielded support request contains zero vault or document identifiers',
       passed,
       durationMs: Math.max(1, Math.round(performance.now() - t0)),
-      assertionSummary: 'Support payment request URI is cryptographically unlinked from switch_id and manifest_digest',
+      assertionSummary: 'Fixture request omits switch_id, manifest_digest, and filename; this is not an address or privacy proof',
       evidenceLog: `URI=${zip321Uri.slice(0, 42)}... | SwitchIdLeaked=${containsSwitchId}`,
     });
   }
