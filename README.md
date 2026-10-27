@@ -6,7 +6,7 @@
 
 > **The simple version:** put a file in a locked box. Press “I’m okay” to keep it locked. If you stop, three helpers provide pieces of the key—but only your chosen recipient can open the box.
 
-**[Create your own Canary](https://unspecifiedcoder.github.io/z-canary/app/#create)** · **[Try Maya & Noor’s story](https://unspecifiedcoder.github.io/z-canary/app/#maya-noor)** · **[Watch the 60–90 second proof](https://unspecifiedcoder.github.io/z-canary/#watch)** · **[Verify the Zcash transactions](#a-real-testnet-proof)**
+**[Create your own Canary](https://unspecifiedcoder.github.io/z-canary/app/#create)** · **[Try Maya & Noor’s story](https://unspecifiedcoder.github.io/z-canary/app/#maya-noor)** · **[Watch the current walkthrough](https://unspecifiedcoder.github.io/z-canary/#watch)** · **[Verify the Zcash transactions](#a-real-testnet-proof)**
 
 > **Maya is reporting a story. Noor is the editor she trusts. Maya does not want to share her notes today—but she wants Noor to have a controlled recovery path if she becomes unavailable.**
 
@@ -54,15 +54,15 @@ A **keeper** is a service that holds one piece of the release key and checks whe
 
 **The result is a recoverable file in the recipient workflow.** Canary does not automatically email the dossier, publish a story, or decide whether Maya is safe. It responds to the check-in record.
 
-## Watch the 60–90 second proof
+## Watch the current narrated walkthrough
 
 [![Watch Canary's short Maya and Noor demo](docs/assets/canary-demo-poster.jpg)](https://unspecifiedcoder.github.io/z-canary/)
 
-**[Explore the live experience](https://unspecifiedcoder.github.io/z-canary/)** · **[Watch the short demo](https://unspecifiedcoder.github.io/z-canary/#watch)** · **[Try the example yourself](https://unspecifiedcoder.github.io/z-canary/app/#maya-noor)**
+**[Explore the live experience](https://unspecifiedcoder.github.io/z-canary/)** · **[Watch the walkthrough](https://unspecifiedcoder.github.io/z-canary/#watch)** · **[Create your own scenario](https://unspecifiedcoder.github.io/z-canary/app/#create)**
 
-<!-- DEMO_V3_DIRECT_URL: replace this comment with the verified demo-v3 release link after upload. -->
+> The published 3:12 film shows the earlier Maya/Noor interface. The cryptographic actions and recovery rules are unchanged, but the live **Create your own Canary** flow is now the authoritative judge experience. A replacement film can be added without changing the protocol or product flow.
 
-In the short film, Maya protects a fictional reporting file for Noor. Noor is blocked from opening it early. Maya checks in and the deadline moves. When a later check-in is missed, grace prevents an instant release. Two keeper shares are still insufficient; three shares permit the next step, but the wrong recipient key still fails. Noor's matching key recovers the original file byte for byte.
+In the walkthrough, Maya protects a fictional reporting file for Noor. Noor is blocked from opening it early. Maya checks in and the deadline moves. When a later check-in is missed, grace prevents an instant release. Two keeper shares are still insufficient; three shares permit the next step, but the wrong recipient key still fails. Noor's matching key recovers the original file byte for byte.
 
 The browser walkthrough uses real local encryption, signatures and decryption with simulated blocks and keeper records. The recorded native Zcash testnet proof is labeled separately; the film does not present simulated actions as on-chain transactions.
 

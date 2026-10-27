@@ -8,7 +8,7 @@ This document describes the implementation in this repository. It distinguishes 
 
 | Surface | Cryptography | Blocks and commands | Keepers | Status |
 |---|---|---|---|---|
-| Hosted browser | Real local X25519, HKDF-SHA-256, AES-256-GCM, signatures, 3-of-5 sharing, recipient-key decryption | Simulated in memory | Simulated in one browser | Interactive educational prototype; sends no transaction |
+| Hosted browser | Real local X25519, HKDF-SHA-256, AES-256-GCM, signatures, signed 2-through-5-of-5 sharing policy, recipient-key decryption | Simulated in memory | Simulated in one browser | Interactive educational prototype; sends no transaction |
 | Five-process rehearsal | Native age/X25519, XChaCha20-Poly1305, Ed25519, 3-of-5 sharing | Explicit synthetic-chain batches | Five processes and SQLite databases under one local operator | Repeatable integration rehearsal |
 | Native Zcash testnet | Same native cryptographic path, persistent local identities, signed 512-byte commands | Real shielded testnet transactions recovered by a viewing-only scanner | Five local processes sharing one scanner and lightwallet endpoint | Recorded end-to-end acceptance; not independent infrastructure |
 | Production deployment | Not implemented | Not implemented | Independent operators not deployed | Requires security review and operational work |
@@ -97,7 +97,7 @@ The diagram shows logical roles. In the recorded native run, all five keeper pro
 
 ### Browser demonstration
 
-The browser deliberately uses a separate `ZCAN-DEMO-X25519-AES256GCM-V2` format: X25519, HKDF-SHA-256, AES-256-GCM, signatures, and 3-of-5 sharing. It exists to make the lifecycle testable without a funded wallet. Its blocks, transactions, time, and keeper records are simulated and resettable.
+The browser deliberately uses a separate `ZCAN-DEMO-X25519-AES256GCM-V2` format: X25519, HKDF-SHA-256, AES-256-GCM, signatures, and a signed configurable threshold from 2-of-5 through 5-of-5. It exists to make the lifecycle testable without a funded wallet. Its blocks, transactions, time, and keeper records are simulated and resettable. The native implementation and recorded acceptance run remain fixed at 3-of-5.
 
 Neither path is presented as independently audited cryptography.
 
@@ -155,7 +155,7 @@ A detected confirmed-chain discontinuity latches a reorganization incident and p
 
 ## Recipient binding and threshold
 
-The signed manifest binds the recipient public key and its fingerprint. Keeper delivery envelopes bind the manifest digest and recipient. Recovery rejects duplicate, malformed, mismatched, or uncommitted shares—including invalid extra shares supplied beyond the threshold. Three distinct valid shares reconstruct only the outer release key; a different recipient private key still cannot open the inner package.
+The signed manifest binds the recipient public key, fingerprint, and threshold policy. Keeper delivery envelopes bind the manifest digest and recipient. Recovery rejects duplicate, malformed, mismatched, or uncommitted shares—including invalid extra shares supplied beyond the threshold. The signed number of distinct valid shares reconstructs only the outer release key; a different recipient private key still cannot open the inner package. The public Maya/Noor example and native path use 3-of-5.
 
 The threshold limits a single keeper, but it is not a magic decentralization guarantee. Three colluding keepers can release early to the designated recipient. The current five local processes also share one operator and scanner.
 
