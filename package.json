@@ -2,6 +2,7 @@
   "name": "z-canary",
   "private": true,
   "version": "0.0.0",
+  "license": "Apache-2.0",
   "type": "module",
   "scripts": {
     "dev": "vite --port=3000 --host=127.0.0.1",

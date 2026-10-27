@@ -46,4 +46,4 @@ Further deployment work includes independent keeper operators, automatic common-
 
 ## Reuse terms
 
-The original repository has an Apache-2.0 SPDX comment in `src/App.tsx` but no root LICENSE file was found. Confirm the intended repository license before public redistribution. New Noble dependencies are MIT licensed; their installed package license texts are the attribution source. No upstream wallet code has been copied into this application.
+The repository now carries a root Apache-2.0 license consistent with the existing SPDX declaration in `src/App.tsx`. New Noble dependencies are MIT licensed; their installed package license texts are the attribution source. No upstream wallet code has been copied into this application.

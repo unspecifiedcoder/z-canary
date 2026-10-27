@@ -12,7 +12,7 @@ References were studied for principles, not copied assets or code: [Kage](https:
 
 ## Validation
 
-- All 36 frontend tests and TypeScript passed; production build passed. The existing lazy 3D chunk still emits Vite’s size advisory.
+- All 43 frontend tests and TypeScript passed; production build passed. The existing lazy 3D chunk still emits Vite’s size advisory.
 - `node scripts/verify-public-site.mjs` checks public assets, relative links, anchors, script element IDs and application chunks.
 - Real browser review at 1440 × 1000, 768 × 1024 and 390 × 844. Landing artwork loaded; no horizontal page overflow in measured desktop/tablet layouts. Mobile story, grace and keeper states inspected.
 - Maya’s flow tested through encryption, early recovery rejection, signed check-in, cancellation, reset into a new missed-check-in scenario, grace check-in, stale scans, two-share rejection, third keeper, wrong-key rejection and successful recovery.

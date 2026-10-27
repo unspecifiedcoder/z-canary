@@ -1,13 +1,14 @@
 # Verification record
 
-Updated 27 October 2026. Base repository revision: `2272e734622e210673d2334dd132917f8dad90ff`. All evidence below distinguishes simulated chain input from actual testnet transactions.
+Updated 27 October 2026. The automated summary below is reconciled with the current public release; machine-readable native evidence retains the exact revision and timestamp of each recorded run. All evidence distinguishes simulated chain input from actual testnet transactions.
 
 ## Automated checks
 
-- A clean extraction of the source archive passed offline npm installation, all 32 frontend tests, TypeScript, production build, and locked metadata resolution for all eight Rust workspace members. [Clean extraction log](clean-source-check.txt).
+- A historical clean extraction of the source archive passed offline npm installation, the 32 frontend tests present at that revision, TypeScript, production build, and locked metadata resolution for all eight Rust workspace members. [Clean extraction log](clean-source-check.txt).
 
 - **66 distinct Rust tests passed.** Final suites: agent 14, core 5, crypto 11, keeper 17, keeper service 4, storage 8, vault CLI 7. The final agent-only rerun replaces the earlier agent suite; it is not counted twice. [Raw evidence](backend-tests.txt).
-- **36 frontend tests passed**, with TypeScript no-emit and Vite production build passing. Tests include signed codecs, cryptographic failures, guided lifecycle and repeated reset, secret-free scene projections, binary file bounds and native API contracts.
+- **43 frontend tests passed**, with TypeScript no-emit and Vite production build passing. Tests include signed codecs, cryptographic failures, guided and judge-created lifecycles, direct-route safety, configurable 2-of-5 through 5-of-5 reconstruction, wrong-recipient rejection, exact-byte recovery, secret-free scene projections, binary file bounds and native API contracts.
+- The repository verification workflow reruns frontend tests, TypeScript, the production build, public-site integrity and committed Pages-bundle drift checks, plus the locked Rust workspace tests, on `main`, `codex/**` branches and pull requests.
 - The actual loopback process smoke test passes bearer/origin checks, three signed memo fixtures including `u64::MAX`, structured method errors and truthful unavailable behavior without a runtime configuration. [Log](agent-http-smoke.txt).
 - The pinned Windows wallet harness builds with Rust 1.99.0. Its optional TLS-shim patch produces an unused-patch warning. The lazy Three.js chunk exceeds Vite's 500kB warning threshold; the main app and scene are split. No FPS benchmark or formal accessibility certification is claimed.
 

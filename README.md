@@ -29,6 +29,7 @@
 </p>
 
 <p align="center">
+  <a href="https://github.com/unspecifiedcoder/z-canary/actions/workflows/verification.yml"><img alt="Verification" src="https://github.com/unspecifiedcoder/z-canary/actions/workflows/verification.yml/badge.svg" /></a>
   <img alt="Zcash testnet" src="https://img.shields.io/badge/network-Zcash_testnet-F4B728?style=flat-square&labelColor=101613" />
   <img alt="Rust tests" src="https://img.shields.io/badge/Rust_tests-66_passed-67D7AE?style=flat-square&labelColor=101613" />
   <img alt="Frontend tests" src="https://img.shields.io/badge/frontend_tests-43_passed-67D7AE?style=flat-square&labelColor=101613" />
@@ -337,7 +338,8 @@ z-canary/
 | Area | Result | Evidence |
 |---|---:|---|
 | Rust workspace | **66 tests passed** | [backend test log](docs/evidence/backend-tests.txt) |
-| Frontend | **36 tests passed** | [frontend test log](docs/evidence/frontend-tests.tap) |
+| Frontend | **43 tests passed** | [frontend test log](docs/evidence/frontend-tests.tap) |
+| Submitted commit | frontend, Rust, Pages drift | [GitHub verification workflow](.github/workflows/verification.yml) |
 | TypeScript + Vite | **passed** | [production build log](docs/evidence/frontend-build.txt) |
 | Five-process rehearsal | **12 checks passed** | [rehearsal record](docs/evidence/five-process-rehearsal.json) |
 | Native live acceptance | **15 checks passed** | [testnet record](docs/evidence/native-live-acceptance.json) |
@@ -374,9 +376,11 @@ Canary demonstrates a privacy-conscious continuity protocol; it is not a product
 
 ## Project status
 
-The hackathon prototype is complete and locally verified. Work still required for production includes independent keeper operation, portable full-state recovery, deep-reorg replay, deployment hardening, external review, and a final repository license decision.
+The hackathon prototype is complete and locally verified. Work still required for production includes independent keeper operation, portable full-state recovery, deep-reorg replay, deployment hardening, and external review.
 
-The original repository contains an Apache-2.0 SPDX header in `src/App.tsx`, but no root `LICENSE` file. Confirm the intended repository-wide license before redistribution or accepting contributions.
+## License
+
+Canary is released under the [Apache License 2.0](LICENSE). Third-party dependency notices remain in [docs/THIRD-PARTY-NOTICES.md](docs/THIRD-PARTY-NOTICES.md).
 
 ---
 

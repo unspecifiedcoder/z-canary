@@ -1,18 +1,19 @@
+You are using Node.js 22.10.0. Vite requires Node.js version 20.19+ or 22.12+. Please upgrade your Node.js version.
 vite v8.3.5 building client environment for production...
 transforming...
-✓ 1708 modules transformed.
+✓ 1711 modules transformed.
 rendering chunks...
 computing gzip size...
 dist/index.html                             1.07 kB │ gzip:   0.51 kB
-dist/assets/CaseStudyDemo-D1u_Ifs-.css      9.83 kB │ gzip:   2.48 kB
-dist/assets/index-D0CvR6Pt.css             62.83 kB │ gzip:  13.45 kB
-dist/assets/pause-D_f9RPwX.js               0.20 kB │ gzip:   0.15 kB
-dist/assets/GuidedExperience-JAUJ8eM7.js    6.04 kB │ gzip:   2.34 kB
-dist/assets/CaseStudyDemo-DGkMmdyT.js      21.54 kB │ gzip:   6.81 kB
-dist/assets/index-B6b_f36_.js             436.36 kB │ gzip: 133.46 kB
-dist/assets/LivingVault-C7Vs2fCD.js       544.57 kB │ gzip: 136.92 kB
+dist/assets/CaseStudyDemo-BnWGHgPK.css     17.25 kB │ gzip:   4.13 kB
+dist/assets/index-Dq6byWfL.css             84.03 kB │ gzip:  17.69 kB
+dist/assets/pause-Bx-eK_Kf.js               0.20 kB │ gzip:   0.15 kB
+dist/assets/GuidedExperience-DBknhpZp.js    6.04 kB │ gzip:   2.33 kB
+dist/assets/CaseStudyDemo-DIpGe1Dl.js      22.37 kB │ gzip:   6.96 kB
+dist/assets/index-DdbxH0hs.js             458.21 kB │ gzip: 140.25 kB
+dist/assets/LivingVault-ZnnkahDj.js       544.57 kB │ gzip: 136.92 kB
 
-✓ built in 1.56s
+✓ built in 2.84s
 [plugin builtin:vite-reporter] 
 (!) Some chunks are larger than 500 kB after minification. Consider:
 - Using dynamic import() to code-split the application
