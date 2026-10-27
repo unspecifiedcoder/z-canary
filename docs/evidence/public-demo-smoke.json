@@ -1,0 +1,38 @@
+{
+  "date": "2026-10-27",
+  "site": "https://unspecifiedcoder.github.io/z-canary/",
+  "app": "https://unspecifiedcoder.github.io/z-canary/app/#maya-noor",
+  "github_readme": "first paragraph and video link verified in signed-out browser",
+  "video": {
+    "chapter_seek_seconds": 53.533333,
+    "observed_playback_seconds": 81.673356,
+    "duration_seconds": 191.9,
+    "ready_state": 4,
+    "width": 1920,
+    "height": 1080,
+    "error": null
+  },
+  "hosted_example": [
+    "protect",
+    "early recovery rejected",
+    "check-in 1024 to1048",
+    "cancel zero shares",
+    "fresh vault",
+    "missed check-in",
+    "grace check-in1048 to1072",
+    "second missed check-in",
+    "stale scans paused",
+    "two shares rejected",
+    "three shares with two offline",
+    "wrong recipient key rejected",
+    "decrypted original",
+    "downloaded verified file"
+  ],
+  "download": {
+    "bytes": 500,
+    "sha256": "cf2f6149b05ac93ed0e5116c506ea1791641c0606f6a7fe10a040a395bc9e20f",
+    "matches_source": true
+  },
+  "app_console_errors": [],
+  "scope": "Browser simulation; no transactions sent. Read-only recorded native evidence remains separate."
+}

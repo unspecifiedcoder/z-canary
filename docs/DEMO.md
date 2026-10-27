@@ -38,4 +38,6 @@ The release's source ZIP contains the deterministic HTML/GSAP scenes, captured p
 
 ## Encoded video verification
 
-The published MP4 is 191.9 seconds, 1920×1080 H.264 at30fps with stereo AAC. A complete decode passed without errors, and decoded frames were inspected across the chapters. Fast-start metadata is present. Measured integrated audio is −16.07LUFS with −2.93dBTP true peak. [Machine-readable media report](evidence/demo-video-v2.json).
+The published MP4 is 191.9 seconds, 1920×1080 H.264 at 30 fps with stereo AAC. A complete decode passed without errors, and decoded frames were inspected across the chapters. Fast-start metadata is present. Measured integrated audio is −16.07 LUFS with −2.93 dBTP true peak. [Machine-readable media report](evidence/demo-video-v2.json).
+
+The signed-out public GitHub README link, hosted video playback and chapter seeking were verified in a real browser. The complete Maya/Noor scenario was repeated on GitHub Pages and downloaded the matching 500-byte file. [Hosted smoke record](evidence/public-demo-smoke.json) · [Recovered file screenshot](evidence/experience/case-public-recovered.jpg).
