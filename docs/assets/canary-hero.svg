@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="520" viewBox="0 0 1440 520" role="img" aria-labelledby="title desc">
+  <title id="title">Canary encrypted continuity vault</title>
+  <desc id="desc">An animated encrypted vault surrounded by five keeper nodes, with three active shares forming a recovery threshold.</desc>
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="42%" r="72%"><stop offset="0" stop-color="#173b32"/><stop offset=".48" stop-color="#0d1716"/><stop offset="1" stop-color="#060908"/></radialGradient>
+    <linearGradient id="vault" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#8fe6c2" stop-opacity=".94"/><stop offset=".45" stop-color="#2a7f67" stop-opacity=".72"/><stop offset="1" stop-color="#0e332b" stop-opacity=".92"/></linearGradient>
+    <linearGradient id="amber" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#ffd68a"/><stop offset="1" stop-color="#cc8c32"/></linearGradient>
+    <filter id="softGlow" x="-80%" y="-80%" width="260%" height="260%"><feGaussianBlur stdDeviation="10" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+    <filter id="lineGlow" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="3" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+    <pattern id="grid" width="48" height="48" patternUnits="userSpaceOnUse"><path d="M48 0H0V48" fill="none" stroke="#78d7b4" stroke-opacity=".055"/></pattern>
+  </defs>
+  <rect width="1440" height="520" rx="28" fill="url(#bg)"/><rect width="1440" height="520" rx="28" fill="url(#grid)"/>
+  <path d="M0 430C270 352 410 496 720 416s500-28 720-104V520H0Z" fill="#64caa5" opacity=".035"/>
+  <g font-family="Segoe UI,Arial,sans-serif" fill="#effbf6">
+    <text x="84" y="108" font-size="19" letter-spacing="7" fill="#86d9b9">CANARY / CONTINUITY PROTOCOL</text>
+    <text x="82" y="176" font-size="58" font-weight="650" letter-spacing="-1.5">Encrypted while you are present.</text>
+    <text x="84" y="225" font-size="25" fill="#b8cac3">Recoverable only when the signed lifecycle permits it.</text>
+    <g transform="translate(84 284)"><rect width="182" height="42" rx="21" fill="#76d5b0" fill-opacity=".1" stroke="#76d5b0" stroke-opacity=".44"/><circle cx="22" cy="21" r="5" fill="#8cf0c6" filter="url(#lineGlow)"><animate attributeName="opacity" values=".4;1;.4" dur="2.4s" repeatCount="indefinite"/></circle><text x="38" y="27" font-size="14" letter-spacing="1.2" fill="#d6eee4">VAULT PROTECTED</text></g>
+    <g transform="translate(280 284)"><rect width="160" height="42" rx="21" fill="#db9f4e" fill-opacity=".08" stroke="#db9f4e" stroke-opacity=".38"/><text x="22" y="27" font-size="14" letter-spacing="1.1" fill="#f1c985">3 OF 5 RELEASE</text></g>
+    <text x="84" y="389" font-family="Consolas,monospace" font-size="14" fill="#739087">ZCASH TESTNET · SIGNED SHIELDED COMMANDS · RECIPIENT-BOUND DECRYPTION</text>
+    <text x="84" y="426" font-size="16" fill="#809b91">A tested hackathon prototype with an explicit simulation and native mode.</text>
+  </g>
+  <g transform="translate(1082 258)">
+    <circle r="176" fill="none" stroke="#76d5b0" stroke-opacity=".12" stroke-width="1" stroke-dasharray="3 12"><animateTransform attributeName="transform" type="rotate" from="0" to="360" dur="36s" repeatCount="indefinite"/></circle>
+    <circle r="128" fill="none" stroke="#db9f4e" stroke-opacity=".14" stroke-width="1" stroke-dasharray="42 18"><animateTransform attributeName="transform" type="rotate" from="360" to="0" dur="28s" repeatCount="indefinite"/></circle>
+    <g fill="none" stroke="#75dab5" stroke-width="2" stroke-linecap="round" opacity=".66" filter="url(#lineGlow)"><path d="M0-68L0-145"><animate attributeName="opacity" values=".22;.9;.22" dur="3.2s" repeatCount="indefinite"/></path><path d="M65-21L138-45"><animate attributeName="opacity" values=".22;.9;.22" dur="3.2s" begin=".35s" repeatCount="indefinite"/></path><path d="M40 55L84 117"><animate attributeName="opacity" values=".22;.9;.22" dur="3.2s" begin=".7s" repeatCount="indefinite"/></path><path d="M-40 55L-84 117" stroke="#587269" opacity=".36"/><path d="M-65-21L-138-45" stroke="#587269" opacity=".36"/></g>
+    <g fill="#0c1916" stroke="#7be0ba" stroke-width="2"><circle cy="-154" r="13"/><circle cx="146" cy="-47" r="13"/><circle cx="89" cy="126" r="13"/><circle cx="-89" cy="126" r="13" stroke="#637c73"/><circle cx="-146" cy="-47" r="13" stroke="#637c73"/></g>
+    <g fill="#8ff0c9" filter="url(#softGlow)"><circle cy="-154" r="3"><animate attributeName="r" values="2;4;2" dur="2s" repeatCount="indefinite"/></circle><circle cx="146" cy="-47" r="3"><animate attributeName="r" values="2;4;2" dur="2s" begin=".4s" repeatCount="indefinite"/></circle><circle cx="89" cy="126" r="3"><animate attributeName="r" values="2;4;2" dur="2s" begin=".8s" repeatCount="indefinite"/></circle></g>
+    <g filter="url(#softGlow)"><path d="M0-78 68-39 68 39 0 78-68 39-68-39Z" fill="#67d6ad" opacity=".12"/><path d="M0-62 54-31 54 31 0 62-54 31-54-31Z" fill="url(#vault)" stroke="#a2f1d3" stroke-opacity=".65"/><path d="M0-62V62M-54-31 54 31M54-31-54 31" fill="none" stroke="#d7fff0" stroke-opacity=".14"/><circle r="22" fill="#07100e" stroke="url(#amber)" stroke-width="3"/><path d="M-7 2h14v13H-7Zm3-2v-5a4 4 0 0 1 8 0v5" fill="none" stroke="#ffd28b" stroke-width="2.5" stroke-linecap="round"/></g>
+    <text x="0" y="104" text-anchor="middle" font-family="Consolas,monospace" font-size="13" letter-spacing="2" fill="#9dd9c3">THRESHOLD READY</text>
+  </g>
+</svg>
