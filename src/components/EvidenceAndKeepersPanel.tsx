@@ -10,6 +10,9 @@ import {
   WifiOff,
   Clock,
   Unlock,
+  ExternalLink,
+  FileCheck2,
+  RadioTower,
 } from 'lucide-react';
 import { hexToBytes, bytesToHex } from '../crypto/shamir';
 import {
@@ -39,6 +42,31 @@ interface EvidenceAndKeepersPanelProps {
   onSimulateReorg: (depth: 'shallow' | 'deep') => void;
   onTriggerExpiryForDemo?: () => void;
 }
+
+const RECORDED_TESTNET_COMMANDS = [
+  {
+    label: 'Expiry vault REGISTER',
+    block: 4546656,
+    txid: '1d4797966b97aac313b4ce7db58a4e546593c1e5efacfa992b3c73519cf90ecb',
+  },
+  {
+    label: 'Cancellation vault REGISTER',
+    block: 4546660,
+    txid: '35bfb606f1e822215e5827dafc6f788319d798cb96fa14f368dedcdfecd56be0',
+  },
+  {
+    label: 'Owner POSTPONE / check-in',
+    block: 4546671,
+    txid: '60d30eb17342311926d39c94164393d0ce9042bb3fe5e1bb3c3311d19a002f66',
+  },
+  {
+    label: 'Owner CANCEL',
+    block: 4546677,
+    txid: '32e76a242961415eee02df615778d8ab0f26427256c47bcdf258e661fbe1d865',
+  },
+] as const;
+
+const NATIVE_FIXTURE_SHA256 = 'e05e833a180c72954315c0165cf79dc921221065f65263b408bcf99ba362d2d2';
 
 export const EvidenceAndKeepersPanel: React.FC<EvidenceAndKeepersPanelProps> = ({
   vault,
@@ -103,6 +131,79 @@ export const EvidenceAndKeepersPanel: React.FC<EvidenceAndKeepersPanelProps> = (
 
   return (
     <div className="space-y-10 pb-16">
+      <section className="border border-[#D6A84B]/50 bg-[#141820] p-6 lg:p-8 space-y-7" aria-labelledby="judge-proof-title">
+        <div className="flex flex-col xl:flex-row xl:items-end justify-between gap-5 border-b border-[#222938] pb-6">
+          <div className="max-w-3xl space-y-2">
+            <div className="text-xs font-mono text-[#F59E0B]">JUDGE PROOF MAP · RECORDED 27 OCTOBER 2026</div>
+            <h1 id="judge-proof-title" className="text-2xl lg:text-3xl font-bold text-[#F8FAFC]">
+              One lifecycle. Three different kinds of evidence.
+            </h1>
+            <p className="text-sm leading-relaxed text-[#AEB8C8]">
+              The hosted lab makes the recovery rules testable without a wallet. It performs real local
+              cryptography but sends no transaction. The receipts below belong to a separate recorded native
+              run that used genuine shielded Zcash testnet commands and recovered a public fixture byte for byte.
+            </p>
+          </div>
+          <div className="flex flex-wrap gap-2 text-xs font-mono">
+            <a href="https://github.com/unspecifiedcoder/z-canary/blob/main/docs/evidence/VERIFICATION.md" target="_blank" rel="noreferrer" className="px-3 py-2 border border-[#F59E0B]/60 text-[#F59E0B] hover:bg-[#F59E0B]/10 inline-flex items-center gap-1.5">Verification record <ExternalLink className="w-3.5 h-3.5" /></a>
+            <a href="https://github.com/unspecifiedcoder/z-canary/blob/main/docs/ARCHITECTURE.md" target="_blank" rel="noreferrer" className="px-3 py-2 border border-[#30394A] text-[#CBD5E1] hover:border-[#94A3B8] inline-flex items-center gap-1.5">Architecture <ExternalLink className="w-3.5 h-3.5" /></a>
+            <a href="https://github.com/unspecifiedcoder/z-canary/blob/main/docs/THREAT-MODEL.md" target="_blank" rel="noreferrer" className="px-3 py-2 border border-[#30394A] text-[#CBD5E1] hover:border-[#94A3B8] inline-flex items-center gap-1.5">Threat model <ExternalLink className="w-3.5 h-3.5" /></a>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-3">
+          <article className="p-4 border border-[#2A3343] bg-[#0B0D11] space-y-2">
+            <div className="flex items-center justify-between gap-3"><span className="text-xs font-mono text-[#F59E0B]">INTERACTIVE / NOW</span><span className="text-[10px] font-mono text-[#64748B]">HOSTED BROWSER</span></div>
+            <h2 className="font-semibold text-[#F8FAFC]">Real local cryptography</h2>
+            <p className="text-xs leading-relaxed text-[#94A3B8]">X25519 recipient binding, AES-256-GCM, signatures, 3-of-5 reconstruction and exact-byte verification execute in this browser.</p>
+          </article>
+          <article className="p-4 border border-[#2A3343] bg-[#0B0D11] space-y-2">
+            <div className="flex items-center justify-between gap-3"><span className="text-xs font-mono text-[#EFAD45]">SIMULATED / RESETTABLE</span><span className="text-[10px] font-mono text-[#64748B]">HOSTED BROWSER</span></div>
+            <h2 className="font-semibold text-[#F8FAFC]">Blocks and keeper records</h2>
+            <p className="text-xs leading-relaxed text-[#94A3B8]">The chain height, transactions, timing and five keeper records on this screen are synthetic. No Zcash transaction is sent here.</p>
+          </article>
+          <article className="p-4 border border-[#10B981]/45 bg-[#0B0D11] space-y-2">
+            <div className="flex items-center justify-between gap-3"><span className="text-xs font-mono text-[#10B981]">RECORDED / VERIFIABLE</span><span className="text-[10px] font-mono text-[#64748B]">NATIVE TESTNET</span></div>
+            <h2 className="font-semibold text-[#F8FAFC]">Shielded Zcash commands</h2>
+            <p className="text-xs leading-relaxed text-[#94A3B8]">A separate native run used real testnet REGISTER, POSTPONE and CANCEL transactions, five local keeper processes and recipient recovery.</p>
+          </article>
+        </div>
+
+        <div className="grid grid-cols-1 xl:grid-cols-[1.35fr_.65fr] gap-5">
+          <div className="border border-[#222938] bg-[#0B0D11]">
+            <div className="px-4 py-3 border-b border-[#222938] flex items-center gap-2">
+              <RadioTower className="w-4 h-4 text-[#10B981]" />
+              <h2 className="text-sm font-semibold text-[#F8FAFC]">Recorded Zcash testnet receipts</h2>
+            </div>
+            <div className="divide-y divide-[#1E2430]">
+              {RECORDED_TESTNET_COMMANDS.map((command) => (
+                <a key={command.txid} href={`https://zexplorer.app/testnet/tx/${command.txid}`} target="_blank" rel="noreferrer" className="grid grid-cols-[1fr_auto] md:grid-cols-[1fr_auto_auto] gap-3 items-center px-4 py-3 hover:bg-[#141820] transition-colors group">
+                  <span className="text-xs font-medium text-[#E2E8F0]">{command.label}</span>
+                  <span className="hidden md:block text-[11px] font-mono text-[#64748B]">block {command.block.toLocaleString()}</span>
+                  <span className="text-[11px] font-mono text-[#F59E0B] inline-flex items-center gap-1">{command.txid.slice(0, 9)}…{command.txid.slice(-8)} <ExternalLink className="w-3 h-3" /></span>
+                </a>
+              ))}
+            </div>
+          </div>
+
+          <aside className="border border-[#10B981]/45 bg-[#0B0D11] p-5 space-y-4">
+            <div className="flex items-center gap-2"><FileCheck2 className="w-5 h-5 text-[#10B981]" /><h2 className="font-semibold text-[#F8FAFC]">Exact recovery passed</h2></div>
+            <div className="grid grid-cols-2 gap-3 font-mono text-xs">
+              <div><span className="block text-[#64748B]">Native fixture</span><strong className="text-[#F8FAFC]">136 bytes</strong></div>
+              <div><span className="block text-[#64748B]">Threshold</span><strong className="text-[#F8FAFC]">3 of 5</strong></div>
+              <div><span className="block text-[#64748B]">Expired path</span><strong className="text-[#10B981]">5 shares</strong></div>
+              <div><span className="block text-[#64748B]">Cancelled path</span><strong className="text-[#10B981]">0 shares</strong></div>
+            </div>
+            <div className="space-y-1"><span className="text-[10px] font-mono text-[#64748B]">RECOVERED SHA-256</span><code className="block text-[10px] leading-relaxed text-[#AEB8C8] break-all">{NATIVE_FIXTURE_SHA256}</code></div>
+            <p className="text-[11px] leading-relaxed text-[#94A3B8]">All five native keeper processes shared one operator, one viewing-only scanner and one lightwallet endpoint. This proves the implemented path—not independent decentralization or production security.</p>
+          </aside>
+        </div>
+
+        <div className="p-4 border-l-2 border-[#F59E0B] bg-[#0B0D11] text-xs leading-relaxed text-[#AEB8C8]">
+          <strong className="text-[#F8FAFC]">Why Zcash is material:</strong> the file remains off-chain. In native mode, shielded 512-byte memos carry the owner’s signed REGISTER, POSTPONE and CANCEL intent in a confirmed order. A viewing-only scanner recovers those commands for keeper evaluation without holding spending authority.
+        </div>
+      </section>
+
       {/* Section 1: Refined 5-Keeper High-Assurance Infrastructure Grid + Live D3.js Topology */}
       <section className="border border-[#222938] bg-[#141820] p-6 lg:p-8 space-y-6">
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 border-b border-[#222938] pb-5">
