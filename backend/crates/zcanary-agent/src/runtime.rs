@@ -137,6 +137,18 @@ impl Runtime {
             wallet_public["network"] == "testnet",
             "wallet is not on testnet"
         );
+        ensure!(
+            wallet_public["receiveAddress"]
+                .as_str()
+                .is_some_and(|address| address.starts_with("utest1")),
+            "wallet did not return a testnet Unified Address"
+        );
+        wallet_public["tipHeight"]
+            .as_u64()
+            .context("wallet tip height missing")?;
+        wallet_public["spendableZatoshi"]
+            .as_u64()
+            .context("wallet spendable balance missing")?;
         let viewer = config.state_dir.join("registry-viewer.dpapi");
         let checkpoint_path = config.state_dir.join("registry-checkpoint.json");
         let checkpoint = if viewer.exists() {
@@ -297,7 +309,20 @@ impl Runtime {
     pub fn status(&self) -> Value {
         let running=!self.stop.load(Ordering::Acquire);
         let keepers:Vec<Value>=self.keepers.iter().map(|k|{let status=keeper_request(k,"GET","/v1/status",None).ok();json!({"id":k.id,"healthy":status.as_ref().and_then(|v|v["healthy"].as_bool()).unwrap_or(false),"cursor":status.map(|v|v["cursor"].clone())})}).collect();
-            json!({"available":running,"mode":"testnet","wallet":{"available":running,"state":if running {"ready"}else{"stopped"}},"keepers":keepers})
+        let wallet = if running {
+            json!({
+                "available": true,
+                "state": "ready",
+                "network": "testnet",
+                "receiveAddress": self.wallet_public["receiveAddress"],
+                "tipHeight": self.wallet_public["tipHeight"],
+                "spendableZatoshi": self.wallet_public["spendableZatoshi"],
+                "snapshot": "startup-sync"
+            })
+        } else {
+            json!({"available":false,"state":"stopped","network":"testnet"})
+        };
+        json!({"available":running,"mode":"testnet","wallet":wallet,"keepers":keepers})
     }
     pub fn fee_estimate(&self) -> Result<Value> {
         ensure!(!self.stop.load(Ordering::Acquire), "runtime stopped");

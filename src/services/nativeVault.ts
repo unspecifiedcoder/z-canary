@@ -9,7 +9,15 @@ export interface NativeKeeperRuntime {
 export interface NativeRuntime {
   available: boolean;
   mode: 'testnet';
-  wallet: { available: boolean; state: string };
+  wallet: {
+    available: boolean;
+    state: string;
+    network?: 'testnet';
+    receiveAddress?: string;
+    tipHeight?: number;
+    spendableZatoshi?: number;
+    snapshot?: 'startup-sync';
+  };
   keepers: NativeKeeperRuntime[];
   error?: string;
 }
