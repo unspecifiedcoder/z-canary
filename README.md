@@ -6,7 +6,7 @@
 
 > **The simple version:** put a file in a locked box. Press “I’m okay” to keep it locked. If you stop, three helpers provide pieces of the key—but only your chosen recipient can open the box.
 
-**[Create your own Canary](https://unspecifiedcoder.github.io/z-canary/app/#create)** · **[Try Maya & Noor’s story](https://unspecifiedcoder.github.io/z-canary/app/#maya-noor)** · **[Watch the current walkthrough](https://unspecifiedcoder.github.io/z-canary/#watch)** · **[Verify the Zcash transactions](#a-real-testnet-proof)**
+**[Create your own Canary](https://unspecifiedcoder.github.io/z-canary/app/#create)** · **[Try Maya & Noor’s story](https://unspecifiedcoder.github.io/z-canary/app/#maya-noor)** · **[Connect the native testnet wallet](https://unspecifiedcoder.github.io/z-canary/app/#native)** · **[Verify the Zcash transactions](#a-real-testnet-proof)**
 
 > **Maya is reporting a story. Noor is the editor she trusts. Maya does not want to share her notes today—but she wants Noor to have a controlled recovery path if she becomes unavailable.**
 
@@ -111,7 +111,7 @@ The app also includes the **Living Vault**, the original six-chapter protocol gu
 | Experience | What you can verify | What is simulated or limited |
 |---|---|---|
 | **Browser demonstration** | File encryption, signed commands, check-in and cancellation behavior, threshold recovery, and exact-byte verification. | Blocks, transactions, keeper records, and timing are simulated in one browser. No wallet or real transaction is needed. |
-| **Native Zcash testnet** | Actual shielded transactions, persistent encrypted storage, five keeper processes, and recipient recovery of the original test file. | The five keeper services share one local operator and scanner. They are not five independent organizations. Native mode currently targets Windows. |
+| **Native Zcash testnet** | Connects the authenticated local Zingolib wallet, displays its real testnet address, balance and synced height, submits actual shielded commands, runs five keeper processes, and recovers the original test file. | This is a local-runtime connection, not a universal injected browser-wallet standard. The five keeper services share one local operator and scanner. Native mode currently targets Windows. |
 
 The browser's encryption format is separate from the native format. Test results and recorded transactions are linked below so a reviewer can inspect the implementation, not just watch an animation.
 
