@@ -35,3 +35,7 @@ The film is hosted as a GitHub release asset. English captions and the poster ar
 ## Edit the film
 
 The release's source ZIP contains the deterministic HTML/GSAP scenes, captured public example states, narration timeline, captions and mixed audio. Install its pinned Node dependencies and use its documented HyperFrames check, preview and render commands. The included audio is ready to use; voice model weights are not required to re-render the film. Credits and reproduction notes are included in that archive.
+
+## Encoded video verification
+
+The published MP4 is 191.9 seconds, 1920×1080 H.264 at30fps with stereo AAC. A complete decode passed without errors, and decoded frames were inspected across the chapters. Fast-start metadata is present. Measured integrated audio is −16.07LUFS with −2.93dBTP true peak. [Machine-readable media report](evidence/demo-video-v2.json).

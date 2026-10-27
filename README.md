@@ -324,7 +324,7 @@ z-canary/
 | Restart audit | **2 additional checks passed** | [restart record](docs/evidence/native-restart-audit.json) |
 | Native extensions | **5 checks passed** | [extension record](docs/evidence/native-extensions.json) |
 | Browser QA | desktop, tablet, mobile | [experience record](docs/EXPERIENCE.md) |
-| Clean source archive | offline install/test/build passed | [clean extraction log](docs/evidence/clean-source-check.txt) |
+| Earlier clean source archive | offline install/test/build passed | [clean extraction log](docs/evidence/clean-source-check.txt) |
 
 The final main bundle is about 436 kB minified and the lazy Three.js scene about 545 kB. The scene retains Vite's chunk-size warning. No formal security audit, FPS benchmark, WCAG certification, or broad cross-browser certification is claimed.
 
