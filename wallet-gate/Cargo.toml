@@ -1,0 +1,32 @@
+[package]
+name = "wallet-gate"
+version = "0.1.0"
+edition = "2024"
+publish = false
+
+[package.metadata.wallet-gate]
+zingolib-revision = "4d85349f3cab5f7e4e5273c7f01c34044f17b1a9"
+
+[dependencies]
+base64 = "=0.22.1"
+anyhow = "=1.0.104"
+hex = "=0.4.3"
+http = "=1.5.0"
+pepper-sync = { path = "../.wallet-upstream/zingolib/pepper-sync" }
+sha2 = "=0.10.9"
+tokio = { version = "=1.53.1", features = ["macros", "rt-multi-thread", "time"] }
+zcash_address = "=0.14.0"
+zcash_client_backend = "=0.25.0"
+zcash_keys = { version = "=0.17.0", features = ["transparent-inputs", "sapling", "orchard"] }
+zcash_protocol = "=0.11.0"
+zcash_primitives = "=0.31.0"
+zip32 = "=0.3.0"
+zeroize = "=1.9.1"
+zcanary-core = { path = "../backend/crates/zcanary-core" }
+zingo-netutils = { path = "../.wallet-upstream/zingolib/zingo-netutils" }
+zingolib = { path = "../.wallet-upstream/zingolib/zingolib" }
+
+# The upstream workspace uses this shim to keep its TLS dependency graph
+# consistent. Cargo only applies patches from the active root manifest.
+[patch.crates-io]
+rustls-platform-verifier = { path = "../.wallet-upstream/zingolib/zingo-netutils/webpki-verifier-shim" }
