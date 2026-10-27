@@ -7,7 +7,7 @@ const LivingVault = lazy(() => import('./LivingVault'));
 interface WelcomeScreenProps {
   activeVault: ContinuityVault;
   currentBlockHeight: number;
-  onNavigate: (tab: 'welcome' | 'sentinel' | 'create' | 'recipient' | 'support' | 'evidence' | 'native' | 'demo') => void;
+  onNavigate: (tab: 'welcome' | 'sentinel' | 'create' | 'recipient' | 'support' | 'evidence' | 'native' | 'demo' | 'case') => void;
   onQuickDemoStep: (step: 'inspect' | 'checkin' | 'grace' | 'expire' | 'support' | 'tests') => void;
   onToggleKeeperOnline: (keeperIndex: number) => void;
 }
@@ -17,11 +17,11 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ activeVault, curre
   return <div className="overview-experience">
     <div className="page-eyebrow"><span>PRIVATE EVIDENCE. ENDURING INTENT.</span><span>CONTINUITY PROTOCOL / 01</span></div>
     <section className="opening-composition">
-      <div className="opening-copy"><div className="opening-kicker"><span className="signal-dot"/>A signal that matters.</div>
+      <div className="opening-copy"><div className="opening-kicker"><span className="signal-dot"/>For reporters and their trusted editors.</div>
         <h1>Stay present.<br/><em>Leave nothing</em><br/>to silence.</h1>
-        <p>Your evidence stays encrypted while you check in. If you become unavailable, a controlled recovery process can deliver it to your designated recipient.</p>
-        <button className="canary-button primary" onClick={() => onNavigate('demo')}>Experience the protocol <ArrowUpRight size={20}/></button>
-        <div className="opening-caption"><span>01—06</span> A guided, interactive simulation</div>
+        <p>Keep your reporting notes private today. Arrange for a trusted editor to recover them if your check-ins stop and the recovery conditions are met.</p>
+        <button className="canary-button primary" onClick={() => onNavigate('case')}>Try Maya &amp; Noor's story <ArrowUpRight size={20}/></button>
+        <div className="opening-caption"><span>TRY IT</span> A fictional reporter, a real encryption workflow.</div>
       </div>
       <div className="opening-scene"><Suspense fallback={<div className="scene-loading">Assembling the archive…</div>}><LivingVault state={visual}/></Suspense></div>
     </section>

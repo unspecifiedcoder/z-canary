@@ -36,8 +36,9 @@ import { EvidenceAndKeepersPanel } from './components/EvidenceAndKeepersPanel';
 import NativeVaultWorkspace from './components/NativeVaultWorkspace';
 
 const GuidedExperience = lazy(() => import('./components/GuidedExperience'));
+const CaseStudyDemo = lazy(() => import('./components/CaseStudyDemo'));
 
-type ActiveTab = 'demo' | 'welcome' | 'sentinel' | 'create' | 'recipient' | 'support' | 'evidence' | 'native';
+type ActiveTab = 'demo' | 'case' | 'welcome' | 'sentinel' | 'create' | 'recipient' | 'support' | 'evidence' | 'native';
 
 const INITIAL_HEIGHT = 2845100;
 
@@ -372,9 +373,10 @@ export default function App() {
       <div className={`environment-strip ${activeTab==='native'?'environment-strip--native':''}`} role="note">
         <span>{activeTab==='native'?'AUTHENTICATED LOCAL WORKSPACE':'BROWSER SIMULATION'}</span>
         <p>{activeTab==='native'?'Actual state is reported by your local agent. Testnet only.':'Synthetic evidence only · Simulated chain and keeper records · No transactions sent'}</p>
-        {activeTab!=='demo'&&<button onClick={()=>setActiveTab('demo')}>Guided story ↗</button>}
+        {activeTab!=='case'&&<button onClick={()=>setActiveTab('case')}>Try Maya & Noor's example ↗</button>}
+        {activeTab==='case'&&<button onClick={()=>setActiveTab('demo')}>Protocol tour ↗</button>}
       </div>
-      {!['native','welcome','demo'].includes(activeTab)&&<details className="simulation-tools">
+      {!['native','welcome','demo','case'].includes(activeTab)&&<details className="simulation-tools">
         <summary><span>SIMULATION CONTROLS</span><span>#{currentBlockHeight.toLocaleString()} · {walletBalanceZatoshi.toLocaleString()} zat</span><span>Expand +</span></summary>
         <div><button onClick={()=>handleAdvanceBlocks(1)}><Pickaxe size={14}/>Mine +1 block</button><button onClick={()=>handleAdvanceBlocks(6)}>Mine +6 blocks</button><button onClick={handleJumpToGrace}>Enter grace</button><button onClick={handleJumpPastGraceToExpire}><FastForward size={14}/>Evaluate expiry</button><button onClick={handleResetDemo}><RotateCcw size={14}/>Reset harness</button><button onClick={()=>setActiveTab('create')}>New demo vault ↗</button></div>
       </details>}
@@ -530,6 +532,7 @@ export default function App() {
         )}
 
         {activeTab === 'native' && <NativeVaultWorkspace />}
+        {activeTab === 'case' && <Suspense fallback={<div className="scene-loading">Preparing Maya and Noor's example…</div>}><CaseStudyDemo /></Suspense>}
         {activeTab === 'demo' && <Suspense fallback={<div className="scene-loading">Preparing the guided experience…</div>}><GuidedExperience onNative={() => setActiveTab('native')} /></Suspense>}
       </div></main>
 
