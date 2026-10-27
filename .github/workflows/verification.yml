@@ -24,13 +24,14 @@ jobs:
           node-version: 22.12.0
           cache: npm
       - run: npm ci --legacy-peer-deps
+      - name: Verify the committed Pages release
+        run: node scripts/verify-public-site.mjs
       - run: npm test
       - run: npm run typecheck
       - run: npm run build -- --base=./
       - run: node scripts/build-public-demo.mjs
-      - run: node scripts/verify-public-site.mjs
-      - name: Confirm the committed Pages bundle matches source
-        run: git diff --exit-code -- docs/app
+      - name: Verify the regenerated Pages release
+        run: node scripts/verify-public-site.mjs
 
   rust:
     name: Rust workspace

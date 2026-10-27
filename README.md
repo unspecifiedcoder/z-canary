@@ -339,7 +339,7 @@ z-canary/
 |---|---:|---|
 | Rust workspace | **66 tests passed** | [backend test log](docs/evidence/backend-tests.txt) |
 | Frontend | **43 tests passed** | [frontend test log](docs/evidence/frontend-tests.tap) |
-| Submitted commit | frontend, Rust, Pages drift | [GitHub verification workflow](.github/workflows/verification.yml) |
+| Submitted commit | frontend, Rust, committed + regenerated Pages verification | [GitHub verification workflow](.github/workflows/verification.yml) |
 | TypeScript + Vite | **passed** | [production build log](docs/evidence/frontend-build.txt) |
 | Five-process rehearsal | **12 checks passed** | [rehearsal record](docs/evidence/five-process-rehearsal.json) |
 | Native live acceptance | **15 checks passed** | [testnet record](docs/evidence/native-live-acceptance.json) |
