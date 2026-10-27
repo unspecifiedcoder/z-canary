@@ -1,0 +1,23 @@
+[package]
+name = "zcanary-vault-cli"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+publish.workspace = true
+
+[dependencies]
+age = "=0.12.1"
+anyhow = "=1.0.104"
+base64 = "=0.22.1"
+bech32 = "=0.11.1"
+ed25519-dalek = { version = "=2.2.0", default-features = false, features = ["std", "zeroize"] }
+hex = "=0.4.3"
+rand = "=0.10.3"
+secrecy = "=0.10.3"
+serde_json = "=1.0.145"
+sha2 = "=0.10.9"
+subtle = "=2.6.1"
+zeroize = { version = "=1.9.1", features = ["alloc"] }
+zcanary-core = { path = "../zcanary-core" }
+zcanary-crypto = { path = "../zcanary-crypto" }
+zcanary-storage = { path = "../zcanary-storage" }

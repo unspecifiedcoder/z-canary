@@ -1,0 +1,21 @@
+[package]
+name = "zcanary-demo"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+publish.workspace = true
+
+[dependencies]
+anyhow = "=1.0.104"
+age = "=0.12.1"
+bech32 = "=0.11.1"
+ed25519-dalek = { version = "=2.2.0", default-features = false, features = ["std", "zeroize"] }
+hex = "=0.4.3"
+rand = "=0.10.3"
+secrecy = "=0.10.3"
+serde_json = "=1.0.145"
+sha2 = "=0.10.9"
+zeroize = "=1.9.1"
+zcanary-core = { path = "../zcanary-core" }
+zcanary-crypto = { path = "../zcanary-crypto" }
+zcanary-storage = { path = "../zcanary-storage" }
