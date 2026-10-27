@@ -1,0 +1,9 @@
+[workspace]
+members = ["crates/zcanary-core", "crates/zcanary-keeper", "crates/zcanary-crypto", "crates/zcanary-agent", "crates/zcanary-storage", "crates/zcanary-keeper-service", "crates/zcanary-demo", "crates/zcanary-vault-cli"]
+resolver = "3"
+
+[workspace.package]
+version = "0.1.0"
+edition = "2024"
+rust-version = "1.99"
+publish = false

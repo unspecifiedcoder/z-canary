@@ -1,0 +1,22 @@
+[package]
+name = "zcanary-crypto"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+publish.workspace = true
+
+[dependencies]
+age = "=0.12.1"
+bech32 = "=0.11.1"
+chacha20poly1305 = "=0.11.0"
+rand = "=0.10.3"
+sha2 = "=0.10.9"
+vsss-rs = { version = "=6.0.1", features = ["std", "zeroize"] }
+zeroize = { version = "=1.9.1", features = ["alloc"] }
+
+[dev-dependencies]
+ed25519-dalek = { version = "=2.2.0", default-features = false, features = ["std", "zeroize"] }
+hex = "=0.4.3"
+zcanary-core = { path = "../zcanary-core" }
+zcanary-keeper = { path = "../zcanary-keeper" }
+
