@@ -45,7 +45,8 @@ const INITIAL_HEIGHT = 2845100;
 export default function App() {
   const [initialData] = useState(() => createInitialPreloadedSetup(INITIAL_HEIGHT));
 
-  const [activeTab, setActiveTab] = useState<ActiveTab>('welcome');
+  const [activeTab, setActiveTab] = useState<ActiveTab>(() =>
+    window.location.hash === '#maya-noor' ? 'case' : 'welcome');
   const mainRef = useRef<HTMLElement>(null);
   const didNavigate = useRef(false);
   useEffect(() => {
