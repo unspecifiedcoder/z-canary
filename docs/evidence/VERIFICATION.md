@@ -7,7 +7,7 @@ Updated 27 October 2026. Base repository revision: `2272e734622e210673d2334dd132
 - A clean extraction of the source archive passed offline npm installation, all 32 frontend tests, TypeScript, production build, and locked metadata resolution for all eight Rust workspace members. [Clean extraction log](clean-source-check.txt).
 
 - **66 distinct Rust tests passed.** Final suites: agent 14, core 5, crypto 11, keeper 17, keeper service 4, storage 8, vault CLI 7. The final agent-only rerun replaces the earlier agent suite; it is not counted twice. [Raw evidence](backend-tests.txt).
-- **32 frontend tests passed**, with TypeScript no-emit and Vite production build passing. Tests include signed codecs, cryptographic failures, guided lifecycle and repeated reset, secret-free scene projections, binary file bounds and native API contracts.
+- **36 frontend tests passed**, with TypeScript no-emit and Vite production build passing. Tests include signed codecs, cryptographic failures, guided lifecycle and repeated reset, secret-free scene projections, binary file bounds and native API contracts.
 - The actual loopback process smoke test passes bearer/origin checks, three signed memo fixtures including `u64::MAX`, structured method errors and truthful unavailable behavior without a runtime configuration. [Log](agent-http-smoke.txt).
 - The pinned Windows wallet harness builds with Rust 1.99.0. Its optional TLS-shim patch produces an unused-patch warning. The lazy Three.js chunk exceeds Vite's 500kB warning threshold; the main app and scene are split. No FPS benchmark or formal accessibility certification is claimed.
 
@@ -33,6 +33,14 @@ After a real process shutdown and restart, the [terminal-state audit](native-res
 - [Three earlier transport transactions](testnet-transport.json) recovered exact 512-byte REGISTER/POSTPONE/CANCEL memos with a separate viewing-only scanner. They use a public signing fixture and are not the protected-document acceptance above.
 - [The five-process synthetic rehearsal](five-process-rehearsal.json) passed 12 checks and exited 0. It verifies inclusive-boundary cancellation, postponement during grace, restart suspension, incomplete scan rejection, two-share failure, and exact PDF recovery with three shares while two keepers are offline. Its block feed is explicitly synthetic.
 - The funded persistent sender received 1 TAZ at block4546067, then paid the real command sends. This proves receipt and later spendability, not a public same-coin link. Wallet secrets and DPAPI state are excluded from exported evidence.
+
+## Maya and Noor example (27 October 2026)
+
+The new example uses the existing browser encryption, signed command validation, keeper state machine and recipient decryption. Four additional tests cover the full recovery flow, cancellation beyond its old boundary, check-in during grace and fresh-key reset. TypeScript and the production build pass. The historical clean-extraction result above predates these four tests. [Current test log](frontend-tests.tap).
+
+Real browser actions exercised protection, early rejection, check-in (1,024 → 1,048), cancellation with zero shares, a fresh missed-check-in branch, check-in during grace (1,048 → 1,072), stale scans, two-share rejection, three-share recovery with two keepers offline, wrong-recipient rejection and download. The downloaded 500-byte public text file has SHA-256 `cf2f6149b05ac93ed0e5116c506ea1791641c0606f6a7fe10a040a395bc9e20f`, matching the source. This is separate from the native 136-byte test fixture.
+
+Desktop captures use the default 1280×720 viewport; tablet 768×1024 and mobile390×844 verify the new component, reset and mobile protection. No console errors were captured. Full-page screenshots: [intro](experience/case-intro.jpg), [check-in](experience/case-checked-in.jpg), [two shares](experience/case-insufficient.jpg), [recovery](experience/case-recovered.jpg), [mobile](experience/case-qa-mobile-recovered.jpg), [tablet reset](experience/case-qa-tablet-reset.jpg). The narrated film edits these actual app states for time; it is not a continuous screen recording.
 
 ## Browser verification
 

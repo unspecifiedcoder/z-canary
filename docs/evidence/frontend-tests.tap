@@ -1,170 +1,194 @@
+
+> z-canary@0.0.0 test
+> node --import tsx --test tests/*.test.ts
+
 TAP version 13
-# Subtest: guided story verifies a signed check-in, fails closed on delayed scans, and recovers with two offline keepers
-ok 1 - guided story verifies a signed check-in, fails closed on delayed scans, and recovers with two offline keepers
+# Subtest: Maya/Noor example runs actual encryption, signed check-in, scanner guards, threshold and exact recovery
+ok 1 - Maya/Noor example runs actual encryption, signed check-in, scanner guards, threshold and exact recovery
   ---
-  duration_ms: 322.4778
+  duration_ms: 735.3057
+  ...
+# Subtest: Maya cancellation is signed and remains terminal beyond the old release boundary
+ok 2 - Maya cancellation is signed and remains terminal beyond the old release boundary
+  ---
+  duration_ms: 239.0472
+  ...
+# Subtest: a signed check-in inside grace restores active protection
+ok 3 - a signed check-in inside grace restores active protection
+  ---
+  duration_ms: 149.6853
+  ...
+# Subtest: reset creates fresh random keys and cannot inherit a recovered or cancelled state
+ok 4 - reset creates fresh random keys and cannot inherit a recovered or cancelled state
+  ---
+  duration_ms: 107.1948
+  ...
+# Subtest: guided story verifies a signed check-in, fails closed on delayed scans, and recovers with two offline keepers
+ok 5 - guided story verifies a signed check-in, fails closed on delayed scans, and recovers with two offline keepers
+  ---
+  duration_ms: 694.761
   ...
 # Subtest: WebGL projection contains no keys, shares, identifiers, filenames or plaintext
-ok 2 - WebGL projection contains no keys, shares, identifiers, filenames or plaintext
+ok 6 - WebGL projection contains no keys, shares, identifiers, filenames or plaintext
   ---
-  duration_ms: 13.9257
+  duration_ms: 26.6886
   ...
 # Subtest: public protection summary does not conceal keeper disagreement
-ok 3 - public protection summary does not conceal keeper disagreement
+ok 7 - public protection summary does not conceal keeper disagreement
   ---
-  duration_ms: 13.5297
+  duration_ms: 24.3966
   ...
 # Subtest: Ed25519 uses RFC 8032 public keys and verifies independently in Node
-ok 4 - Ed25519 uses RFC 8032 public keys and verifies independently in Node
+ok 8 - Ed25519 uses RFC 8032 public keys and verifies independently in Node
   ---
-  duration_ms: 151.3323
+  duration_ms: 332.1562
   ...
 # Subtest: a source public key alone cannot forge a cancellation
-ok 5 - a source public key alone cannot forge a cancellation
+ok 9 - a source public key alone cannot forge a cancellation
   ---
-  duration_ms: 22.0342
+  duration_ms: 75.7448
   ...
 # Subtest: memo integers and hex are rejected instead of truncated
-ok 6 - memo integers and hex are rejected instead of truncated
+ok 10 - memo integers and hex are rejected instead of truncated
   ---
-  duration_ms: 18.4032
+  duration_ms: 43.202
   ...
 # Subtest: X25519 public key matches RFC 7748
-ok 7 - X25519 public key matches RFC 7748
+ok 11 - X25519 public key matches RFC 7748
   ---
-  duration_ms: 1.4099
+  duration_ms: 3.4057
   ...
 # Subtest: AES-256-GCM ciphertext and tag match Node OpenSSL
-ok 8 - AES-256-GCM ciphertext and tag match Node OpenSSL
+ok 12 - AES-256-GCM ciphertext and tag match Node OpenSSL
   ---
-  duration_ms: 3.0865
+  duration_ms: 14.8837
   ...
 # Subtest: binary dossier roundtrips, wrong recipient and modified metadata fail
-ok 9 - binary dossier roundtrips, wrong recipient and modified metadata fail
+ok 13 - binary dossier roundtrips, wrong recipient and modified metadata fail
   ---
-  duration_ms: 15.2404
+  duration_ms: 30.8956
   ...
 # Subtest: all ten distinct three-share subsets reconstruct
-ok 10 - all ten distinct three-share subsets reconstruct
+ok 14 - all ten distinct three-share subsets reconstruct
   ---
-  duration_ms: 3.333
+  duration_ms: 15.3314
   ...
 # Subtest: manifest signature binds the policy before any keeper release
-ok 11 - manifest signature binds the policy before any keeper release
+ok 15 - manifest signature binds the policy before any keeper release
   ---
-  duration_ms: 23.8535
+  duration_ms: 45.3989
   ...
 # Subtest: manifest verification rejects a changed protocol discriminator
-ok 12 - manifest verification rejects a changed protocol discriminator
+ok 16 - manifest verification rejects a changed protocol discriminator
   ---
-  duration_ms: 16.0388
+  duration_ms: 37.1728
   ...
 # Subtest: manifest signing rejects invalid policies even from the legitimate source
-ok 13 - manifest signing rejects invalid policies even from the legitimate source
+ok 17 - manifest signing rejects invalid policies even from the legitimate source
   ---
-  duration_ms: 39.6386
+  duration_ms: 59.5604
   ...
 # Subtest: tip at grace boundary cannot release before that block confirms
-ok 14 - tip at grace boundary cannot release before that block confirms
+ok 18 - tip at grace boundary cannot release before that block confirms
   ---
-  duration_ms: 39.3262
+  duration_ms: 83.4089
   ...
 # Subtest: command included at inclusive grace boundary wins: 2
-ok 15 - command included at inclusive grace boundary wins: 2
+ok 19 - command included at inclusive grace boundary wins: 2
   ---
-  duration_ms: 79.7956
+  duration_ms: 146.5693
   ...
 # Subtest: command included after grace cannot rescue a delayed keeper: 2
-ok 16 - command included after grace cannot rescue a delayed keeper: 2
+ok 20 - command included after grace cannot rescue a delayed keeper: 2
   ---
-  duration_ms: 36.9308
+  duration_ms: 60.6237
   ...
 # Subtest: command included at inclusive grace boundary wins: 3
-ok 17 - command included at inclusive grace boundary wins: 3
+ok 21 - command included at inclusive grace boundary wins: 3
   ---
-  duration_ms: 76.6155
+  duration_ms: 128.0039
   ...
 # Subtest: command included after grace cannot rescue a delayed keeper: 3
-ok 18 - command included after grace cannot rescue a delayed keeper: 3
+ok 22 - command included after grace cannot rescue a delayed keeper: 3
   ---
-  duration_ms: 34.6434
+  duration_ms: 55.8202
   ...
 # Subtest: delayed scans and backward confirmed cursor suspend release
-ok 19 - delayed scans and backward confirmed cursor suspend release
+ok 23 - delayed scans and backward confirmed cursor suspend release
   ---
-  duration_ms: 18.306
+  duration_ms: 23.825
   ...
 # Subtest: cancel remains terminal across repeated processing and duplicate events
-ok 20 - cancel remains terminal across repeated processing and duplicate events
+ok 24 - cancel remains terminal across repeated processing and duplicate events
   ---
-  duration_ms: 50.7638
+  duration_ms: 88.9796
   ...
 # Subtest: simulated reorg freezes future processing and does not pretend to recall delivered shares
-ok 21 - simulated reorg freezes future processing and does not pretend to recall delivered shares
+ok 25 - simulated reorg freezes future processing and does not pretend to recall delivered shares
   ---
-  duration_ms: 34.5447
+  duration_ms: 60.3091
   ...
 # Subtest: existing eight simulation checks pass and remain labelled as simulations
-ok 22 - existing eight simulation checks pass and remain labelled as simulations
+ok 26 - existing eight simulation checks pass and remain labelled as simulations
   ---
-  duration_ms: 200.8102
+  duration_ms: 393.5993
   ...
 # Subtest: local agent client only accepts exact loopback HTTP origins
-ok 23 - local agent client only accepts exact loopback HTTP origins
+ok 27 - local agent client only accepts exact loopback HTTP origins
   ---
-  duration_ms: 3.2405
+  duration_ms: 7.9359
   ...
 # Subtest: status request sends bearer auth and disables caching
-ok 24 - status request sends bearer auth and disables caching
+ok 28 - status request sends bearer auth and disables caching
   ---
-  duration_ms: 38.5232
+  duration_ms: 89.341
   ...
 # Subtest: agent error envelopes preserve stable codes
-ok 25 - agent error envelopes preserve stable codes
+ok 29 - agent error envelopes preserve stable codes
   ---
-  duration_ms: 1.1042
+  duration_ms: 1.4013
   ...
 # Subtest: evidence endpoint returns versioned runs over the authenticated client
-ok 26 - evidence endpoint returns versioned runs over the authenticated client
+ok 30 - evidence endpoint returns versioned runs over the authenticated client
   ---
-  duration_ms: 1.4
+  duration_ms: 2.1328
   ...
 # Subtest: hung local agent request times out and stale request epochs are ignored
-ok 27 - hung local agent request times out and stale request epochs are ignored
+ok 31 - hung local agent request times out and stale request epochs are ignored
   ---
-  duration_ms: 9.341
+  duration_ms: 15.3161
   ...
 # Subtest: native agent client rejects non-loopback URLs and missing credentials before fetch
-ok 28 - native agent client rejects non-loopback URLs and missing credentials before fetch
+ok 32 - native agent client rejects non-loopback URLs and missing credentials before fetch
   ---
-  duration_ms: 3.2916
+  duration_ms: 5.7521
   ...
 # Subtest: native client sends bearer auth, no-store, and the exact vault endpoint
-ok 29 - native client sends bearer auth, no-store, and the exact vault endpoint
+ok 33 - native client sends bearer auth, no-store, and the exact vault endpoint
   ---
-  duration_ms: 34.322
+  duration_ms: 90.1445
   ...
 # Subtest: native wallet errors preserve status and stable error codes
-ok 30 - native wallet errors preserve status and stable error codes
+ok 34 - native wallet errors preserve status and stable error codes
   ---
-  duration_ms: 1.7208
+  duration_ms: 2.5496
   ...
 # Subtest: file encoding preserves arbitrary binary data and enforces the 10 MiB limit
-ok 31 - file encoding preserves arbitrary binary data and enforces the 10 MiB limit
+ok 35 - file encoding preserves arbitrary binary data and enforces the 10 MiB limit
   ---
-  duration_ms: 27.6122
+  duration_ms: 44.6442
   ...
 # Subtest: retry resumes the existing operation and identity export carries only explicit role/passphrase
-ok 32 - retry resumes the existing operation and identity export carries only explicit role/passphrase
+ok 36 - retry resumes the existing operation and identity export carries only explicit role/passphrase
   ---
-  duration_ms: 2.7927
+  duration_ms: 4.8023
   ...
-1..32
-# tests 32
+1..36
+# tests 36
 # suites 0
-# pass 32
+# pass 36
 # fail 0
 # cancelled 0
 # skipped 0
 # todo 0
-# duration_ms 1415.5752
+# duration_ms 2834.1363

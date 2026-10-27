@@ -12,13 +12,13 @@
   <rect width="1440" height="520" rx="28" fill="url(#bg)"/><rect width="1440" height="520" rx="28" fill="url(#grid)"/>
   <path d="M0 430C270 352 410 496 720 416s500-28 720-104V520H0Z" fill="#64caa5" opacity=".035"/>
   <g font-family="Segoe UI,Arial,sans-serif" fill="#effbf6">
-    <text x="84" y="108" font-size="19" letter-spacing="7" fill="#86d9b9">CANARY / CONTINUITY PROTOCOL</text>
-    <text x="82" y="176" font-size="58" font-weight="650" letter-spacing="-1.5">Encrypted while you are present.</text>
-    <text x="84" y="225" font-size="25" fill="#b8cac3">Recoverable only when the signed lifecycle permits it.</text>
+    <text x="84" y="108" font-size="19" letter-spacing="5" fill="#86d9b9">CANARY / AN ENCRYPTED HANDOFF</text>
+    <text x="82" y="176" font-size="58" font-weight="650" letter-spacing="-1.5">Your reporting needs</text>
+    <text x="82" y="238" font-size="58" font-weight="650" letter-spacing="-1.5">a handoff plan.</text>
     <g transform="translate(84 284)"><rect width="182" height="42" rx="21" fill="#76d5b0" fill-opacity=".1" stroke="#76d5b0" stroke-opacity=".44"/><circle cx="22" cy="21" r="5" fill="#8cf0c6" filter="url(#lineGlow)"><animate attributeName="opacity" values=".4;1;.4" dur="2.4s" repeatCount="indefinite"/></circle><text x="38" y="27" font-size="14" letter-spacing="1.2" fill="#d6eee4">VAULT PROTECTED</text></g>
     <g transform="translate(280 284)"><rect width="160" height="42" rx="21" fill="#db9f4e" fill-opacity=".08" stroke="#db9f4e" stroke-opacity=".38"/><text x="22" y="27" font-size="14" letter-spacing="1.1" fill="#f1c985">3 OF 5 RELEASE</text></g>
-    <text x="84" y="389" font-family="Consolas,monospace" font-size="14" fill="#739087">ZCASH TESTNET · SIGNED SHIELDED COMMANDS · RECIPIENT-BOUND DECRYPTION</text>
-    <text x="84" y="426" font-size="16" fill="#809b91">A tested hackathon prototype with an explicit simulation and native mode.</text>
+    <text x="84" y="389" font-size="23" fill="#b8cac3">Private now. Recoverable by your chosen editor if check-ins stop.</text>
+    <text x="84" y="426" font-size="16" fill="#809b91">Subject to grace, keeper participation and the recipient's private key.</text>
   </g>
   <g transform="translate(1082 258)">
     <circle r="176" fill="none" stroke="#76d5b0" stroke-opacity=".12" stroke-width="1" stroke-dasharray="3 12"><animateTransform attributeName="transform" type="rotate" from="0" to="360" dur="36s" repeatCount="indefinite"/></circle>

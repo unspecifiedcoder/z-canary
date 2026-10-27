@@ -1,52 +1,105 @@
-<p align="center">
-  <img src="docs/assets/canary-hero.svg" alt="Canary — encrypted continuity protocol" width="100%" />
-</p>
+# Canary
+
+## Keep it private now. Make it recoverable if you stop checking in.
+
+**Canary helps a journalist leave an encrypted reporting dossier for a trusted editor—without handing over access immediately.** The journalist checks in to keep the handoff on hold. If check-ins stop, a deadline and grace period pass, and enough keepers participate, the chosen editor can recover the file using their own private key.
+
+It is a contingency plan for the work: **“If I become unavailable, this is who should be able to continue.”**
+
+> **Current status:** a working, tested prototype with a browser simulation and a verified Zcash testnet path. Use synthetic files to explore it. It has not been independently security-audited and is not ready for real sensitive reporting.
 
 <p align="center">
-  <strong>Evidence stays encrypted while the owner is present.<br />If they become unavailable, a controlled threshold process can deliver it to their designated recipient.</strong>
+  <img src="docs/assets/canary-hero.svg" alt="Canary — keep a dossier encrypted until a permitted recovery" width="100%" />
 </p>
 
 <p align="center">
   <img alt="Zcash testnet" src="https://img.shields.io/badge/network-Zcash_testnet-F4B728?style=flat-square&labelColor=101613" />
   <img alt="Rust tests" src="https://img.shields.io/badge/Rust_tests-66_passed-67D7AE?style=flat-square&labelColor=101613" />
-  <img alt="Frontend tests" src="https://img.shields.io/badge/frontend_tests-32_passed-67D7AE?style=flat-square&labelColor=101613" />
+  <img alt="Frontend tests" src="https://img.shields.io/badge/frontend_tests-36_passed-67D7AE?style=flat-square&labelColor=101613" />
   <img alt="Threshold" src="https://img.shields.io/badge/recovery-3_of_5-DBA04F?style=flat-square&labelColor=101613" />
   <img alt="Status" src="https://img.shields.io/badge/status-tested_prototype-8FA79E?style=flat-square&labelColor=101613" />
 </p>
 
 ---
 
-## The 15-second story
+## A concrete example: Maya's reporting, Noor's next step
 
-Canary is a privacy-preserving continuity vault. The owner encrypts a dossier for one recipient, then places the release key behind a 3-of-5 keeper threshold. A signed, shielded Zcash memo renews the deadline. If the deadline and grace window pass without a valid check-in, keepers may deliver their shares. The recipient still needs their private identity to decrypt the evidence.
+*Maya and Noor are fictional people. Their dossier is a synthetic demonstration file.*
 
-The repository includes two intentionally separate experiences:
+Maya is preparing a story. Her editor, Noor, may need the supporting notes if Maya becomes unavailable, but Maya is not ready to grant access today. Sending the file now is too early. Keeping the only usable copy with Maya leaves no handoff plan.
 
-| Experience | What is real | What is simulated |
+With Canary, Maya:
+
+1. **Protects the dossier.** She encrypts the file for Noor and sets a check-in deadline and grace window.
+2. **Keeps control while present.** A signed check-in extends the deadline. A valid cancellation before release stops future share delivery.
+3. **Prepares a recovery path.** If the deadline and grace window pass without a valid check-in, keepers evaluate the confirmed record. Noor needs three valid keeper shares **and** Noor's own private key to recover the file.
+
+A **keeper** is a service that holds one piece of the release key and checks whether release is permitted. One keeper cannot unlock the release layer alone. The demonstrated configuration requires **3 of 5**.
+
+**The result is a recoverable file in the recipient workflow.** Canary does not automatically email the dossier, publish a story, or decide whether Maya is safe. It responds to the check-in record.
+
+## Watch the complete example
+
+[![Watch Maya and Noor's complete Canary demo](docs/assets/canary-demo-poster.jpg)](https://unspecifiedcoder.github.io/z-canary/)
+
+**[Watch the narrated demo · about 3 minutes 12 seconds](https://unspecifiedcoder.github.io/z-canary/)** · **[Try the example yourself](https://unspecifiedcoder.github.io/z-canary/app/#maya-noor)**
+
+Follow Maya from protecting a synthetic dossier to checking in, cancelling, missing a deadline, and Noor's permitted recovery. The film uses captured application steps, edited for time: a changed deadline, a rejected early attempt, a cancelled vault, stale scans, too few shares, a wrong recipient key, and the original file recovered. Browser simulation and recorded native testnet proof are explicitly labeled.
+
+## What happens in each scenario?
+
+| What happens | What Canary does | What Noor can do |
 |---|---|---|
-| **Guided experience** | X25519 key agreement, AES-256-GCM, Ed25519 signatures, 3-of-5 recovery, exact byte verification | Blocks, transactions, keeper records, and timing |
-| **Native testnet** | Zcash testnet transactions, fixed 512-byte memos, UFVK-only scanning, age + XChaCha20-Poly1305, five persistent keeper services, SQLite state, recipient recovery | Independent organizations—the five services run under one local operator |
+| Maya checks in on time | Applies the valid signed command and extends the deadline. | Wait; normal release remains locked. |
+| Noor tries to open the dossier early | Refuses recovery without enough permitted release shares. | Cannot open it with the recipient key alone. |
+| Maya misses the deadline | Enters a grace window; expiry alone does not release the file. | Wait while keepers evaluate on-time commands. |
+| Maya checks in during grace | A valid command included within the allowed boundary extends the deadline. | Wait; the recovery path is deferred. |
+| Maya cancels before release | A valid cancellation stops future share delivery. | Cannot recover through that cancelled release path. |
+| A keeper has stale or incomplete chain data | Suspends that keeper's release decision until its view is healthy. | Cannot treat missing information as permission. |
+| Only two valid shares are available | Keeps threshold recovery blocked. | Wait for a third valid, distinct share. |
+| Conditions pass and three valid shares arrive | Allows reconstruction of the release key. | Use Noor's private key, decrypt, verify, and download the original file. |
+| Someone has shares but lacks Noor's private key | The recipient encryption layer remains locked. | Shares alone are insufficient. |
 
-No smart contract is deployed. The native command channel is composed from shielded Zcash memos.
+Cancellation cannot recall shares already delivered. Three colluding keepers could release early to the designated recipient. These are real trust boundaries, not problems hidden by the demo.
 
-## See it
+## Try it in the app
 
 <p align="center">
-  <img src="docs/evidence/experience/overview-desktop.jpg" alt="Canary overview with the Living Vault" width="92%" />
+  <img src="docs/evidence/experience/case-intro.jpg" alt="Maya chooses Noor as the recipient for her reporting notes" width="92%" />
 </p>
 
 <table>
   <tr>
-    <td width="50%"><img src="docs/evidence/experience/guided-03-grace.jpg" alt="Guided experience in grace state" /></td>
-    <td width="50%"><img src="docs/evidence/experience/guided-05-threshold.jpg" alt="Guided experience reaching keeper threshold" /></td>
+    <td width="50%"><img src="docs/evidence/experience/case-checked-in.jpg" alt="Signed check-in changes the deadline from 1024 to 1048" /></td>
+    <td width="50%"><img src="docs/evidence/experience/case-recovered.jpg" alt="Noor decrypts the original public demonstration file" /></td>
   </tr>
   <tr>
-    <td align="center"><sub>Deadline missed · grace window opens</sub></td>
-    <td align="center"><sub>Three valid shares · recipient recovery permitted</sub></td>
+    <td align="center"><sub>Maya checks in · deadline moves from 1,024 to 1,048</sub></td>
+    <td align="center"><sub>Noor decrypts · original 500-byte file verified</sub></td>
   </tr>
 </table>
 
-The interface includes the pointer-reactive **Living Vault**, a six-chapter guided lifecycle, owner controls, recipient inbox, shielded support, keeper topology, evidence management, and a connected native workspace. It supports reduced motion, bounded WebGL resolution, hidden-tab pausing, and a labeled 2D fallback.
+Start with **[Try the example](https://unspecifiedcoder.github.io/z-canary/app/#maya-noor)**. You take the actions yourself: protect Maya's file, try Noor's inbox too early, check in, explore cancellation, and work through the missed-check-in recovery path. The result panels show what actually changed after each action.
+
+The app also includes the **Living Vault**, the original six-chapter protocol guide, owner controls, recipient inbox, shielded support, keeper topology, evidence management, and a connected native workspace. It supports reduced motion, bounded WebGL resolution, hidden-tab pausing, and a labeled 2D fallback.
+
+[Run the browser demo](#run-the-guided-experience) · [Inspect the testnet proof](#a-real-testnet-proof) · [Read the trust limits](#threat-model-and-honest-limits)
+
+## What works today?
+
+| Experience | What you can verify | What is simulated or limited |
+|---|---|---|
+| **Browser demonstration** | File encryption, signed commands, check-in and cancellation behavior, threshold recovery, and exact-byte verification. | Blocks, transactions, keeper records, and timing are simulated in one browser. No wallet or real transaction is needed. |
+| **Native Zcash testnet** | Actual shielded transactions, persistent encrypted storage, five keeper processes, and recipient recovery of the original test file. | The five keeper services share one local operator and scanner. They are not five independent organizations. Native mode currently targets Windows. |
+
+The browser's encryption format is separate from the native format. Test results and recorded transactions are linked below so a reviewer can inspect the implementation, not just watch an animation.
+
+### Why Zcash is part of it
+
+In native mode, Maya's signed check-ins and cancellation commands travel in shielded Zcash memos. The dossier itself stays off-chain and encrypted. Keepers use confirmed commands to decide whether to keep waiting or permit release. **No smart contract is deployed.** This transport choice does not establish a guarantee of network anonymity.
+
+<details>
+<summary><strong>Technical walkthrough: lifecycle, architecture, and security boundaries</strong></summary>
 
 ## Lifecycle
 
@@ -120,6 +173,8 @@ flowchart LR
 | Keeper | Its encrypted envelope, manifest, confirmed command stream | Recipient private identity, complete release key before threshold |
 | Recipient | Encrypted package, validated release shares | Source signing key, wallet spending key |
 
+</details>
+
 ## A real testnet proof
 
 The completed native acceptance run used four shielded transactions and recovered the exact fixture after threshold release. Links below open in the Zcash testnet explorer.
@@ -148,7 +203,9 @@ npm run typecheck
 npm run dev
 ```
 
-Open `http://127.0.0.1:3000`, choose **Begin guided experience**, and use a synthetic file. The guide is repeatable and resettable; it never connects to a wallet or sends a transaction.
+Open `http://127.0.0.1:3000` and choose **Try Maya & Noor's story**. The example supplies a fictional reporting file and runs real browser encryption, signed commands, threshold checks, and decryption against simulated chain and keeper records. It is repeatable and resettable; it never connects to a wallet or sends a transaction. Use **Vault Sentinel** for additional owner actions, **Recipient Inbox** for recovery, and **Evidence & Keepers** to inspect keeper participation.
+
+The verified Maya/Noor browser run recovered the original **500-byte** `Maya-Rivergate-demo-notes.txt` file. Its SHA-256 is `cf2f6149b05ac93ed0e5116c506ea1791641c0606f6a7fe10a040a395bc9e20f`. This is separate from the **136-byte native testnet fixture** above. [Case-study tests](tests/caseStudy.test.ts) cover the complete recovery path, signed cancellation, check-in during grace, and clean reset.
 
 For a production bundle:
 
@@ -194,6 +251,9 @@ pwsh -File backend/scripts/run-native.ps1 `
 The runner prints the path of a private bearer-token file, never the token itself. Enter the token in the **Native Testnet** screen. It remains in browser memory. The runner refuses to invent or fund a replacement wallet.
 
 Read [backend/README.md](backend/README.md) before native use. It documents the exact setup, state layout, retry behavior, key backups, API, smoke commands, and operational limits.
+
+<details>
+<summary><strong>Implementation reference: cryptography, command format, and repository map</strong></summary>
 
 ## Cryptographic model
 
@@ -250,12 +310,14 @@ z-canary/
 └── docs/evidence/        Test logs, live acceptance records and visual QA
 ```
 
+</details>
+
 ## Verification snapshot
 
 | Area | Result | Evidence |
 |---|---:|---|
 | Rust workspace | **66 tests passed** | [backend test log](docs/evidence/backend-tests.txt) |
-| Frontend | **32 tests passed** | [frontend test log](docs/evidence/frontend-tests.tap) |
+| Frontend | **36 tests passed** | [frontend test log](docs/evidence/frontend-tests.tap) |
 | TypeScript + Vite | **passed** | [production build log](docs/evidence/frontend-build.txt) |
 | Five-process rehearsal | **12 checks passed** | [rehearsal record](docs/evidence/five-process-rehearsal.json) |
 | Native live acceptance | **15 checks passed** | [testnet record](docs/evidence/native-live-acceptance.json) |
@@ -297,5 +359,5 @@ The original repository contains an Apache-2.0 SPDX header in `src/App.tsx`, but
 ---
 
 <p align="center">
-  <sub>Canary turns a difficult privacy and recovery protocol into a lifecycle a first-time user can see, test, and understand.</sub>
+  <sub>Keep the work private while you are present. Prepare a deliberate handoff if you are not.</sub>
 </p>
