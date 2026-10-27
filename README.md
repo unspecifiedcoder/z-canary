@@ -31,7 +31,7 @@
 <p align="center">
   <img alt="Zcash testnet" src="https://img.shields.io/badge/network-Zcash_testnet-F4B728?style=flat-square&labelColor=101613" />
   <img alt="Rust tests" src="https://img.shields.io/badge/Rust_tests-66_passed-67D7AE?style=flat-square&labelColor=101613" />
-  <img alt="Frontend tests" src="https://img.shields.io/badge/frontend_tests-36_passed-67D7AE?style=flat-square&labelColor=101613" />
+  <img alt="Frontend tests" src="https://img.shields.io/badge/frontend_tests-43_passed-67D7AE?style=flat-square&labelColor=101613" />
   <img alt="Threshold" src="https://img.shields.io/badge/recovery-3_of_5-DBA04F?style=flat-square&labelColor=101613" />
   <img alt="Status" src="https://img.shields.io/badge/status-tested_prototype-8FA79E?style=flat-square&labelColor=101613" />
 </p>
