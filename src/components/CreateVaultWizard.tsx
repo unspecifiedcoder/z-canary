@@ -27,6 +27,7 @@ import {
   computeKeyFingerprint,
   EncryptedVaultPackage,
   encryptDossierDualLayer,
+  generateRecipientIdentity,
   RecipientIdentity,
 } from '../crypto/envelope';
 import {
@@ -42,7 +43,7 @@ interface CreateVaultWizardProps {
   recipientIdentity: RecipientIdentity;
   currentBlockHeight: number;
   walletBalanceZatoshi: number;
-  onVaultCreated: (vault: ContinuityVault, regTx: ChainTransaction, feeZatoshi: number) => void;
+  onVaultCreated: (vault: ContinuityVault, regTx: ChainTransaction, feeZatoshi: number, recipient: RecipientIdentity) => void;
   onCancel: () => void;
 }
 
@@ -64,13 +65,17 @@ export const CreateVaultWizard: React.FC<CreateVaultWizardProps> = ({
   const [fileError, setFileError] = useState<string | null>(null);
   const [provisioningError, setProvisioningError] = useState<string | null>(null);
 
-  const [recipientPubKey, setRecipientPubKey] = useState(recipientIdentity.publicKeyHex);
+  const [generatedRecipient, setGeneratedRecipient] = useState<RecipientIdentity>(() =>
+    generateRecipientIdentity('Judge-created recovery recipient')
+  );
+  const [recipientPubKey, setRecipientPubKey] = useState(generatedRecipient.publicKeyHex);
   const [fingerprintVerified, setFingerprintVerified] = useState(false);
 
   const [profileMode, setProfileMode] = useState<'TESTNET_DEMO' | 'STANDARD_PRODUCTION'>('TESTNET_DEMO');
   const [intervalBlocks, setIntervalBlocks] = useState(24);
   const [graceBlocks, setGraceBlocks] = useState(6);
   const [confirmationTarget, setConfirmationTarget] = useState(2);
+  const [threshold, setThreshold] = useState(3);
 
   // Step 4 provisioning & backup state
   const [provisionedKeepers, setProvisionedKeepers] = useState<number[]>([]);
@@ -130,7 +135,7 @@ export const CreateVaultWizard: React.FC<CreateVaultWizardProps> = ({
       const plainBytes = uploadedBytes ?? new TextEncoder().encode(fileContent);
 
       const pkg = encryptDossierDualLayer(plainBytes, recipientPubKey, randReleaseKey);
-      const shares = splitSecret(randReleaseKey, sIdHex, 1, 5, 3);
+      const shares = splitSecret(randReleaseKey, sIdHex, 1, 5, threshold);
 
       setSwitchIdHex(sIdHex);
       setSourceSecretHex(srcSecHex);
@@ -163,7 +168,7 @@ export const CreateVaultWizard: React.FC<CreateVaultWizardProps> = ({
       graceBlocks,
       confirmationTarget,
       maxExtensionBlocks: 10000,
-      threshold: 3,
+      threshold,
       configurationEpoch: 1,
       shareCommitments,
     }, sourceSecretHex);
@@ -282,7 +287,15 @@ export const CreateVaultWizard: React.FC<CreateVaultWizardProps> = ({
       ],
     };
 
-    onVaultCreated(newVault, regTx, estimatedFeeZatoshi);
+    const selectedRecipient = recipientPubKey === generatedRecipient.publicKeyHex
+      ? generatedRecipient
+      : {
+          label: 'External recovery recipient',
+          privateKeyHex: '',
+          publicKeyHex: recipientPubKey,
+          fingerprint: computeKeyFingerprint(recipientPubKey),
+        };
+    onVaultCreated(newVault, regTx, estimatedFeeZatoshi, selectedRecipient);
   };
 
   const displayedFingerprint = (() => {
@@ -304,6 +317,9 @@ export const CreateVaultWizard: React.FC<CreateVaultWizardProps> = ({
     }
     if (!Number.isInteger(confirmationTarget) || confirmationTarget < 1 || confirmationTarget > uint32Max) {
       return 'Confirmation target must be a positive whole block count.';
+    }
+    if (!Number.isInteger(threshold) || threshold < 2 || threshold > 5) {
+      return 'Keeper threshold must be a whole number from 2 through 5.';
     }
     if (currentBlockHeight + intervalBlocks + graceBlocks > uint32Max) {
       return 'This deadline exceeds the protocol’s maximum supported block height.';
@@ -437,9 +453,30 @@ export const CreateVaultWizard: React.FC<CreateVaultWizardProps> = ({
               Designated Recipient X25519 Identity
             </h2>
             <p className="text-sm text-[#94A3B8]">
-              Z-Canary v1 enforces single-recipient encrypted delivery without public document
-              disclosure. Verify the recipient’s out-of-band key fingerprint before encrypting.
+              Canary created a fresh browser-only recipient identity for this walkthrough. You can
+              use it immediately, regenerate it, or paste a public key supplied by another recipient.
             </p>
+          </div>
+
+          <div className="p-4 bg-[#071611] border border-[#10B981]/40 space-y-3">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+              <div>
+                <div className="text-xs font-mono text-[#10B981]">FRESH DEMO RECIPIENT GENERATED LOCALLY</div>
+                <p className="text-xs text-[#94A3B8] mt-1">The private key stays in this browser session and is used later to prove recipient-only recovery.</p>
+              </div>
+              <button
+                type="button"
+                onClick={() => {
+                  const next = generateRecipientIdentity('Judge-created recovery recipient');
+                  setGeneratedRecipient(next);
+                  setRecipientPubKey(next.publicKeyHex);
+                  setFingerprintVerified(false);
+                }}
+                className="px-3 py-2 text-xs font-semibold text-[#10B981] border border-[#10B981]/50 hover:bg-[#10B981]/10 cursor-pointer"
+              >
+                Generate another identity
+              </button>
+            </div>
           </div>
 
           <div className="space-y-2">
@@ -467,7 +504,7 @@ export const CreateVaultWizard: React.FC<CreateVaultWizardProps> = ({
               {displayedFingerprint}
             </div>
             <div className="text-xs text-[#94A3B8]">
-              Designated Profile: {recipientIdentity.label}
+              Designated Profile: {recipientPubKey === generatedRecipient.publicKeyHex ? generatedRecipient.label : recipientIdentity.label}
             </div>
           </div>
 
@@ -570,9 +607,13 @@ export const CreateVaultWizard: React.FC<CreateVaultWizardProps> = ({
             </div>
             <div className="p-3.5 bg-[#0B0D11] border border-[#222938] space-y-1">
               <span className="text-[#64748B]">Keeper Committee</span>
-              <div className="text-sm font-semibold text-[#10B981] tabular-nums">
-                3-of-5 Threshold (Epoch 1)
-              </div>
+              <label className="block text-sm font-semibold text-[#10B981] tabular-nums" htmlFor="keeper-threshold">
+                <span className="sr-only">Keeper threshold</span>
+                <select id="keeper-threshold" value={threshold} onChange={event => setThreshold(Number(event.target.value))} className="w-full bg-transparent text-[#10B981] border-0 p-0 focus:outline-none cursor-pointer">
+                  {[2,3,4,5].map(value => <option key={value} value={value} className="bg-[#0B0D11]">{value}-of-5 Threshold</option>)}
+                </select>
+              </label>
+              <span className="text-[10px] text-[#64748B]">Choose how many distinct shares recovery requires.</span>
             </div>
           </div>
 

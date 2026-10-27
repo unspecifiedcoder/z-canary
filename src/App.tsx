@@ -33,29 +33,35 @@ import { VaultDetailConsole } from './components/VaultDetailConsole';
 import { RecipientInboxScreen } from './components/RecipientInboxScreen';
 import { SupportScreen } from './components/SupportScreen';
 import { EvidenceAndKeepersPanel } from './components/EvidenceAndKeepersPanel';
+import { JudgeJourney } from './components/JudgeJourney';
 import NativeVaultWorkspace from './components/NativeVaultWorkspace';
+import { tabForHash, type PublicAppTab } from './experience/routes';
 
 const GuidedExperience = lazy(() => import('./components/GuidedExperience'));
 const CaseStudyDemo = lazy(() => import('./components/CaseStudyDemo'));
 
-type ActiveTab = 'demo' | 'case' | 'welcome' | 'sentinel' | 'create' | 'recipient' | 'support' | 'evidence' | 'native';
+type ActiveTab = PublicAppTab;
 
 const INITIAL_HEIGHT = 2845100;
 
 export default function App() {
   const [initialData] = useState(() => createInitialPreloadedSetup(INITIAL_HEIGHT));
 
-  const [activeTab, setActiveTab] = useState<ActiveTab>(() =>
-    window.location.hash === '#maya-noor' ? 'case' : 'welcome');
+  const [activeTab, setActiveTab] = useState<ActiveTab>(() => tabForHash(window.location.hash));
   const mainRef = useRef<HTMLElement>(null);
   const didNavigate = useRef(false);
   useEffect(() => {
     if (didNavigate.current) { mainRef.current?.focus({ preventScroll: true }); window.scrollTo({ top: 0, behavior: 'instant' }); }
     didNavigate.current = true;
   }, [activeTab]);
+  useEffect(() => {
+    const followHash = () => setActiveTab(tabForHash(window.location.hash));
+    window.addEventListener('hashchange', followHash);
+    return () => window.removeEventListener('hashchange', followHash);
+  }, []);
   const [currentBlockHeight, setCurrentBlockHeight] = useState<number>(INITIAL_HEIGHT);
   const [forkSalt, setForkSalt] = useState<number>(0);
-  const [recipientIdentity] = useState(initialData.recipientIdentity);
+  const [recipientIdentity, setRecipientIdentity] = useState(initialData.recipientIdentity);
   const [vault, setVault] = useState<ContinuityVault>(initialData.vault);
   const [transactions, setTransactions] = useState<ChainTransaction[]>(initialData.transactions);
   const [walletBalanceZatoshi, setWalletBalanceZatoshi] = useState<number>(480000);
@@ -300,6 +306,38 @@ export default function App() {
     );
   };
 
+  const handleConfirmRegistration = () => {
+    const delta = Math.max(1, vault.manifest.confirmationTarget - 1);
+    handleAdvanceBlocks(delta);
+    setActiveTab('sentinel');
+    showToast('Simulated registration confirmed. All healthy keeper records are active; no transaction was sent.');
+  };
+
+  const handleReleaseBelowThreshold = () => {
+    const available = Math.max(1, vault.manifest.threshold - 1);
+    const targetHeight = vault.graceDeadlineHeight + vault.manifest.confirmationTarget - 1;
+    const prepared = { ...vault, keepers: vault.keepers.map(keeper => ({
+      ...keeper, online: keeper.index <= available, scannerHealth: 'HEALTHY' as const,
+    })) };
+    const nextHeight = Math.max(currentBlockHeight, targetHeight);
+    const synced = synchronizeVaultWithChain(prepared, transactions, nextHeight, forkSalt);
+    setCurrentBlockHeight(nextHeight);
+    setVault(synced);
+    setActiveTab('recipient');
+    showToast(`Below-threshold test complete: ${synced.deliveredSharesToRecipient.length}/${vault.manifest.threshold} shares. Recovery must remain blocked.`);
+  };
+
+  const handleRestoreThreshold = () => {
+    const required = vault.manifest.threshold;
+    const prepared = { ...vault, keepers: vault.keepers.map(keeper => ({
+      ...keeper, online: keeper.index <= required, scannerHealth: 'HEALTHY' as const,
+    })) };
+    const synced = synchronizeVaultWithChain(prepared, transactions, currentBlockHeight, forkSalt);
+    setVault(synced);
+    setActiveTab('recipient');
+    showToast(`Threshold met: ${synced.deliveredSharesToRecipient.length}/${required} valid shares. The recipient key is still required.`);
+  };
+
   const handleResetDemo = () => {
     const fresh = createInitialPreloadedSetup(INITIAL_HEIGHT);
     setCurrentBlockHeight(INITIAL_HEIGHT);
@@ -382,6 +420,18 @@ export default function App() {
         <div><button onClick={()=>handleAdvanceBlocks(1)}><Pickaxe size={14}/>Mine +1 block</button><button onClick={()=>handleAdvanceBlocks(6)}>Mine +6 blocks</button><button onClick={handleJumpToGrace}>Enter grace</button><button onClick={handleJumpPastGraceToExpire}><FastForward size={14}/>Evaluate expiry</button><button onClick={handleResetDemo}><RotateCcw size={14}/>Reset harness</button><button onClick={()=>setActiveTab('create')}>New demo vault ↗</button></div>
       </details>}
 
+      <JudgeJourney
+        vault={vault}
+        isCustomVault={vault.id !== initialData.vault.id}
+        onNavigate={page => setActiveTab(page)}
+        onConfirmRegistration={handleConfirmRegistration}
+        onCheckIn={() => { handleCheckIn(vault.manifest.initialIntervalBlocks); setActiveTab('sentinel'); }}
+        onEnterGrace={handleJumpToGrace}
+        onReleaseBelowThreshold={handleReleaseBelowThreshold}
+        onRestoreThreshold={handleRestoreThreshold}
+        onReset={() => { handleResetDemo(); setActiveTab('create'); }}
+      />
+
       {/* Toast Feedback Banner */}
       {toastMessage && (
         <div role="status" aria-live="polite" className="max-w-7xl w-full mx-auto px-6 pt-4">
@@ -432,11 +482,12 @@ export default function App() {
             recipientIdentity={recipientIdentity}
             currentBlockHeight={currentBlockHeight}
             walletBalanceZatoshi={walletBalanceZatoshi}
-            onVaultCreated={(newVault, regTx, fee) => {
+            onVaultCreated={(newVault, regTx, fee, newRecipient) => {
               const nextTxs = [...transactions, regTx];
               setWalletBalanceZatoshi((b) => Math.max(0, b - fee));
               setTransactions(nextTxs);
               setVault(newVault);
+              setRecipientIdentity(newRecipient);
               setSelectedTxidForMemo(regTx.txid);
               setActiveTab('sentinel');
               showToast(
@@ -537,7 +588,7 @@ export default function App() {
         {activeTab === 'demo' && <Suspense fallback={<div className="scene-loading">Preparing the guided experience…</div>}><GuidedExperience onNative={() => setActiveTab('native')} /></Suspense>}
       </div></main>
 
-      <footer className="canary-footer"><span className="footer-wordmark">canary.</span><p>Private by design. Deliberate by protocol.<br/><span>Zcash testnet · 3-of-5 threshold · Signed shielded memos</span></p><button onClick={()=>setActiveTab('evidence')}>Inspect the evidence ↗</button></footer>
+      <footer className="canary-footer"><span className="footer-wordmark">canary.</span><p>Private by design. Deliberate by protocol.<br/><span>Zcash testnet · {vault.manifest.threshold}-of-5 threshold · Signed shielded memos</span></p><button onClick={()=>setActiveTab('evidence')}>Inspect the evidence ↗</button></footer>
     </div>
   );
 }
