@@ -1,0 +1,6 @@
+{
+  "generator": "canary-public-demo",
+  "source": "dist",
+  "output": "docs/app",
+  "version": 1
+}

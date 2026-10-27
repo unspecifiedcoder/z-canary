@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Canary helps a journalist keep reporting notes private now and prepare a trusted editor to recover them if regular check-ins stop. Watch Maya and Noor’s working example, then try it yourself.">
+  <meta name="theme-color" content="#0a1411">
+  <title>Canary — Private now. A handoff when it matters.</title>
+  <style>
+    :root{color-scheme:dark;--bg:#0a1411;--paper:#e6eee6;--mint:#a4e8d8;--muted:#a9bdb0;--line:#2d473b;--amber:#e7bc79;font-family:Arial,Helvetica,sans-serif;background:var(--bg);color:var(--paper)}
+    *{box-sizing:border-box}body{margin:0}a{color:var(--mint)}button,a{-webkit-tap-highlight-color:transparent}button:focus-visible,a:focus-visible,video:focus-visible{outline:3px solid var(--mint);outline-offset:5px}.skip{position:fixed;top:8px;left:12px;padding:10px;background:var(--mint);color:var(--bg);z-index:5;translate:0 -160%}.skip:focus{translate:0 0}.shell{max-width:1460px;margin:0 auto;padding:0 42px}.masthead{display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--line);padding:27px 0}.wordmark{font-size:30px;font-weight:700;letter-spacing:-1.7px;text-decoration:none;color:var(--paper)}.wordmark span{color:var(--mint)}.masthead nav{display:flex;gap:25px;font-size:13px}.masthead nav a{text-decoration:none;color:var(--muted)}.masthead nav a:hover{color:var(--mint)}.intro{padding:55px 0 34px;display:grid;grid-template-columns:1.5fr 1fr;gap:60px;align-items:end}.eyebrow{font:11px Consolas,monospace;letter-spacing:1.8px;text-transform:uppercase;color:var(--mint);margin:0 0 17px}h1{font-size:clamp(38px,5vw,69px);line-height:1.03;font-weight:400;letter-spacing:-2.7px;margin:0}h1 em{font-family:Georgia,serif;color:var(--mint);font-weight:400}.pitch{font-size:17px;line-height:1.6;color:var(--muted);margin:0 0 23px;max-width:520px}.pitch strong{color:var(--paper);font-weight:400}.cta{display:inline-flex;align-items:center;gap:22px;padding:14px 18px;background:var(--mint);color:var(--bg);text-decoration:none;font-size:14px;font-weight:600;border:1px solid var(--mint)}.cta:hover{background:#c9f8e8}.player-layout{display:grid;grid-template-columns:minmax(0,1fr) 255px;gap:25px;align-items:start}.film{margin:0;min-width:0}video{display:block;width:100%;aspect-ratio:16/9;background:#06100b;border:1px solid var(--line)}figcaption{display:flex;align-items:center;justify-content:space-between;gap:18px;font:11px/1.5 Consolas,monospace;color:var(--muted);letter-spacing:.4px;padding:15px 0;border-bottom:1px solid var(--line)}.film-mode{color:var(--mint)}.film-mode.simulation{color:var(--amber)}.chapter-panel{border-top:1px solid var(--line)}.chapter-panel h2{font:11px Consolas,monospace;letter-spacing:1.5px;color:var(--muted);font-weight:400;margin:16px 8px}.chapters{max-height:540px;overflow:auto;scrollbar-width:thin;scrollbar-color:#527a63 transparent}.chapter{width:100%;display:grid;grid-template-columns:42px 1fr;gap:10px;align-items:start;padding:12px 9px;text-align:left;border:0;border-top:1px solid #1d3328;background:none;color:var(--muted);font-size:13px;line-height:1.4;cursor:pointer}.chapter time{font:11px/1.7 Consolas,monospace;color:#7fa28d}.chapter:hover,.chapter[aria-current="true"]{background:#173529;color:var(--mint)}.chapter[aria-current="true"] time{color:var(--mint)}.player-message{font-size:13px;line-height:1.5;color:var(--amber);margin:12px 0;min-height:20px}.downloads{display:flex;flex-wrap:wrap;gap:14px;align-items:center;padding-top:15px}.downloads a{font-size:13px;text-underline-offset:5px}.downloads span{color:#476550}.explain{display:grid;grid-template-columns:1.1fr 1fr;gap:70px;padding:47px 0;border-bottom:1px solid var(--line)}.explain h2{font-size:29px;font-weight:400;letter-spacing:-.7px;margin:0 0 17px}.explain p{font-size:15px;line-height:1.65;color:var(--muted);margin:0 0 15px}.explain strong{color:var(--paper);font-weight:400}.proof-link{font-size:14px;text-underline-offset:5px}.fact{display:flex;gap:14px;padding:13px 0;border-top:1px solid var(--line);font-size:14px;line-height:1.45}.fact span{color:var(--mint);min-width:21px;font:12px Consolas,monospace;padding-top:3px}.fact p{margin:0}.limits{padding:28px 0 45px;font-size:12px;line-height:1.7;color:#91ac9a;max-width:1080px}.limits strong{color:var(--muted);font-weight:600}.footer-line{display:flex;justify-content:space-between;padding-bottom:26px;color:#72947f;font:11px Consolas,monospace}.footer-line a{text-decoration:none}.noscript{padding:12px 0;font-size:13px;color:var(--amber)}
+    @media(max-width:1050px){.intro{grid-template-columns:1.2fr 1fr;gap:35px}.player-layout{grid-template-columns:minmax(0,1fr) 220px}.chapter{font-size:12px}.chapters{max-height:400px}.explain{gap:40px}.pitch{font-size:15px}}
+    @media(max-width:780px){.shell{padding:0 22px}.masthead{padding:22px 0}.masthead nav{gap:16px;font-size:12px}.intro{grid-template-columns:1fr;padding:37px 0 26px;gap:22px}h1{font-size:48px;letter-spacing:-2px}.pitch{max-width:650px;margin-bottom:18px;font-size:16px}.player-layout{grid-template-columns:1fr}.chapter-panel{margin-top:2px}.chapters{max-height:225px;display:grid;grid-template-columns:1fr 1fr}.chapter{font-size:13px}.explain{grid-template-columns:1fr;gap:27px;padding:34px 0}figcaption{font-size:10px}.limits{padding-top:23px}.footer-line{gap:20px;line-height:1.5}}
+    @media(max-width:420px){.shell{padding:0 16px}h1{font-size:40px}.masthead nav{gap:13px}.masthead nav a:first-child{display:none}.chapters{grid-template-columns:1fr}.downloads{gap:11px}.pitch{font-size:15px}.cta{font-size:13px}.footer-line{display:block}.footer-line a{display:block;margin-top:8px}}
+    @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}}
+  </style>
+</head>
+<body>
+  <a class="skip" href="#watch">Skip to the demo video</a>
+  <div class="shell">
+    <header class="masthead"><a class="wordmark" href="./" aria-label="Canary home">canary<span>.</span></a><nav aria-label="Page navigation"><a href="#how">The example</a><a href="app/#maya-noor">Try Canary</a><a href="https://github.com/unspecifiedcoder/z-canary">Source ↗</a></nav></header>
+    <main>
+      <section class="intro" aria-labelledby="page-title">
+        <div><p class="eyebrow">An encrypted handoff for the person you trust</p><h1 id="page-title">Private now.<br/><em>A handoff when it matters.</em></h1></div>
+        <div><p class="pitch"><strong>Maya is a journalist. Noor is her editor.</strong> Maya wants to keep her reporting notes private today—but give Noor a way to recover them if she stops checking in. Canary gives her that conditional handoff plan.</p><a class="cta" href="app/#maya-noor">Try Maya &amp; Noor’s example <span aria-hidden="true">↗</span></a></div>
+      </section>
+      <section id="watch" class="player-layout" aria-label="Watch the working example">
+        <figure class="film">
+          <video id="canary-video" controls preload="metadata" playsinline poster="assets/canary-demo-poster.jpg" aria-label="Canary demonstration: Maya and Noor’s encrypted handoff">
+            <source src="https://github.com/unspecifiedcoder/z-canary/releases/download/demo-v2/canary-demo-v2.mp4" type="video/mp4">
+            <track kind="captions" src="assets/canary-demo.vtt" srclang="en" label="English">
+            Your browser does not support embedded video. <a href="https://github.com/unspecifiedcoder/z-canary/releases/download/demo-v2/canary-demo-v2.mp4">Download the demo MP4</a>.
+          </video>
+          <figcaption><span id="film-mode" class="film-mode">MAYA &amp; NOOR / FICTIONAL EXAMPLE</span><span>3:12 · 1080p · Narrated</span></figcaption>
+          <p id="player-message" class="player-message" role="status" aria-live="polite"></p>
+          <div class="downloads"><a href="https://github.com/unspecifiedcoder/z-canary/releases/download/demo-v2/canary-demo-v2.mp4">Download MP4 ↗</a><span aria-hidden="true">/</span><a href="assets/canary-demo.vtt" download>English captions</a><span aria-hidden="true">/</span><a href="https://github.com/unspecifiedcoder/z-canary/blob/main/docs/evidence/VERIFICATION.md">Verification evidence ↗</a></div>
+        </figure>
+        <aside class="chapter-panel" aria-labelledby="chapters-title"><h2 id="chapters-title">JUMP TO A SCENARIO</h2><div id="chapters" class="chapters"></div><noscript><p class="noscript">Chapter shortcuts require JavaScript. The video’s own controls and MP4 download still work.</p></noscript></aside>
+      </section>
+      <section id="how" class="explain" aria-label="What the example demonstrates">
+        <div><p class="eyebrow">One concrete story, several possible outcomes</p><h2>Maya can change the plan.<br/>Noor cannot skip the rules.</h2><p>Maya encrypts a fictional reporting file for Noor. Her signed check-ins extend the deadline. If she cancels before release, future delivery stops. If she misses a check-in, a grace window gives her another chance.</p><p>After that window, keepers need a sufficiently current view of confirmed commands before releasing shares. Noor needs <strong>three distinct shares and her own private key</strong> to recover the file.</p></div>
+        <div><div class="fact"><span>01</span><p><strong>Watch the actions change the result.</strong> File encryption, early recovery rejected, deadline extended, cancellation, grace, stale scans, two-share rejection, three-share recovery, wrong-key rejection, and a verified download.</p></div><div class="fact"><span>02</span><p><strong>Know which parts are simulated.</strong> The browser walkthrough uses real local cryptography with simulated blocks and keeper records. The captured actions are edited for time; no blockchain transactions are sent by this example.</p></div><div class="fact"><span>03</span><p><strong>Inspect the native evidence separately.</strong> The film also presents a recorded, completed Zcash testnet run with confirmed commands and exact-file recovery. Those receipts are not transactions created by the fictional scenario.</p></div></div>
+      </section>
+      <p class="limits"><strong>A tested prototype, not an audited tool for sensitive reporting.</strong> Use the harmless public fixture. The five native keeper processes currently share one operator and scanner. Three colluding keepers could release early, and delivered shares cannot be recalled. Canary does not determine whether someone is safe, automatically publish a story, or guarantee anonymity. The example explores conditional file recovery for one designated recipient.</p>
+    </main>
+    <footer class="footer-line"><span>Private evidence. Enduring intent.</span><a href="https://github.com/unspecifiedcoder/z-canary">Inspect the code on GitHub ↗</a></footer>
+  </div>
+  <script>
+    const chapters = [
+      [0, 'Meet Maya and Noor'], [14.566667, 'What Canary does'], [29.266667, 'Protect the file'],
+      [43.566667, 'Early recovery is blocked'], [53.533333, 'Maya checks in'], [64.9, 'Cancel the handoff'],
+      [77.266667, 'Miss a check-in'], [88.433333, 'Return during grace'], [100.433333, 'Stale scans: release waits'],
+      [110.6, 'Two shares: not enough'], [120.933333, 'Restore the third keeper'], [131.233333, 'Try the wrong recipient key'],
+      [141.166667, 'Recover and download'], [155.666667, 'Recorded native testnet proof'], [175.766667, 'Try the example yourself']
+    ];
+    const video = document.getElementById('canary-video');
+    const list = document.getElementById('chapters');
+    const message = document.getElementById('player-message');
+    const mode = document.getElementById('film-mode');
+    const buttons = chapters.map(([start, label]) => {
+      const button = document.createElement('button');
+      button.className = 'chapter'; button.type = 'button';
+      const time = document.createElement('time');
+      time.textContent = Math.floor(start / 60) + ':' + String(Math.floor(start % 60)).padStart(2, '0');
+      const text = document.createElement('span'); text.textContent = label;
+      button.append(time, text); button.setAttribute('aria-label', `Play ${label}, ${time.textContent}`);
+      button.addEventListener('click', async () => {
+        message.textContent = '';
+        try {
+          if (video.readyState === 0) {
+            await new Promise((resolve, reject) => {
+              const timer = setTimeout(() => { cleanup(); reject(new Error('metadata-timeout')); }, 15000);
+              const loaded = () => { cleanup(); resolve(); };
+              const failed = () => { cleanup(); reject(new Error('media-load')); };
+              const cleanup = () => { clearTimeout(timer); video.removeEventListener('loadedmetadata', loaded); video.removeEventListener('error', failed); };
+              video.addEventListener('loadedmetadata', loaded, { once: true }); video.addEventListener('error', failed, { once: true });
+              video.load();
+            });
+          }
+          video.currentTime = start;
+          await video.play();
+        } catch {
+          message.textContent = 'Playback could not start here. Press Play in the video controls, or use Download MP4.';
+        }
+      });
+      list.appendChild(button); return button;
+    });
+    let lastChapter = -1;
+    function updateChapter() {
+      let current = 0;
+      chapters.forEach(([start], index) => { if (video.currentTime >= start) current = index; });
+      if (current !== lastChapter) {
+        buttons.forEach((button, index) => { button.setAttribute('aria-current', index === current ? 'true' : 'false'); });
+        lastChapter = current;
+      }
+      const t = video.currentTime;
+      const simulated = t >= 29.266667 && t < 155.666667;
+      mode.classList.toggle('simulation', simulated);
+      mode.textContent = simulated ? 'BROWSER SIMULATION / CAPTURED ACTIONS, EDITED FOR TIME' : t >= 155.666667 && t < 175.766667 ? 'NATIVE TESTNET / RECORDED VERIFICATION EVIDENCE' : 'MAYA & NOOR / FICTIONAL EXAMPLE';
+    }
+    video.addEventListener('timeupdate', updateChapter);
+    video.addEventListener('loadedmetadata', updateChapter);
+    const showMediaError = () => { message.textContent = 'The embedded video could not load. The Download MP4 link opens the same film on GitHub.'; };
+    video.addEventListener('error', showMediaError);
+    video.querySelector('source').addEventListener('error', showMediaError);
+    updateChapter();
+  </script>
+</body>
+</html>
