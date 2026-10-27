@@ -57,12 +57,15 @@ export const CreateVaultWizard: React.FC<CreateVaultWizardProps> = ({
 }) => {
   const [step, setStep] = useState<1 | 2 | 3 | 4>(1);
   const [title, setTitle] = useState('Meridian Liquidity Audit — Supplemental Annex');
-  const [fileName, setFileName] = useState('Synthetic-Evidence-Annex-B.pdf');
+  const [fileName, setFileName] = useState('Synthetic-Evidence-Annex-B.txt');
   const [fileContent, setFileContent] = useState(SYNTHETIC_DOSSIER_CONTENT);
+  const [uploadedBytes, setUploadedBytes] = useState<Uint8Array | null>(null);
+  const [fileLoading, setFileLoading] = useState(false);
   const [fileError, setFileError] = useState<string | null>(null);
+  const [provisioningError, setProvisioningError] = useState<string | null>(null);
 
   const [recipientPubKey, setRecipientPubKey] = useState(recipientIdentity.publicKeyHex);
-  const [fingerprintVerified, setFingerprintVerified] = useState(true);
+  const [fingerprintVerified, setFingerprintVerified] = useState(false);
 
   const [profileMode, setProfileMode] = useState<'TESTNET_DEMO' | 'STANDARD_PRODUCTION'>('TESTNET_DEMO');
   const [intervalBlocks, setIntervalBlocks] = useState(24);
@@ -77,26 +80,26 @@ export const CreateVaultWizard: React.FC<CreateVaultWizardProps> = ({
   const [sourceSecretHex, setSourceSecretHex] = useState('');
   const [backupConfirmed, setBackupConfirmed] = useState(false);
 
-  const estimatedFeeZatoshi = 10000; // Standard ZIP-317 10,000 zatoshi fee
+  const estimatedFeeZatoshi = 10000; // Simulation assumption; the future wallet adapter estimates fees.
 
-  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFileError(null);
-    const file = e.target.files?.[0];
+  const loadFile = async (file?: File) => {
     if (!file) return;
-
+    setFileError(null);
+    setUploadedBytes(null);
     if (file.size > MAX_FILE_SIZE_BYTES) {
-      setFileError(`File size (${(file.size / 1024 / 1024).toFixed(2)} MiB) exceeds the 10 MiB maximum limit.`);
+      setFileError('Document exceeds the 10 MiB limit.');
       return;
     }
-
-    setFileName(file.name);
-    const reader = new FileReader();
-    reader.onload = () => {
-      const text = typeof reader.result === 'string' ? reader.result : SYNTHETIC_DOSSIER_CONTENT;
-      setFileContent(text);
-    };
-    reader.readAsText(file);
+    setFileLoading(true);
+    try {
+      const bytes = new Uint8Array(await file.arrayBuffer());
+      setUploadedBytes(bytes);
+      setFileName(file.name);
+    } catch {
+      setFileError('Could not read the selected file. Try again.');
+    } finally { setFileLoading(false); }
   };
+  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => { void loadFile(e.target.files?.[0]); };
 
   const handleSelectProfile = (mode: 'TESTNET_DEMO' | 'STANDARD_PRODUCTION') => {
     setProfileMode(mode);
@@ -112,26 +115,32 @@ export const CreateVaultWizard: React.FC<CreateVaultWizardProps> = ({
   };
 
   const initiateEncryptionAndProvisioning = () => {
-    const randSwitch = new Uint8Array(32);
-    const randSource = new Uint8Array(32);
-    const randReleaseKey = new Uint8Array(32);
-    crypto.getRandomValues(randSwitch);
-    crypto.getRandomValues(randSource);
-    crypto.getRandomValues(randReleaseKey);
+    if (policyValidationError) return;
+    setProvisioningError(null);
+    try {
+      const randSwitch = new Uint8Array(32);
+      const randSource = new Uint8Array(32);
+      const randReleaseKey = new Uint8Array(32);
+      crypto.getRandomValues(randSwitch);
+      crypto.getRandomValues(randSource);
+      crypto.getRandomValues(randReleaseKey);
 
-    const sIdHex = bytesToHex(randSwitch);
-    const srcSecHex = bytesToHex(randSource);
-    const plainBytes = new TextEncoder().encode(fileContent);
+      const sIdHex = bytesToHex(randSwitch);
+      const srcSecHex = bytesToHex(randSource);
+      const plainBytes = uploadedBytes ?? new TextEncoder().encode(fileContent);
 
-    const pkg = encryptDossierDualLayer(plainBytes, recipientPubKey, randReleaseKey);
-    const shares = splitSecret(randReleaseKey, sIdHex, 1, 5, 3);
+      const pkg = encryptDossierDualLayer(plainBytes, recipientPubKey, randReleaseKey);
+      const shares = splitSecret(randReleaseKey, sIdHex, 1, 5, 3);
 
-    setSwitchIdHex(sIdHex);
-    setSourceSecretHex(srcSecHex);
-    setEncryptedPkg(pkg);
-    setGeneratedShares(shares);
-    setProvisionedKeepers([1, 2, 3, 4, 5]);
-    setStep(4);
+      setSwitchIdHex(sIdHex);
+      setSourceSecretHex(srcSecHex);
+      setEncryptedPkg(pkg);
+      setGeneratedShares(shares);
+      setProvisionedKeepers([1, 2, 3, 4, 5]);
+      setStep(4);
+    } catch {
+      setProvisioningError('Could not encrypt for this recipient key. Recheck the 32-byte public key and its fingerprint.');
+    }
   };
 
   const handleBroadcastRegistration = () => {
@@ -157,7 +166,7 @@ export const CreateVaultWizard: React.FC<CreateVaultWizardProps> = ({
       threshold: 3,
       configurationEpoch: 1,
       shareCommitments,
-    });
+    }, sourceSecretHex);
 
     const requestedExpiryHeight = currentBlockHeight + intervalBlocks;
     const graceDeadlineHeight = requestedExpiryHeight + graceBlocks;
@@ -171,7 +180,7 @@ export const CreateVaultWizard: React.FC<CreateVaultWizardProps> = ({
       requestedExpiryHeight,
       manifestDigestHex: manifest.manifestDigestHex,
       sourcePubKeyHex,
-    });
+    }, sourceSecretHex);
     const memoHex = bytesToHex(memoBytes);
     const txid = sha256Hex(`tx-reg-${switchIdHex}-${Date.now()}`);
 
@@ -187,7 +196,7 @@ export const CreateVaultWizard: React.FC<CreateVaultWizardProps> = ({
       index: share.index,
       id: share.keeperId,
       name: keeperNames[idx],
-      operatorLabel: `Local Process #${share.index} · Port 910${share.index}`,
+      operatorLabel: `Simulated keeper #${share.index} · Port 910${share.index}`,
       endpoint: `http://127.0.0.1:910${share.index}`,
       dbPath: `./state/keeper_0${share.index}.sqlite`,
       online: true,
@@ -221,7 +230,7 @@ export const CreateVaultWizard: React.FC<CreateVaultWizardProps> = ({
       minedAtHeight: currentBlockHeight,
       blockHash: formatBlockHash(currentBlockHeight),
       confirmations: 1,
-      status: 'CONFIRMED',
+      status: 'MINED',
       timestamp: new Date().toISOString().replace('T', ' ').slice(0, 19) + ' UTC',
     };
 
@@ -229,7 +238,7 @@ export const CreateVaultWizard: React.FC<CreateVaultWizardProps> = ({
       id: `vault-${switchIdHex.slice(0, 8)}`,
       title,
       fileName,
-      mimeType: 'application/pdf',
+      mimeType: 'application/octet-stream',
       createdAt: new Date().toISOString().replace('T', ' ').slice(0, 19) + ' UTC',
       profileMode,
       sourceSecretHex,
@@ -257,7 +266,7 @@ export const CreateVaultWizard: React.FC<CreateVaultWizardProps> = ({
           id: `ev-prov-${Date.now()}`,
           type: 'KEEPERS_PROVISIONED',
           title: '5 of 5 Keepers acknowledged share provisioning',
-          detail: 'All five isolated keepers verified share commitments and persisted encrypted shares.',
+          detail: 'Five in-memory keeper records hold demo shares. Persistence is not implemented.',
           blockHeight: currentBlockHeight,
           timestamp: new Date().toISOString().replace('T', ' ').slice(0, 19) + ' UTC',
         },
@@ -284,13 +293,34 @@ export const CreateVaultWizard: React.FC<CreateVaultWizardProps> = ({
     }
   })();
 
+  const policyValidationError = (() => {
+    const uint32Max = 0xffff_ffff;
+    const documentSize = uploadedBytes?.length ?? new TextEncoder().encode(fileContent).length;
+    if (!Number.isInteger(intervalBlocks) || intervalBlocks < 1 || intervalBlocks > uint32Max) {
+      return 'Release interval must be a positive whole block count.';
+    }
+    if (!Number.isInteger(graceBlocks) || graceBlocks < 0 || graceBlocks > uint32Max) {
+      return 'Grace period must be a whole block count of zero or more.';
+    }
+    if (!Number.isInteger(confirmationTarget) || confirmationTarget < 1 || confirmationTarget > uint32Max) {
+      return 'Confirmation target must be a positive whole block count.';
+    }
+    if (currentBlockHeight + intervalBlocks + graceBlocks > uint32Max) {
+      return 'This deadline exceeds the protocol’s maximum supported block height.';
+    }
+    if (documentSize > MAX_FILE_SIZE_BYTES) {
+      return 'Document exceeds the 10 MiB limit.';
+    }
+    return null;
+  })();
+
   return (
     <div className="max-w-4xl mx-auto space-y-8 pb-16">
       <div className="flex items-center justify-between border-b border-[#222938] pb-5">
         <div>
           <h1 className="text-2xl font-bold text-[#F8FAFC]">Create Continuity Vault</h1>
           <p className="text-sm text-[#94A3B8]">
-            Encrypt a confidential dossier locally, provision 5 keepers, and register on Zcash Testnet.
+            Encrypt a confidential dossier locally, provision 5 keepers, and simulate registration using the testnet command format.
           </p>
         </div>
         <button
@@ -302,7 +332,7 @@ export const CreateVaultWizard: React.FC<CreateVaultWizardProps> = ({
       </div>
 
       {/* Stepper Header */}
-      <div className="grid grid-cols-4 gap-3 text-xs font-mono">
+      <div aria-label="Creation progress" className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs font-mono">
         {[
           { num: 1, label: '01. Dossier File' },
           { num: 2, label: '02. Recipient Key' },
@@ -311,6 +341,7 @@ export const CreateVaultWizard: React.FC<CreateVaultWizardProps> = ({
         ].map((s) => (
           <div
             key={s.num}
+            aria-current={step === s.num ? 'step' : undefined}
             className={`p-3 border ${
               step === s.num
                 ? 'border-[#F59E0B] bg-[#141820] text-[#F8FAFC]'
@@ -328,10 +359,11 @@ export const CreateVaultWizard: React.FC<CreateVaultWizardProps> = ({
       {step === 1 && (
         <div className="border border-[#222938] bg-[#141820] p-6 lg:p-8 space-y-6">
           <div className="space-y-2">
-            <label className="block text-xs font-mono text-[#94A3B8]">
+            <label htmlFor="vault-reference" className="block text-xs font-mono text-[#94A3B8]">
               Vault Reference Label (Local Only — Never Included in Manifest or Chain Memo)
             </label>
             <input
+              id="vault-reference"
               type="text"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
@@ -340,31 +372,33 @@ export const CreateVaultWizard: React.FC<CreateVaultWizardProps> = ({
           </div>
 
           <div className="space-y-2">
-            <label className="block text-xs font-mono text-[#94A3B8]">
+            <label id="dossier-document-label" className="block text-xs font-mono text-[#94A3B8]">
               Dossier Document (Max 10 MiB · Encrypted Locally Before Any Network Activity)
             </label>
-            <label className="flex flex-col items-center justify-center border border-dashed border-[#2E3748] hover:border-[#F59E0B] bg-[#0B0D11] p-8 rounded cursor-pointer transition-colors">
+            <label onDragOver={e => e.preventDefault()} onDrop={e => { e.preventDefault(); void loadFile(e.dataTransfer.files[0]); }} className="flex flex-col items-center justify-center border border-dashed border-[#2E3748] hover:border-[#F59E0B] bg-[#0B0D11] p-8 rounded cursor-pointer transition-colors">
               <Upload className="w-6 h-6 text-[#F59E0B] mb-2" />
               <span className="text-sm font-medium text-[#F8FAFC]">
                 Drop dossier file here or click to select
               </span>
               <span className="text-xs text-[#64748B] font-mono mt-1">
-                Active selection: {fileName} ({new TextEncoder().encode(fileContent).length} bytes)
+                Active selection: {fileName} ({uploadedBytes?.length ?? new TextEncoder().encode(fileContent).length} bytes)
               </span>
-              <input type="file" onChange={handleFileUpload} className="hidden" />
+              <input type="file" onChange={handleFileUpload} aria-labelledby="dossier-document-label" aria-describedby={fileError ? 'dossier-file-error' : undefined} accept="*/*" className="mt-3 text-xs max-w-full" />
             </label>
             {fileError && (
-              <p className="text-xs text-[#EF4444] font-mono pt-1">{fileError}</p>
+              <p id="dossier-file-error" role="alert" className="text-xs text-[#EF4444] font-mono pt-1">{fileError}</p>
             )}
           </div>
 
           <div className="space-y-2">
             <div className="flex items-center justify-between text-xs font-mono text-[#94A3B8]">
-              <span>Synthetic Dossier Preview (Plaintext SHA-256: {sha256Hex(fileContent).slice(0, 20)}…)</span>
+              <span>Synthetic Dossier Preview (Plaintext SHA-256: {sha256Hex(uploadedBytes ?? fileContent).slice(0, 20)}…)</span>
               <button
                 type="button"
                 onClick={() => {
-                  setFileName('Synthetic-Evidence-Annex-B.pdf');
+                  setUploadedBytes(null);
+                  setFileError(null);
+                  setFileName('Synthetic-Evidence-Annex-B.txt');
                   setFileContent(SYNTHETIC_DOSSIER_CONTENT);
                 }}
                 className="text-[#F59E0B] hover:underline cursor-pointer"
@@ -374,7 +408,9 @@ export const CreateVaultWizard: React.FC<CreateVaultWizardProps> = ({
             </div>
             <textarea
               rows={6}
-              value={fileContent}
+              aria-label="Synthetic text dossier"
+              disabled={uploadedBytes !== null}
+              value={uploadedBytes ? 'Binary file selected. Exact bytes will be encrypted and downloaded.' : fileContent}
               onChange={(e) => setFileContent(e.target.value)}
               className="w-full p-3 bg-[#0B0D11] border border-[#222938] rounded font-mono text-xs text-[#CBD5E1] focus:outline-none focus:border-[#F59E0B]"
             />
@@ -382,6 +418,7 @@ export const CreateVaultWizard: React.FC<CreateVaultWizardProps> = ({
 
           <div className="flex justify-end pt-2">
             <button
+              disabled={fileLoading || Boolean(fileError)}
               onClick={() => setStep(2)}
               className="px-5 py-2.5 bg-[#F59E0B] hover:bg-[#D97706] text-[#0B0D11] font-semibold text-sm rounded transition-colors flex items-center gap-2 cursor-pointer"
             >
@@ -406,13 +443,18 @@ export const CreateVaultWizard: React.FC<CreateVaultWizardProps> = ({
           </div>
 
           <div className="space-y-2">
-            <label className="block text-xs font-mono text-[#94A3B8]">
+            <label htmlFor="recipient-public-key" className="block text-xs font-mono text-[#94A3B8]">
               Recipient Public Key (32-Byte Hex)
             </label>
             <input
+              id="recipient-public-key"
               type="text"
+              autoComplete="off"
+              spellCheck={false}
+              aria-invalid={displayedFingerprint.startsWith('INVALID')}
+              aria-describedby="recipient-key-fingerprint"
               value={recipientPubKey}
-              onChange={(e) => setRecipientPubKey(e.target.value)}
+              onChange={(e) => { setRecipientPubKey(e.target.value); setFingerprintVerified(false); }}
               className="w-full px-3.5 py-2.5 bg-[#0B0D11] border border-[#222938] rounded font-mono text-xs text-[#F8FAFC] focus:outline-none focus:border-[#F59E0B]"
             />
           </div>
@@ -421,7 +463,7 @@ export const CreateVaultWizard: React.FC<CreateVaultWizardProps> = ({
             <div className="text-xs font-mono text-[#64748B]">
               COMPUTED SHA-256 KEY FINGERPRINT
             </div>
-            <div className="text-sm font-mono font-semibold text-[#F59E0B] tracking-wider">
+            <div id="recipient-key-fingerprint" role="status" aria-live="polite" className="text-sm font-mono font-semibold text-[#F59E0B] tracking-wider">
               {displayedFingerprint}
             </div>
             <div className="text-xs text-[#94A3B8]">
@@ -503,13 +545,12 @@ export const CreateVaultWizard: React.FC<CreateVaultWizardProps> = ({
                   : 'border-[#222938] bg-[#0B0D11]/50 hover:border-[#2E3748]'
               }`}
             >
-              <div className="text-xs font-mono text-[#94A3B8]">STANDARD PRODUCTION PROFILE</div>
+              <div className="text-xs font-mono text-[#94A3B8]">STANDARD INTERVAL SIMULATION</div>
               <div className="text-base font-semibold text-[#F8FAFC]">
                 8,064 Blocks Interval · 12 Blocks Grace
               </div>
               <p className="text-xs text-[#94A3B8]">
-                Requires 6 confirmations (~7 days interval at 75s/block). Full operational security
-                margins.
+                Requires 6 simulated confirmations. The roughly 7-day interval is an estimate at 75 seconds per block.
               </p>
             </button>
           </div>
@@ -535,6 +576,13 @@ export const CreateVaultWizard: React.FC<CreateVaultWizardProps> = ({
             </div>
           </div>
 
+          {policyValidationError && (
+            <p role="alert" className="text-xs text-[#EF4444] font-mono">{policyValidationError}</p>
+          )}
+          {provisioningError && (
+            <p role="alert" className="text-xs text-[#EF4444] font-mono">{provisioningError}</p>
+          )}
+
           <div className="flex justify-between pt-2">
             <button
               onClick={() => setStep(2)}
@@ -543,8 +591,9 @@ export const CreateVaultWizard: React.FC<CreateVaultWizardProps> = ({
               Back
             </button>
             <button
+              disabled={Boolean(policyValidationError)}
               onClick={initiateEncryptionAndProvisioning}
-              className="px-5 py-2.5 bg-[#F59E0B] hover:bg-[#D97706] text-[#0B0D11] font-semibold text-sm rounded transition-colors flex items-center gap-2 cursor-pointer"
+              className="px-5 py-2.5 bg-[#F59E0B] disabled:opacity-40 hover:bg-[#D97706] text-[#0B0D11] font-semibold text-sm rounded transition-colors flex items-center gap-2 cursor-pointer"
             >
               <span>Encrypt Dossier & Provision 5 Keepers</span>
               <ArrowRight className="w-4 h-4" />
@@ -564,8 +613,7 @@ export const CreateVaultWizard: React.FC<CreateVaultWizardProps> = ({
               Verify Keeper Acknowledgements & Broadcast Registration Memo
             </h2>
             <p className="text-xs text-[#94A3B8]">
-              Registration is only unlocked after all 5 isolated keepers verify their share against
-              its commitment and return a durable storage signature.
+              This demo provisions five in-memory keeper records. Durable storage and authenticated keeper acknowledgements remain backend work.
             </p>
           </div>
 
@@ -581,7 +629,7 @@ export const CreateVaultWizard: React.FC<CreateVaultWizardProps> = ({
                     Commitment: {s.commitmentHex.slice(0, 20)}…
                   </span>
                 </div>
-                <span className="text-[#10B981] shrink-0">ACK VERIFIED (SQLite)</span>
+                <span className="text-[#10B981] shrink-0">SIMULATED ACK</span>
               </div>
             ))}
           </div>
@@ -589,7 +637,7 @@ export const CreateVaultWizard: React.FC<CreateVaultWizardProps> = ({
           {/* Fee Estimate & Source Recovery Instructions */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 font-mono text-xs">
             <div className="p-4 bg-[#0B0D11] border border-[#222938] space-y-1.5">
-              <div className="text-[#64748B]">Zcash Shielded Transaction Fee (ZIP-317)</div>
+              <div className="text-[#64748B]">Assumed simulation fee (live estimate pending)</div>
               <div className="text-sm font-semibold text-[#F8FAFC] tabular-nums">
                 10,000 zatoshi (0.00010000 TAZ)
               </div>
@@ -599,7 +647,7 @@ export const CreateVaultWizard: React.FC<CreateVaultWizardProps> = ({
             </div>
 
             <div className="p-4 bg-[#0B0D11] border border-[#222938] space-y-1.5">
-              <div className="text-[#64748B]">Source Signing Seed Backup (Encrypted Local Store)</div>
+              <div className="text-[#64748B]">Synthetic demo signing seed (browser memory only)</div>
               <div className="text-xs text-[#F59E0B] truncate tabular-nums">
                 {sourceSecretHex}
               </div>

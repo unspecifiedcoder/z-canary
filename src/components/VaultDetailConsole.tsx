@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
   Shield,
   Clock,
@@ -11,6 +11,7 @@ import {
   Activity,
 } from 'lucide-react';
 import { ChainTransaction, ContinuityVault } from '../engine/protocolStore';
+import { phaseLabels, projectVault } from '../experience/model';
 
 interface VaultDetailConsoleProps {
   vault: ContinuityVault;
@@ -35,13 +36,52 @@ export const VaultDetailConsole: React.FC<VaultDetailConsoleProps> = ({
 }) => {
   const [customExtension, setCustomExtension] = useState(vault.manifest.initialIntervalBlocks);
   const [showCancelModal, setShowCancelModal] = useState(false);
+  const cancelTriggerRef = useRef<HTMLButtonElement>(null);
+  const cancelDialogRef = useRef<HTMLDivElement>(null);
+  const keepActiveRef = useRef<HTMLButtonElement>(null);
+  const closeCancelDialog = () => {
+    setShowCancelModal(false);
+    cancelTriggerRef.current?.focus();
+  };
+
+  useEffect(() => {
+    if (!showCancelModal) return;
+    keepActiveRef.current?.focus();
+
+    const handleDialogKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        event.preventDefault();
+        closeCancelDialog();
+        return;
+      }
+      if (event.key !== 'Tab' || !cancelDialogRef.current) return;
+      const controls = Array.from(
+        cancelDialogRef.current.querySelectorAll<HTMLElement>(
+          'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
+        )
+      );
+      if (controls.length === 0) return;
+      const first = controls[0];
+      const last = controls[controls.length - 1];
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first.focus();
+      }
+    };
+    document.addEventListener('keydown', handleDialogKeyDown);
+    return () => document.removeEventListener('keydown', handleDialogKeyDown);
+  }, [showCancelModal]);
 
   // Determine aggregate consensus state from online keepers
   const onlineKeepers = vault.keepers.filter((k) => k.online);
   const primaryState = onlineKeepers[0]?.lifecycleState || vault.keepers[0]?.lifecycleState || 'ACTIVE';
 
-  const blocksUntilExpiry = vault.currentExpiryHeight - currentBlockHeight;
-  const blocksUntilGraceRelease = vault.graceDeadlineHeight - currentBlockHeight;
+  const confirmedHeight = Math.max(0, currentBlockHeight - vault.manifest.confirmationTarget + 1);
+  const blocksUntilExpiry = vault.currentExpiryHeight - confirmedHeight;
+  const blocksUntilGraceRelease = vault.graceDeadlineHeight - confirmedHeight;
   const estimatedMinutesRemaining = Math.max(0, Math.round((blocksUntilExpiry * 75) / 60));
 
   const unconfirmedTxs = transactions.filter(
@@ -51,7 +91,9 @@ export const VaultDetailConsole: React.FC<VaultDetailConsoleProps> = ({
       currentBlockHeight - tx.minedAtHeight + 1 < vault.manifest.confirmationTarget
   );
 
-  const canAct = primaryState === 'ACTIVE' || primaryState === 'GRACE' || primaryState === 'REGISTERING';
+  const visual = projectVault(vault, currentBlockHeight);
+  const canAct = (primaryState === 'ACTIVE' || primaryState === 'GRACE') && visual.phase !== 'suspended';
+  const remainingRatio = Math.min(1, Math.max(0, blocksUntilExpiry / vault.manifest.initialIntervalBlocks));
 
   return (
     <div className="space-y-8 pb-16">
@@ -78,142 +120,20 @@ export const VaultDetailConsole: React.FC<VaultDetailConsoleProps> = ({
         </div>
       )}
 
-      {/* First Viewport Focal Anchor: Answers the 3 Core Questions */}
-      <section className="border border-[#222938] bg-[#141820] p-6 lg:p-8 space-y-8">
-        <div className="flex flex-col lg:flex-row lg:items-start justify-between gap-6 border-b border-[#222938] pb-6">
-          <div className="space-y-2">
-            <div className="flex items-center gap-2 text-xs font-mono text-[#94A3B8]">
-              <span>Switch ID: {vault.manifest.switchIdHex.slice(0, 16)}…</span>
-              <span aria-hidden="true">·</span>
-              <span>Sequence: #{vault.highestSequence}</span>
-              <span aria-hidden="true">·</span>
-              <span>Threshold: 3-of-5 Keepers</span>
-            </div>
-            <h1 className="text-2xl sm:text-3xl font-bold text-[#F8FAFC]">{vault.title}</h1>
-            <p className="text-xs font-mono text-[#94A3B8]">
-              Protected Artifact: {vault.fileName} · Package Digest: {vault.manifest.packageDigestHex.slice(0, 24)}…
-            </p>
+      <section className="sentinel-primary">
+        <div className="product-heading"><div><span className="section-label">SOURCE / VAULT SENTINEL</span><h1>Your signal keeps<br/>the archive sealed.</h1><p>{vault.fileName}</p></div><span className="section-label">SIMULATED VAULT / {vault.manifest.switchIdHex.slice(0,8)}</span></div>
+        <div className="sentinel-instrument">
+          <div className="deadline-dial" role="img" aria-label={`${Math.max(0,blocksUntilExpiry)} confirmed blocks until expiry`}>
+            <svg viewBox="0 0 260 260" aria-hidden="true"><circle cx="130" cy="130" r="116" fill="none" stroke="#273b33" strokeWidth="1"/><circle cx="130" cy="130" r="104" fill="none" stroke="#20342b" strokeWidth="4"/><circle cx="130" cy="130" r="104" fill="none" stroke={visual.phase==='grace'?'#e7bc79':'#a4e8d8'} strokeWidth="4" strokeDasharray="653.45" strokeDashoffset={653.45*(1-remainingRatio)} style={{transition:'stroke-dashoffset 1s cubic-bezier(.16,1,.3,1)'}}/><circle cx="130" cy="130" r="87" fill="none" stroke="#274030" strokeWidth="1" strokeDasharray="1 8"/></svg>
+            <div><strong>{Math.max(0,blocksUntilExpiry)}</strong><span>BLOCKS TO EXPIRY</span></div>
           </div>
-
-          {/* Primary Action: Check In */}
-          <div className="flex flex-wrap items-center gap-3 shrink-0">
-            <button
-              disabled={!canAct || walletBalanceZatoshi < 10000}
-              onClick={() => onCheckIn(vault.manifest.initialIntervalBlocks)}
-              className="px-6 py-3 bg-[#F59E0B] disabled:opacity-40 hover:bg-[#D97706] text-[#0B0D11] font-bold text-sm rounded transition-colors flex items-center gap-2 whitespace-nowrap cursor-pointer"
-            >
-              <RefreshCw className="w-4 h-4" />
-              <span>Check In (+{vault.manifest.initialIntervalBlocks} Blocks)</span>
-            </button>
-
-            {canAct && (
-              <button
-                onClick={() => setShowCancelModal(true)}
-                className="px-4 py-3 bg-[#0B0D11] hover:bg-[#1E2430] text-[#EF4444] border border-[#222938] font-medium text-xs rounded transition-colors whitespace-nowrap cursor-pointer"
-              >
-                Cancel Vault…
-              </button>
-            )}
+          <div className="sentinel-status"><span className="section-label">CURRENT PROTECTION STATE</span><h2>{phaseLabels[visual.phase]}</h2><p>{visual.phase==='sealed'?'The recipient layer remains encrypted. Your next signed check-in extends the release deadline.':visual.phase==='grace'?'Your check-in is overdue. A valid command must be included by the inclusive grace boundary to prevent release.':visual.phase==='released'?'The release condition was evaluated. The recipient still needs three valid shares and their private key to recover the evidence.':visual.phase==='suspended'?'Keeper states are unavailable or disagree. Inspect keeper health before relying on protection status.':visual.phase==='cancelled'?'This simulated vault is cancelled. Shares already delivered cannot be recalled.':'Confirm the registration before relying on this vault.'}</p>
+            <div className="sentinel-meta"><span>EXPIRY #{vault.currentExpiryHeight.toLocaleString()}</span><span>GRACE +{vault.manifest.graceBlocks} BLOCKS</span><span>SEQUENCE {vault.highestSequence}</span></div>
+            <button className="canary-button primary" disabled={!canAct||walletBalanceZatoshi<10000} onClick={()=>onCheckIn(vault.manifest.initialIntervalBlocks)}><RefreshCw size={16}/>Check in · +{vault.manifest.initialIntervalBlocks} blocks</button>
+            <p style={{fontSize:10,marginTop:12}}>Simulated command · assumed fee 10,000 zat · no network transaction</p>
           </div>
         </div>
-
-        {/* 3 Core Questions Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {/* Question 1: Is this vault active? */}
-          <div className="p-5 bg-[#0B0D11] border border-[#222938] space-y-2">
-            <div className="text-xs font-mono text-[#64748B]">1. IS THIS VAULT ACTIVE?</div>
-            <div className="flex items-center gap-2">
-              {primaryState === 'ACTIVE' && (
-                <span className="text-xl font-bold text-[#10B981]">ACTIVE & LOCKED</span>
-              )}
-              {primaryState === 'REGISTERING' && (
-                <span className="text-xl font-bold text-[#F59E0B]">AWAITING CONFIRMATION</span>
-              )}
-              {primaryState === 'GRACE' && (
-                <span className="text-xl font-bold text-[#F59E0B]">IN GRACE WINDOW</span>
-              )}
-              {primaryState === 'RELEASED' && (
-                <span className="text-xl font-bold text-[#EF4444]">RELEASE AUTHORIZED</span>
-              )}
-              {primaryState === 'CANCELLED' && (
-                <span className="text-xl font-bold text-[#94A3B8]">PERMANENTLY CANCELLED</span>
-              )}
-            </div>
-            <p className="text-xs text-[#94A3B8] leading-relaxed">
-              {primaryState === 'ACTIVE' &&
-                `${onlineKeepers.length}/5 online Keepers are guarding shares. Outer Release Key remains split.`}
-              {primaryState === 'REGISTERING' &&
-                `Registration broadcast. Protection activates once confirmed by ${vault.manifest.confirmationTarget} blocks.`}
-              {primaryState === 'GRACE' &&
-                `Confirmed chain height reached expiry (#${vault.currentExpiryHeight}). Broadcast check-in before #${vault.graceDeadlineHeight} to abort release.`}
-              {primaryState === 'RELEASED' &&
-                `Grace deadline (#${vault.graceDeadlineHeight}) passed. ${vault.deliveredSharesToRecipient.length} of 5 Keeper shares delivered to Recipient Inbox.`}
-              {primaryState === 'CANCELLED' &&
-                'Signed CANCEL command confirmed. Unreleased Keeper shares have been permanently zeroized.'}
-            </p>
-          </div>
-
-          {/* Question 2: When is the next confirmed-chain deadline? */}
-          <div className="p-5 bg-[#0B0D11] border border-[#222938] space-y-2">
-            <div className="text-xs font-mono text-[#64748B]">2. NEXT CONFIRMED-CHAIN DEADLINE</div>
-            <div className="text-xl font-bold font-mono text-[#F8FAFC] tabular-nums">
-              Block #{vault.currentExpiryHeight.toLocaleString()}
-            </div>
-            <div className="text-xs font-mono text-[#F59E0B] tabular-nums">
-              {blocksUntilExpiry > 0
-                ? `${blocksUntilExpiry} blocks remaining (~${estimatedMinutesRemaining} min est.)`
-                : blocksUntilGraceRelease > 0
-                ? `Expired · ${blocksUntilGraceRelease} Grace blocks left until #${vault.graceDeadlineHeight}`
-                : `Grace boundary #${vault.graceDeadlineHeight} passed`}
-            </div>
-            <p className="text-xs text-[#64748B] font-mono">
-              Current Scan Height: #{currentBlockHeight.toLocaleString()} · Grace: +{vault.manifest.graceBlocks} blocks
-            </p>
-          </div>
-
-          {/* Question 3: What should I do next? */}
-          <div className="p-5 bg-[#0B0D11] border border-[#222938] space-y-2">
-            <div className="text-xs font-mono text-[#64748B]">3. RECOMMENDED NEXT ACTION</div>
-            <div className="text-base font-semibold text-[#F8FAFC]">
-              {primaryState === 'ACTIVE' && 'Broadcast periodic Check-In before expiry'}
-              {primaryState === 'REGISTERING' && 'Wait for block confirmation'}
-              {primaryState === 'GRACE' && 'URGENT: Broadcast Check-In immediately to prevent release'}
-              {primaryState === 'RELEASED' && 'Switch to Recipient Inbox to reconstruct & decrypt'}
-              {primaryState === 'CANCELLED' && 'No further action (Switch deactivated)'}
-            </div>
-            <p className="text-xs text-[#94A3B8] leading-relaxed">
-              {canAct
-                ? `Each Check-In signs sequence #${vault.highestSequence + 1} in a 512-byte shielded memo (Fee: 10,000 zatoshi).`
-                : 'Terminal lifecycle state reached on confirmed chain.'}
-            </p>
-          </div>
-        </div>
-
-        {/* Custom Postponement Controls */}
-        {canAct && (
-          <div className="pt-2 border-t border-[#222938] flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-            <div className="text-xs text-[#94A3B8]">
-              Need a custom postponement window? Specify block extension (Max:{' '}
-              <span className="font-mono">{vault.manifest.maxExtensionBlocks}</span> blocks):
-            </div>
-            <div className="flex items-center gap-2">
-              <input
-                type="number"
-                min={6}
-                max={vault.manifest.maxExtensionBlocks}
-                value={customExtension}
-                onChange={(e) => setCustomExtension(Math.max(1, Number(e.target.value)))}
-                className="w-28 px-3 py-1.5 bg-[#0B0D11] border border-[#222938] rounded font-mono text-xs text-[#F8FAFC] tabular-nums"
-              />
-              <button
-                onClick={() => onCheckIn(customExtension)}
-                className="px-3.5 py-1.5 bg-[#1E2430] hover:bg-[#283040] border border-[#2E3748] text-xs font-medium text-[#F8FAFC] rounded whitespace-nowrap cursor-pointer"
-              >
-                Postpone by +{customExtension} Blocks
-              </button>
-            </div>
-          </div>
-        )}
+        {canAct&&<div className="sentinel-custom"><label htmlFor="extension-blocks">Choose a custom extension</label><input id="extension-blocks" type="number" min={1} max={vault.manifest.maxExtensionBlocks} value={customExtension} onChange={event=>setCustomExtension(Number(event.target.value))}/><button className="canary-button outline" onClick={()=>onCheckIn(customExtension)}>Postpone</button><button ref={cancelTriggerRef} className="canary-button quiet" onClick={()=>setShowCancelModal(true)}>Cancel simulated vault…</button></div>}
       </section>
 
       {/* Two-Column Split: Auditable Event Timeline & Keeper Committee Summary */}
@@ -223,7 +143,7 @@ export const VaultDetailConsole: React.FC<VaultDetailConsoleProps> = ({
           <div className="flex items-center justify-between border-b border-[#222938] pb-4">
             <div>
               <h2 className="text-base font-semibold text-[#F8FAFC]">
-                Verified Continuity Event Timeline
+                Simulated Continuity Event Timeline
               </h2>
               <p className="text-xs text-[#94A3B8]">
                 Local source audit log (never published on unauthenticated public pages).
@@ -271,7 +191,7 @@ export const VaultDetailConsole: React.FC<VaultDetailConsoleProps> = ({
                 3-of-5 Keeper Committee State
               </h2>
               <p className="text-xs text-[#94A3B8]">
-                Five isolated local processes scanning Zcash Testnet blocks.
+                Five in-memory keeper records processing simulated blocks.
               </p>
             </div>
             <span className="text-xs font-mono text-[#10B981]">Epoch #{vault.manifest.configurationEpoch}</span>
@@ -323,16 +243,16 @@ export const VaultDetailConsole: React.FC<VaultDetailConsoleProps> = ({
       {/* Deliberate Cancellation Confirmation Modal */}
       {showCancelModal && (
         <div className="fixed inset-0 z-50 bg-black/80 flex items-center justify-center p-4">
-          <div className="max-w-md w-full border border-[#222938] bg-[#141820] p-6 space-y-5">
+          <div ref={cancelDialogRef} role="dialog" aria-modal="true" aria-labelledby="cancel-dialog-title" aria-describedby="cancel-dialog-description" className="max-w-md w-full border border-[#222938] bg-[#141820] p-6 space-y-5">
             <div className="space-y-2">
-              <div className="text-xs font-mono text-[#EF4444]">IRREVOCABLE CANCELLATION COMMAND</div>
-              <h3 className="text-lg font-bold text-[#F8FAFC]">
-                Permanently cancel this continuity vault?
+              <div className="text-xs font-mono text-[#EF4444]">SIMULATED CANCELLATION</div>
+              <h3 id="cancel-dialog-title" className="text-lg font-bold text-[#F8FAFC]">
+                Mark this simulated vault cancelled?
               </h3>
-              <p className="text-xs text-[#94A3B8] leading-relaxed">
-                Broadcasting a signed CANCEL (0x03) shielded memo instructs all 5 Keepers to transition
-                this switch to the terminal <strong>CANCELLED</strong> state and purge queued release
-                shares. A cancelled switch can never be reactivated.
+              <p id="cancel-dialog-description" className="text-xs text-[#94A3B8] leading-relaxed">
+                This browser demo changes local simulated state only. It does not broadcast a Zcash
+                transaction or erase keeper keys or shares. Shares already delivered or copied cannot
+                be recalled. Reset the demo to start again.
               </p>
             </div>
 
@@ -344,7 +264,8 @@ export const VaultDetailConsole: React.FC<VaultDetailConsoleProps> = ({
 
             <div className="flex items-center justify-end gap-3 pt-2">
               <button
-                onClick={() => setShowCancelModal(false)}
+                ref={keepActiveRef}
+                onClick={closeCancelDialog}
                 className="px-4 py-2 text-xs font-medium text-[#94A3B8] hover:text-[#F8FAFC] border border-[#222938] rounded cursor-pointer"
               >
                 Keep Vault Active
@@ -356,7 +277,7 @@ export const VaultDetailConsole: React.FC<VaultDetailConsoleProps> = ({
                 }}
                 className="px-4 py-2 bg-[#EF4444] hover:bg-[#DC2626] text-white text-xs font-semibold rounded cursor-pointer"
               >
-                Sign & Broadcast Cancellation
+                Simulate Cancellation
               </button>
             </div>
           </div>
