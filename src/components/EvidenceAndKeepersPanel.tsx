@@ -12,7 +12,6 @@ import {
   Unlock,
   ExternalLink,
   FileCheck2,
-  RadioTower,
 } from 'lucide-react';
 import { hexToBytes, bytesToHex } from '../crypto/shamir';
 import {
@@ -31,6 +30,8 @@ import {
 } from '../engine/testSuite';
 import { KeeperNetworkD3Graph } from './KeeperNetworkD3Graph';
 import { LocalAgentPanel } from './LocalAgentPanel';
+import { ReceiptVerifier } from './ReceiptVerifier';
+import { RealRunReplay } from './RealRunReplay';
 
 interface EvidenceAndKeepersPanelProps {
   vault: ContinuityVault;
@@ -42,29 +43,6 @@ interface EvidenceAndKeepersPanelProps {
   onSimulateReorg: (depth: 'shallow' | 'deep') => void;
   onTriggerExpiryForDemo?: () => void;
 }
-
-const RECORDED_TESTNET_COMMANDS = [
-  {
-    label: 'Expiry vault REGISTER',
-    block: 4546656,
-    txid: '1d4797966b97aac313b4ce7db58a4e546593c1e5efacfa992b3c73519cf90ecb',
-  },
-  {
-    label: 'Cancellation vault REGISTER',
-    block: 4546660,
-    txid: '35bfb606f1e822215e5827dafc6f788319d798cb96fa14f368dedcdfecd56be0',
-  },
-  {
-    label: 'Owner POSTPONE / check-in',
-    block: 4546671,
-    txid: '60d30eb17342311926d39c94164393d0ce9042bb3fe5e1bb3c3311d19a002f66',
-  },
-  {
-    label: 'Owner CANCEL',
-    block: 4546677,
-    txid: '32e76a242961415eee02df615778d8ab0f26427256c47bcdf258e661fbe1d865',
-  },
-] as const;
 
 const NATIVE_FIXTURE_SHA256 = 'e05e833a180c72954315c0165cf79dc921221065f65263b408bcf99ba362d2d2';
 
@@ -170,21 +148,7 @@ export const EvidenceAndKeepersPanel: React.FC<EvidenceAndKeepersPanelProps> = (
         </div>
 
         <div className="grid grid-cols-1 xl:grid-cols-[1.35fr_.65fr] gap-5">
-          <div className="border border-[#222938] bg-[#0B0D11]">
-            <div className="px-4 py-3 border-b border-[#222938] flex items-center gap-2">
-              <RadioTower className="w-4 h-4 text-[#10B981]" />
-              <h2 className="text-sm font-semibold text-[#F8FAFC]">Recorded Zcash testnet receipts</h2>
-            </div>
-            <div className="divide-y divide-[#1E2430]">
-              {RECORDED_TESTNET_COMMANDS.map((command) => (
-                <a key={command.txid} href={`https://zexplorer.app/testnet/tx/${command.txid}`} target="_blank" rel="noreferrer" className="grid grid-cols-[1fr_auto] md:grid-cols-[1fr_auto_auto] gap-3 items-center px-4 py-3 hover:bg-[#141820] transition-colors group">
-                  <span className="text-xs font-medium text-[#E2E8F0]">{command.label}</span>
-                  <span className="hidden md:block text-[11px] font-mono text-[#64748B]">block {command.block.toLocaleString()}</span>
-                  <span className="text-[11px] font-mono text-[#F59E0B] inline-flex items-center gap-1">{command.txid.slice(0, 9)}…{command.txid.slice(-8)} <ExternalLink className="w-3 h-3" /></span>
-                </a>
-              ))}
-            </div>
-          </div>
+          <ReceiptVerifier />
 
           <aside className="border border-[#10B981]/45 bg-[#0B0D11] p-5 space-y-4">
             <div className="flex items-center gap-2"><FileCheck2 className="w-5 h-5 text-[#10B981]" /><h2 className="font-semibold text-[#F8FAFC]">Exact recovery passed</h2></div>
@@ -199,8 +163,24 @@ export const EvidenceAndKeepersPanel: React.FC<EvidenceAndKeepersPanelProps> = (
           </aside>
         </div>
 
-        <div className="p-4 border-l-2 border-[#F59E0B] bg-[#0B0D11] text-xs leading-relaxed text-[#AEB8C8]">
-          <strong className="text-[#F8FAFC]">Why Zcash is material:</strong> the file remains off-chain. In native mode, shielded 512-byte memos carry the owner’s signed REGISTER, POSTPONE and CANCEL intent in a confirmed order. A viewing-only scanner recovers those commands for keeper evaluation without holding spending authority.
+        <RealRunReplay />
+
+        <div className="grid grid-cols-1 gap-3 lg:grid-cols-2">
+          <article className="p-4 border-l-2 border-[#F59E0B] bg-[#0B0D11] space-y-2 text-xs leading-relaxed text-[#AEB8C8]">
+            <h2 className="text-sm font-semibold text-[#F8FAFC]">Why Zcash, and why no smart contract</h2>
+            <p>The file stays off-chain. Zcash carries only the owner’s signed REGISTER, POSTPONE and CANCEL commands, as 512-byte shielded memos in a confirmed order. A viewing-only scanner reads them for the keepers without any spending authority.</p>
+            <p>Shielded memos hide who is checking in and for whom. A transparent chain would expose a pattern of life, and a plain server would be one party that can be pressured or switched off. Zcash has no general smart contracts, and none are needed: the memo format and the keeper state machine do that job.</p>
+            <p>This page publishes testnet receipts only because it is a demonstration. Real users would never publish their memos or viewing keys.</p>
+          </article>
+          <article className="p-4 border-l-2 border-[#64748B] bg-[#0B0D11] space-y-2 text-xs leading-relaxed text-[#AEB8C8]">
+            <h2 className="text-sm font-semibold text-[#F8FAFC]">What this does not prove</h2>
+            <ul className="list-disc space-y-1 pl-4">
+              <li>The five keepers are local processes sharing one operator, one scanner and one lightwallet endpoint. They are not independent.</li>
+              <li>Three colluding keepers can deliver shares early. Cancellation cannot revoke shares already delivered.</li>
+              <li>Testnet only, with no mainnet funds, and the native runtime is Windows-specific.</li>
+              <li>Not independently security-audited. Use synthetic files only.</li>
+            </ul>
+          </article>
         </div>
       </section>
 
@@ -574,7 +554,7 @@ export const EvidenceAndKeepersPanel: React.FC<EvidenceAndKeepersPanelProps> = (
                 setSelectedTxid(e.target.value);
                 setTamperMode('NONE');
               }}
-              className="px-3 py-2 bg-[#0B0D11] border border-[#222938] rounded font-mono text-xs text-[#F8FAFC]"
+              className="w-full min-w-0 max-w-full sm:w-auto px-3 py-2 bg-[#0B0D11] border border-[#222938] rounded font-mono text-xs text-[#F8FAFC]"
             >
               {transactions.map((tx) => (
                 <option key={tx.txid} value={tx.txid}>
