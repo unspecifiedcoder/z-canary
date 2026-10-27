@@ -1,6 +1,11 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { base64ToBytes, fileToBase64, MAX_NATIVE_FILE_BYTES, NativeApiError, nativeVaultApi, sha256HexBytes } from '../src/services/nativeVault';
+import { base64ToBytes, fileToBase64, isLoopbackHostname, MAX_NATIVE_FILE_BYTES, NativeApiError, nativeVaultApi, sha256HexBytes } from '../src/services/nativeVault';
+
+test('wallet controls are enabled only for exact loopback browser hostnames', () => {
+  for (const hostname of ['localhost', 'LOCALHOST', '127.0.0.1', '[::1]', '::1']) assert.equal(isLoopbackHostname(hostname), true);
+  for (const hostname of ['unspecifiedcoder.github.io', 'localhost.evil.test', '127.0.0.1.evil.test', '0.0.0.0']) assert.equal(isLoopbackHostname(hostname), false);
+});
 
 const token = 'native-agent-test-token';
 

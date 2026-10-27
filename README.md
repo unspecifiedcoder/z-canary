@@ -6,7 +6,7 @@
 
 > **The simple version:** put a file in a locked box. Press “I’m okay” to keep it locked. If you stop, three helpers provide pieces of the key—but only your chosen recipient can open the box.
 
-**[Create your own Canary](https://unspecifiedcoder.github.io/z-canary/app/#create)** · **[Try Maya & Noor’s story](https://unspecifiedcoder.github.io/z-canary/app/#maya-noor)** · **[Connect the native testnet wallet](https://unspecifiedcoder.github.io/z-canary/app/#native)** · **[Verify the Zcash transactions](#a-real-testnet-proof)**
+**[Create your own Canary](https://unspecifiedcoder.github.io/z-canary/app/#create)** · **[Try Maya & Noor’s story](https://unspecifiedcoder.github.io/z-canary/app/#maya-noor)** · **[See the native testnet connection](https://unspecifiedcoder.github.io/z-canary/app/#native)** · **[Verify the Zcash transactions](#a-real-testnet-proof)**
 
 > **Maya is reporting a story. Noor is the editor she trusts. Maya does not want to share her notes today—but she wants Noor to have a controlled recovery path if she becomes unavailable.**
 

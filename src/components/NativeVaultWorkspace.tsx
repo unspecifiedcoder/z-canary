@@ -6,6 +6,7 @@ import {
   base64ToBytes,
   downloadBytes,
   fileToBase64,
+  isLoopbackHostname,
   MAX_NATIVE_FILE_BYTES,
   NativeApiError,
   NativeOperation,
@@ -67,6 +68,7 @@ const NativeVaultWorkspace: React.FC = () => {
   const [operationVaultId, setOperationVaultId] = useState<string | null>(null);
   const [createOutcomeUnknown, setCreateOutcomeUnknown] = useState(false);
   const [cancelConfirm, setCancelConfirm] = useState(false);
+  const canConnectFromPage = typeof window !== 'undefined' && isLoopbackHostname(window.location.hostname);
   const epoch = useRef(0);
   const active = useRef(true);
   const selected = useMemo(() => vaults.find(vault => vault.id === selectedId) ?? null, [vaults, selectedId]);
@@ -279,15 +281,16 @@ const NativeVaultWorkspace: React.FC = () => {
         <span className="inline-flex items-center gap-2 px-3 py-1.5 border border-sky-500/30 text-xs font-mono text-sky-200"><FileLock2 size={15}/>KEYS STAY IN NATIVE RUNTIME</span>
       </div>
       <p className="max-w-3xl text-sm leading-6 text-[#AAB6C7]">This is the real network path, separate from the browser simulation. It connects this tab to Canary’s authenticated local Zingolib wallet, then enables real REGISTER, CHECK-IN and CANCEL memo transactions on Zcash testnet. Canary never asks for a seed phrase.</p>
+      {!canConnectFromPage&&<div className="border border-amber-500/30 bg-amber-500/5 p-3 text-sm text-amber-100"><strong className="block">Hosted judge copy · connection is intentionally locked.</strong><span className="mt-1 block text-xs leading-5 text-amber-100/75">Run Canary on loopback before entering the private bearer token. The local agent rejects remote webpage origins, so a hosted-page compromise cannot command your wallet.</span></div>}
       <div className="grid gap-2 sm:grid-cols-3 text-xs">
         <div className="border-l-2 border-sky-400/60 pl-3"><strong className="block text-[#E2E8F0]">1 · Start native runtime</strong><span className="text-[#718096]">Run the repository launcher with the existing wallet state.</span></div>
         <div className="border-l-2 border-sky-400/35 pl-3"><strong className="block text-[#E2E8F0]">2 · Connect locally</strong><span className="text-[#718096]">Paste the one-time bearer from its private token file.</span></div>
         <div className="border-l-2 border-sky-400/20 pl-3"><strong className="block text-[#E2E8F0]">3 · Verify on explorer</strong><span className="text-[#718096]">Confirmed commands expose a real txid and block height.</span></div>
       </div>
       <div className="grid gap-3 md:grid-cols-[minmax(0,1fr)_minmax(0,1fr)_auto]">
-        <label className="space-y-1 text-xs text-[#94A3B8]">Loopback agent URL<input value={baseUrl} onChange={event => { clearConnection(); setBaseUrl(event.target.value); }} spellCheck={false} autoComplete="off" className="w-full rounded border border-[#2E3748] bg-[#0B0D11] px-3 py-2 text-sm font-mono text-[#F8FAFC]"/></label>
-        <label className="space-y-1 text-xs text-[#94A3B8]">Bearer token<input value={token} onChange={event => { clearConnection(); setToken(event.target.value); }} type="password" autoComplete="off" className="w-full rounded border border-[#2E3748] bg-[#0B0D11] px-3 py-2 text-sm font-mono text-[#F8FAFC]"/></label>
-        <button type="button" disabled={!!busy} onClick={runtime ? refresh : connect} className="self-end inline-flex items-center justify-center gap-2 rounded bg-sky-300 px-4 py-2 text-sm font-semibold text-[#081018] disabled:opacity-50">{busy==='connect'?<LoaderCircle size={16} className="animate-spin"/>:runtime?<RefreshCw size={16}/>:<WalletCards size={16}/>} {runtime?'Refresh wallet':'Connect Zcash wallet'}</button>
+        <label className="space-y-1 text-xs text-[#94A3B8]">Loopback agent URL<input value={baseUrl} disabled={!canConnectFromPage} onChange={event => { clearConnection(); setBaseUrl(event.target.value); }} spellCheck={false} autoComplete="off" className="w-full rounded border border-[#2E3748] bg-[#0B0D11] px-3 py-2 text-sm font-mono text-[#F8FAFC] disabled:cursor-not-allowed disabled:opacity-50"/></label>
+        <label className="space-y-1 text-xs text-[#94A3B8]">Bearer token<input value={token} disabled={!canConnectFromPage} onChange={event => { clearConnection(); setToken(event.target.value); }} type="password" autoComplete="off" className="w-full rounded border border-[#2E3748] bg-[#0B0D11] px-3 py-2 text-sm font-mono text-[#F8FAFC] disabled:cursor-not-allowed disabled:opacity-50"/></label>
+        {canConnectFromPage?<button type="button" disabled={!!busy} onClick={runtime ? refresh : connect} className="self-end inline-flex items-center justify-center gap-2 rounded bg-sky-300 px-4 py-2 text-sm font-semibold text-[#081018] disabled:opacity-50">{busy==='connect'?<LoaderCircle size={16} className="animate-spin"/>:runtime?<RefreshCw size={16}/>:<WalletCards size={16}/>} {runtime?'Refresh wallet':'Connect Zcash wallet'}</button>:<a href="https://github.com/unspecifiedcoder/z-canary#run-native-zcash-testnet" target="_blank" rel="noreferrer" className="self-end inline-flex items-center justify-center gap-2 rounded bg-sky-300 px-4 py-2 text-sm font-semibold text-[#081018]"><WalletCards size={16}/>Run locally to connect<ExternalLink size={13}/></a>}
       </div>
       {error&&<div role="alert" className="whitespace-pre-line border border-red-500/40 bg-red-500/5 p-3 text-sm text-red-200"><CircleAlert className="mr-2 inline" size={16}/>{error}</div>}
       {notice&&<div role="status" className="border border-amber-500/30 bg-amber-500/5 p-3 text-sm text-amber-100">{notice}</div>}

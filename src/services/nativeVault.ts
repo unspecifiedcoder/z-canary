@@ -59,6 +59,10 @@ export class NativeApiError extends Error {
   }
 }
 
+export function isLoopbackHostname(hostname: string): boolean {
+  return ['localhost', '127.0.0.1', '[::1]', '::1'].includes(hostname.toLowerCase());
+}
+
 function getApiUrl(baseUrl: string, route: string): string {
   const base = baseUrl.trim().replace(/\/+$/, '');
   if (!/^http:\/\/(?:localhost|127\.0\.0\.1|\[::1\])(?::\d+)?$/.test(base)) {
