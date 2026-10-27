@@ -202,10 +202,10 @@ The completed native acceptance run used four shielded transactions and recovere
 
 | Action | Block | Transaction |
 |---|---:|---|
-| Register release-path vault | 4,546,656 | [`1d479796…19cf90ecb`](https://zexplorer.app/testnet/tx/1d4797966b97aac313b4ce7db58a4e546593c1e5efacfa992b3c73519cf90ecb) |
-| Register cancellation-path vault | 4,546,660 | [`35bfb606…ecd56be0`](https://zexplorer.app/testnet/tx/35bfb606f1e822215e5827dafc6f788319d798cb96fa14f368dedcdfecd56be0) |
-| Check in / postpone | 4,546,671 | [`60d30eb1…9a002f66`](https://zexplorer.app/testnet/tx/60d30eb17342311926d39c94164393d0ce9042bb3fe5e1bb3c3311d19a002f66) |
-| Cancel | 4,546,677 | [`32e76a24…fbe1d865`](https://zexplorer.app/testnet/tx/32e76a242961415eee02df615778d8ab0f26427256c47bcdf258e661fbe1d865) |
+| Register release-path vault | 4,546,656 | [`1d479796…19cf90ecb`](https://testnet.cipherscan.app/tx/1d4797966b97aac313b4ce7db58a4e546593c1e5efacfa992b3c73519cf90ecb) |
+| Register cancellation-path vault | 4,546,660 | [`35bfb606…ecd56be0`](https://testnet.cipherscan.app/tx/35bfb606f1e822215e5827dafc6f788319d798cb96fa14f368dedcdfecd56be0) |
+| Check in / postpone | 4,546,671 | [`60d30eb1…9a002f66`](https://testnet.cipherscan.app/tx/60d30eb17342311926d39c94164393d0ce9042bb3fe5e1bb3c3311d19a002f66) |
+| Cancel | 4,546,677 | [`32e76a24…fbe1d865`](https://testnet.cipherscan.app/tx/32e76a242961415eee02df615778d8ab0f26427256c47bcdf258e661fbe1d865) |
 
 All five keeper databases applied the check-in at sequence 1. The cancelled vault delivered zero shares. The release-path vault produced five validated shares and recovered the original 136-byte fixture with SHA-256 `e05e833a180c72954315c0165cf79dc921221065f65263b408bcf99ba362d2d2`.
 

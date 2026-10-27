@@ -10,7 +10,7 @@ The harness in [wallet-gate](../wallet-gate/README.md) pins official Zingolib co
 
 Sender and receiver recovery is encrypted with Windows CurrentUser DPAPI before their public addresses are exposed. Repeated independent `prepare` processes restored the same addresses. No mnemonic is printed or stored in plaintext. The user funded an earlier ephemeral wallet; that harness failed to preserve its keys. A replacement durable wallet was independently funded through Fauzec without requiring another user payment. The obsolete address must not be funded again.
 
-The durable wallet's 1 TAZ funding transaction is [f0701ee…243a3](https://zexplorer.app/testnet/tx/f0701ee36548c63c9729838766db72f39b50925ad55f995b544832b8b76243a3), confirmed at height **4,546,067**. This same durable sender subsequently paid the three command transactions below. TAZ is testnet currency; these are not mainnet payments.
+The durable wallet's 1 TAZ funding transaction is [f0701ee…243a3](https://testnet.cipherscan.app/tx/f0701ee36548c63c9729838766db72f39b50925ad55f995b544832b8b76243a3), confirmed at height **4,546,067**. This same durable sender subsequently paid the three command transactions below. TAZ is testnet currency; these are not mainnet payments.
 
 ## Confirmed transport evidence
 
@@ -18,9 +18,9 @@ Each row represents an actual shielded send and a distinct UFVK-only receiver sc
 
 | Command | Sequence | Confirmed block | Transaction |
 | --- | ---: | ---: | --- |
-| REGISTER | 0 | 4,546,108 | [4c8d932…5dbcd](https://zexplorer.app/testnet/tx/4c8d93227d41f826a0f2e6b01961fe5789df6b86241f7da08feea54fce05dbcd) |
-| POSTPONE | 1 | 4,546,115 | [eb88105…34ef8](https://zexplorer.app/testnet/tx/eb88105b26d0a33bcf51ca4ecff29b2d608e20231ca6ce357578401481c34ef8) |
-| CANCEL | 2 | 4,546,123 | [07e4e41…1299e](https://zexplorer.app/testnet/tx/07e4e41413971119d85f282f698e52b963152d26d40224aec022df151ad1299e) |
+| REGISTER | 0 | 4,546,108 | [4c8d932…5dbcd](https://testnet.cipherscan.app/tx/4c8d93227d41f826a0f2e6b01961fe5789df6b86241f7da08feea54fce05dbcd) |
+| POSTPONE | 1 | 4,546,115 | [eb88105…34ef8](https://testnet.cipherscan.app/tx/eb88105b26d0a33bcf51ca4ecff29b2d608e20231ca6ce357578401481c34ef8) |
+| CANCEL | 2 | 4,546,123 | [07e4e41…1299e](https://testnet.cipherscan.app/tx/07e4e41413971119d85f282f698e52b963152d26d40224aec022df151ad1299e) |
 
 The full machine-readable proof is [testnet-transport.json](evidence/testnet-transport.json). These commands use a deliberately public signing fixture and demonstrate transport only. They are not a protected dossier, keeper activation proof or completed recipient delivery.
 
