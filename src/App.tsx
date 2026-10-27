@@ -35,7 +35,7 @@ import { SupportScreen } from './components/SupportScreen';
 import { EvidenceAndKeepersPanel } from './components/EvidenceAndKeepersPanel';
 import { JudgeJourney } from './components/JudgeJourney';
 import NativeVaultWorkspace from './components/NativeVaultWorkspace';
-import { tabForHash, type PublicAppTab } from './experience/routes';
+import { tabForDirectHash, tabForHash, type PublicAppTab } from './experience/routes';
 
 const GuidedExperience = lazy(() => import('./components/GuidedExperience'));
 const CaseStudyDemo = lazy(() => import('./components/CaseStudyDemo'));
@@ -55,7 +55,10 @@ export default function App() {
     didNavigate.current = true;
   }, [activeTab]);
   useEffect(() => {
-    const followHash = () => setActiveTab(tabForHash(window.location.hash));
+    const followHash = () => {
+      const directTab = tabForDirectHash(window.location.hash);
+      if (directTab) setActiveTab(directTab);
+    };
     window.addEventListener('hashchange', followHash);
     return () => window.removeEventListener('hashchange', followHash);
   }, []);
@@ -343,6 +346,7 @@ export default function App() {
     setCurrentBlockHeight(INITIAL_HEIGHT);
     setForkSalt(0);
     setVault(fresh.vault);
+    setRecipientIdentity(fresh.recipientIdentity);
     setTransactions(fresh.transactions);
     setWalletBalanceZatoshi(480000);
     setSelectedTxidForMemo(fresh.transactions[0]?.txid || null);
@@ -422,7 +426,7 @@ export default function App() {
 
       <JudgeJourney
         vault={vault}
-        isCustomVault={vault.id !== initialData.vault.id}
+        isCustomVault={vault.id !== initialData.vault.id && ['create','sentinel','recipient','evidence'].includes(activeTab)}
         onNavigate={page => setActiveTab(page)}
         onConfirmRegistration={handleConfirmRegistration}
         onCheckIn={() => { handleCheckIn(vault.manifest.initialIntervalBlocks); setActiveTab('sentinel'); }}
@@ -530,7 +534,7 @@ export default function App() {
                     id: `ev-dec-${Date.now()}`,
                     type: 'RECIPIENT_DECRYPTED',
                     title: 'Recipient reconstructed key and decrypted dossier',
-                    detail: `3-of-5 Keeper shares interpolated over GF(256) and inner X25519 envelope verified against SHA-256 digest.`,
+                    detail: `${prev.manifest.threshold}-of-5 Keeper shares interpolated over GF(256) and inner X25519 envelope verified against SHA-256 digest.`,
                     blockHeight: currentBlockHeight,
                     timestamp: new Date().toISOString().replace('T', ' ').slice(0, 19) + ' UTC',
                   },

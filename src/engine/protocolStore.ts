@@ -209,7 +209,7 @@ export function canonicalManifestBytes(params: ManifestFields): Uint8Array {
       ![params.switchIdHex, params.sourcePubKeyHex, params.recipientPubKeyHex, params.packageDigestHex].every(isHash) ||
       !Number.isSafeInteger(params.packageSize) || params.packageSize < 32 || params.packageSize > 10 * 1024 * 1024 + 65536 ||
       ![params.initialIntervalBlocks, params.confirmationTarget, params.maxExtensionBlocks, params.configurationEpoch].every(value => isU32(value)) ||
-      !isU32(params.graceBlocks, 0) || params.threshold !== 3 ||
+      !isU32(params.graceBlocks, 0) || !Number.isInteger(params.threshold) || params.threshold < 2 || params.threshold > 5 ||
       !params.shareCommitments || Object.keys(params.shareCommitments).sort().join(',') !== '1,2,3,4,5' ||
       ![1, 2, 3, 4, 5].every(index => isHash(params.shareCommitments[index]))) {
     throw new Error('ERR_MANIFEST_POLICY');
@@ -244,7 +244,7 @@ export function verifyManifest(manifest: ImmutableManifest): boolean {
     if (manifest.protocolId !== 'Z-CANARY-V1') return false;
     const bytes = canonicalManifestBytes(manifest);
     if (sha256Hex(bytes) !== manifest.manifestDigestHex || manifest.recipientFingerprint !== computeKeyFingerprint(manifest.recipientPubKeyHex)) return false;
-    if (manifest.keeperIds.join(',') !== 'keeper-01,keeper-02,keeper-03,keeper-04,keeper-05' || manifest.threshold !== 3) return false;
+    if (manifest.keeperIds.join(',') !== 'keeper-01,keeper-02,keeper-03,keeper-04,keeper-05' || manifest.threshold < 2 || manifest.threshold > 5) return false;
     return ed25519.verify(hexToBytes(manifest.sourceSignatureHex), bytes, hexToBytes(manifest.sourcePubKeyHex), { zip215: false });
   } catch { return false; }
 }

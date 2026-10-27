@@ -102,7 +102,7 @@ export function splitSecret(
   if (secretBytes.length !== 32) {
     throw new Error('Release secret must be exactly 32 bytes (256 bits)');
   }
-  if (!Number.isInteger(k) || !Number.isInteger(n) || k !== 3 || n !== 5) {
+  if (!Number.isInteger(k) || !Number.isInteger(n) || n !== 5 || k < 2 || k > n) {
     throw new Error('Invalid threshold parameters');
   }
 
@@ -164,7 +164,7 @@ export function reconstructSecret(
   expectedCommitments: Record<number, string>,
   k = 3
 ): Uint8Array {
-  if (k !== 3) throw new Error('ERR_THRESHOLD_POLICY: Only 3-of-5 is supported');
+  if (!Number.isInteger(k) || k < 2 || k > 5) throw new Error('ERR_THRESHOLD_POLICY: Expected a 2-of-5 through 5-of-5 policy');
   if (shares.length < k) {
     throw new Error(`ERR_THRESHOLD_INSUFFICIENT: Need at least ${k} valid shares, received ${shares.length}`);
   }

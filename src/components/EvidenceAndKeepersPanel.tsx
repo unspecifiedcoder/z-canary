@@ -155,7 +155,7 @@ export const EvidenceAndKeepersPanel: React.FC<EvidenceAndKeepersPanelProps> = (
           <article className="p-4 border border-[#2A3343] bg-[#0B0D11] space-y-2">
             <div className="flex items-center justify-between gap-3"><span className="text-xs font-mono text-[#F59E0B]">INTERACTIVE / NOW</span><span className="text-[10px] font-mono text-[#64748B]">HOSTED BROWSER</span></div>
             <h2 className="font-semibold text-[#F8FAFC]">Real local cryptography</h2>
-            <p className="text-xs leading-relaxed text-[#94A3B8]">X25519 recipient binding, AES-256-GCM, signatures, 3-of-5 reconstruction and exact-byte verification execute in this browser.</p>
+            <p className="text-xs leading-relaxed text-[#94A3B8]">X25519 recipient binding, AES-256-GCM, signatures, {vault.manifest.threshold}-of-5 reconstruction and exact-byte verification execute in this browser.</p>
           </article>
           <article className="p-4 border border-[#2A3343] bg-[#0B0D11] space-y-2">
             <div className="flex items-center justify-between gap-3"><span className="text-xs font-mono text-[#EFAD45]">SIMULATED / RESETTABLE</span><span className="text-[10px] font-mono text-[#64748B]">HOSTED BROWSER</span></div>

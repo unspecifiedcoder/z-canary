@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { tabForHash } from '../src/experience/routes';
+import { tabForDirectHash, tabForHash } from '../src/experience/routes';
 
 test('public judge links open the intended self-service and proof surfaces', () => {
   assert.equal(tabForHash('#create'), 'create');
@@ -14,4 +14,11 @@ test('unknown or empty hashes fail safely to the product overview', () => {
   assert.equal(tabForHash(''), 'welcome');
   assert.equal(tabForHash('#not-a-real-route'), 'welcome');
   assert.equal(tabForHash('#CREATE'), 'create');
+});
+
+test('ordinary document anchors never navigate away from the current app surface', () => {
+  assert.equal(tabForDirectHash('#main-content'), null);
+  assert.equal(tabForDirectHash('#watch'), null);
+  assert.equal(tabForDirectHash(''), null);
+  assert.equal(tabForDirectHash('#create'), 'create');
 });

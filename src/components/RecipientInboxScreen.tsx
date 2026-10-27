@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Lock,
   Unlock,
@@ -33,8 +33,14 @@ export const RecipientInboxScreen: React.FC<RecipientInboxScreenProps> = ({
   const [decryptError, setDecryptError] = useState<string | null>(null);
   const [reconstructed, setReconstructed] = useState(false);
 
+  useEffect(() => {
+    setRecipientPrivInput(recipientIdentity.privateKeyHex);
+    setDecryptError(null);
+    setReconstructed(false);
+  }, [recipientIdentity.privateKeyHex]);
+
   const deliveredCount = vault.deliveredSharesToRecipient.length;
-  const threshold = vault.manifest.threshold; // 3
+  const threshold = vault.manifest.threshold;
 
   // Distinct Recipient States: "LOCKED" | "WAITING_SHARES" | "READY_TO_DECRYPT" | "DECRYPTED"
   const inboxState = vault.decryptedByRecipient
