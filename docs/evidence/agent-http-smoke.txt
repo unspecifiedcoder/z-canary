@@ -1,0 +1,1 @@
+PASS: real loopback HTTP process; bearer/origin controls; three signed memos; u64 sequence; truthful 503 wallet status; structured 405 errors.

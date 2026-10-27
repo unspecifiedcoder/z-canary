@@ -1,0 +1,203 @@
+   Compiling zcanary-keeper v0.1.0 (C:\Users\Pramod\Documents\Codex\2026-10-26\can\work\z-canary\backend\crates\zcanary-keeper)
+   Compiling zcanary-agent v0.1.0 (C:\Users\Pramod\Documents\Codex\2026-10-26\can\work\z-canary\backend\crates\zcanary-agent)
+   Compiling zcanary-keeper-service v0.1.0 (C:\Users\Pramod\Documents\Codex\2026-10-26\can\work\z-canary\backend\crates\zcanary-keeper-service)
+   Compiling zcanary-vault-cli v0.1.0 (C:\Users\Pramod\Documents\Codex\2026-10-26\can\work\z-canary\backend\crates\zcanary-vault-cli)
+   Compiling zcanary-crypto v0.1.0 (C:\Users\Pramod\Documents\Codex\2026-10-26\can\work\z-canary\backend\crates\zcanary-crypto)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 30.72s
+     Running unittests src\lib.rs (C:\Users\Pramod\Documents\Codex\2026-10-26\can\work\zingolib-spike\target\debug\deps\zcanary_agent-46a806139bdffe8d.exe)
+
+running 13 tests
+test runtime::acknowledgement_tests::acknowledgement_requires_signature_and_exact_provisioned_context ... ok
+test tests::bind_and_origin_config_must_be_loopback_only ... ok
+test tests::bounds_request_body_and_reports_stable_status_capabilities ... ok
+test tests::evidence_endpoint_requires_auth_and_returns_only_validated_fields ... ok
+test tests::evidence_file_reader_is_bounded_and_cli_evidence_path_is_optional ... ok
+test tests::evidence_schema_rejects_unknown_fields_invalid_txids_and_synthetic_transactions ... ok
+test tests::native_create_schema_rejects_security_overrides_and_runtime_cli_is_optional ... ok
+test tests::native_file_limit_is_scoped_to_configured_create_only ... ok
+test tests::native_routes_are_authenticated_and_never_simulate_missing_runtime ... ok
+test tests::native_routes_report_wrong_methods_as_structured_errors ... ok
+test tests::requires_auth_and_rejects_unapproved_origins ... ok
+test tests::unsupported_method_returns_stable_error_with_request_id ... ok
+test tests::verifies_real_memo_and_rejects_bad_signature ... ok
+
+test result: ok. 13 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.05s
+
+     Running unittests src\main.rs (C:\Users\Pramod\Documents\Codex\2026-10-26\can\work\zingolib-spike\target\debug\deps\zcanary_agent-a21a7e820e5ce75c.exe)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests src\lib.rs (C:\Users\Pramod\Documents\Codex\2026-10-26\can\work\zingolib-spike\target\debug\deps\zcanary_core-2844e85ab24d2f1c.exe)
+
+running 5 tests
+test tests::manifest_is_ordered_signed_digest_bound_and_tamper_evident ... ok
+test tests::manifest_policy_and_signer_mismatch_are_rejected ... ok
+test tests::memo_rejects_bad_framing_network_padding_fields_signature_and_signer ... ok
+test tests::memo_roundtrip_preserves_u64_max_and_exact_little_endian_bytes ... ok
+test tests::typescript_public_fixture_interoperates_byte_for_byte ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.06s
+
+     Running unittests src\lib.rs (C:\Users\Pramod\Documents\Codex\2026-10-26\can\work\zingolib-spike\target\debug\deps\zcanary_crypto-37793ffca919caec.exe)
+
+running 1 test
+test tests::signed_manifest_package_digest_rejects_same_key_context_substitution ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests\protocol_integration.rs (C:\Users\Pramod\Documents\Codex\2026-10-26\can\work\zingolib-spike\target\debug\deps\protocol_integration-ff77fc5f0f55fbaa.exe)
+
+running 2 tests
+test signed_cancel_in_last_grace_block_prevents_all_five_keeper_releases ... ok
+test signed_register_to_five_keepers_grace_release_and_three_share_decryption ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.51s
+
+     Running tests\roundtrip.rs (C:\Users\Pramod\Documents\Codex\2026-10-26\can\work\zingolib-spike\target\debug\deps\roundtrip-c44fe4e7fc6e79ca.exe)
+
+running 8 tests
+test binary_roundtrip_and_every_three_of_five_subset ... ok
+test ciphertext_tampering_and_wrong_recipient_fail ... ok
+test context_metadata_is_authenticated ... ok
+test duplicate_index_is_rejected ... ok
+test every_supplied_share_is_checked_including_extras ... ok
+test keeper_can_encrypt_delivery_share_to_recipient_after_manifest ... ok
+test plaintext_limit_is_enforced_before_encryption ... ok
+test two_shares_are_insufficient ... ok
+
+test result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.17s
+
+     Running unittests src\main.rs (C:\Users\Pramod\Documents\Codex\2026-10-26\can\work\zingolib-spike\target\debug\deps\zcanary_demo-b67d3c9b5fccc4e7.exe)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests src\lib.rs (C:\Users\Pramod\Documents\Codex\2026-10-26\can\work\zingolib-spike\target\debug\deps\zcanary_keeper-ef7fa3ffaace5736.exe)
+
+running 17 tests
+test tests::cancellation_after_release_does_not_recall_pending_envelope ... ok
+test tests::cancellation_in_last_inclusive_grace_block_suppresses_release ... ok
+test tests::expiry_plus_grace_overflow_is_rejected_for_register_and_postpone ... ok
+test tests::heterogeneous_confirmation_policies_gate_coverage_by_largest_target ... ok
+test tests::identical_provision_retry_keeps_first_recipient_envelope_and_rejects_metadata_change ... ok
+test tests::incomplete_initial_gap_suspends_without_advancing_cursor ... ok
+test tests::incomplete_mid_batch_is_prevalidated_before_register_or_block_writes ... ok
+test tests::invalid_provisioning_epoch_or_keeper_index_is_rejected ... ok
+test tests::late_command_does_not_block_cursor_or_release ... ok
+test tests::postpone_in_last_grace_block_wins_and_outbox_retries_keep_stable_key ... ok
+test tests::provisioned_draft_never_releases_even_past_candidate_deadline_and_survives_restart ... ok
+test tests::rejected_batch_rolls_back_and_suspends_pending_delivery ... ok
+test tests::release_occurs_at_expiry_plus_inclusive_grace_after_boundary_commands ... ok
+test tests::reorg_incident_latches_even_when_old_branch_is_retried ... ok
+test tests::restart_requires_fresh_complete_scan_before_pending_delivery ... ok
+test tests::trusted_checkpoint_initializes_once_and_existing_open_preserves_cursor ... ok
+test tests::u64_sequences_and_epochs_roundtrip_above_sqlite_integer_range ... ok
+
+test result: ok. 17 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.50s
+
+     Running unittests src\main.rs (C:\Users\Pramod\Documents\Codex\2026-10-26\can\work\zingolib-spike\target\debug\deps\zcanary_keeper_service-dce3385b2fa8dca0.exe)
+
+running 4 tests
+test http_tests::live_scan_freshness_expires_and_scan_failure_suspends_delivery ... ok
+test http_tests::parses_bounded_loopback_request_headers ... ok
+test http_tests::rejects_invalid_or_oversized_content_length_and_header_block ... ok
+test http_tests::rejects_origin_transfer_encoding_and_duplicate_headers ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+
+     Running unittests src\lib.rs (C:\Users\Pramod\Documents\Codex\2026-10-26\can\work\zingolib-spike\target\debug\deps\zcanary_storage-a8b26a640f6bc14e.exe)
+
+running 8 tests
+test tests::create_new_preserves_existing_file_and_never_writes_plaintext ... ok
+test tests::encrypted_export_can_be_saved_and_imported_as_backup ... ok
+test tests::encrypted_export_import_roundtrips_binary_bundle ... ok
+test tests::format_and_ciphertext_size_are_bounded ... ok
+test tests::rejects_empty_passphrases_for_export_and_import ... ok
+test tests::rejects_import_work_factor_above_policy_before_running_scrypt ... ok
+test tests::role_and_identity_id_are_bound_inside_ciphertext ... ok
+test tests::wrong_passphrase_and_modified_or_truncated_ciphertext_fail ... ok
+
+test result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 34.95s
+
+     Running unittests src\main.rs (C:\Users\Pramod\Documents\Codex\2026-10-26\can\work\zingolib-spike\target\debug\deps\zcanary_vault_cli-e4c6401e76e8b5aa.exe)
+
+running 7 tests
+test tests::dpapi_restore_command_retry_and_three_keeper_recipient_roundtrip ... ok
+test tests::identity_backups_restore_both_roles_and_refuse_wrong_context_or_replacement ... ok
+test tests::manifest_json_roundtrip_preserves_signature_and_rejects_tampering ... ok
+test tests::operation_id_retry_returns_prior_record_or_rejects_conflicting_reuse ... ok
+test tests::operation_ids_are_16_bytes_while_vault_ids_are_32_bytes ... ok
+test tests::rejects_mutation_without_registration_nonincreasing_expiry_and_sequence_overflow ... ok
+test tests::reserves_monotonic_sequence_and_signs_register_postpone_cancel_memos ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 66.48s
+
+   Doc-tests zcanary_agent
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests zcanary_core
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests zcanary_crypto
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests zcanary_keeper
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests zcanary_storage
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+Final agent14-tests rerun after package/events/fee changes replaces the earlier agent suite;66distinct tests.
+   Compiling zcanary-agent v0.1.0 (C:\Users\Pramod\Documents\Codex\2026-10-26\can\work\z-canary\backend\crates\zcanary-agent)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 11.32s
+     Running unittests src\lib.rs (C:\Users\Pramod\Documents\Codex\2026-10-26\can\work\zingolib-spike\target\debug\deps\zcanary_agent-46a806139bdffe8d.exe)
+
+running 14 tests
+test runtime::acknowledgement_tests::acknowledgement_requires_signature_and_exact_provisioned_context ... ok
+test runtime::acknowledgement_tests::ciphertext_export_checks_manifest_binding_and_omits_private_metadata ... ok
+test tests::bind_and_origin_config_must_be_loopback_only ... ok
+test tests::bounds_request_body_and_reports_stable_status_capabilities ... ok
+test tests::evidence_endpoint_requires_auth_and_returns_only_validated_fields ... ok
+test tests::evidence_file_reader_is_bounded_and_cli_evidence_path_is_optional ... ok
+test tests::evidence_schema_rejects_unknown_fields_invalid_txids_and_synthetic_transactions ... ok
+test tests::native_create_schema_rejects_security_overrides_and_runtime_cli_is_optional ... ok
+test tests::native_file_limit_is_scoped_to_configured_create_only ... ok
+test tests::native_routes_are_authenticated_and_never_simulate_missing_runtime ... ok
+test tests::native_routes_report_wrong_methods_as_structured_errors ... ok
+test tests::requires_auth_and_rejects_unapproved_origins ... ok
+test tests::unsupported_method_returns_stable_error_with_request_id ... ok
+test tests::verifies_real_memo_and_rejects_bad_signature ... ok
+
+test result: ok. 14 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.09s
+
+     Running unittests src\main.rs (C:\Users\Pramod\Documents\Codex\2026-10-26\can\work\zingolib-spike\target\debug\deps\zcanary_agent-a21a7e820e5ce75c.exe)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests zcanary_agent
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+

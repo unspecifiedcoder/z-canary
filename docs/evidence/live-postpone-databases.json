@@ -1,0 +1,38 @@
+{
+  "verifiedAt": "2026-10-27T07:15:57.681Z",
+  "switchId": "d138bf3d2277924891e21b2ba658a794fe671af60d1bb6a0b88e8451e527d3de",
+  "initialExpiry": 4546757,
+  "postponedExpiry": 4546761,
+  "states": [
+    {
+      "keeper": 1,
+      "lifecycle": "ACTIVE",
+      "expires": 4546761,
+      "sequence": "0000000000000001"
+    },
+    {
+      "keeper": 2,
+      "lifecycle": "ACTIVE",
+      "expires": 4546761,
+      "sequence": "0000000000000001"
+    },
+    {
+      "keeper": 3,
+      "lifecycle": "ACTIVE",
+      "expires": 4546761,
+      "sequence": "0000000000000001"
+    },
+    {
+      "keeper": 4,
+      "lifecycle": "ACTIVE",
+      "expires": 4546761,
+      "sequence": "0000000000000001"
+    },
+    {
+      "keeper": 5,
+      "lifecycle": "ACTIVE",
+      "expires": 4546761,
+      "sequence": "0000000000000001"
+    }
+  ]
+}

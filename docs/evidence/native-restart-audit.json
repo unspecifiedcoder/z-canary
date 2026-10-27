@@ -1,0 +1,134 @@
+{
+  "version": 1,
+  "label": "Native API → shielded testnet → five keeper processes → recipient recovery",
+  "mode": "testnet",
+  "status": "complete",
+  "startedAt": "2026-10-27T07:00:05.485Z",
+  "updatedAt": "2026-10-27T07:20:32.499Z",
+  "completedAt": "2026-10-27T07:17:03.259Z",
+  "checks": [
+    {
+      "name": "unauthenticated_api_rejected",
+      "passed": true
+    },
+    {
+      "name": "unapproved_browser_origin_rejected",
+      "passed": true
+    },
+    {
+      "name": "native_testnet_runtime_and_five_keepers_available",
+      "passed": true
+    },
+    {
+      "name": "recipient_identity_restores_across_cli_processes",
+      "passed": true
+    },
+    {
+      "name": "release_five_verified_keeper_acknowledgements",
+      "passed": true
+    },
+    {
+      "name": "subthreshold_recipient_recovery_rejected",
+      "passed": true
+    },
+    {
+      "name": "cancel_five_verified_keeper_acknowledgements",
+      "passed": true
+    },
+    {
+      "name": "release_register_confirmed_on_testnet",
+      "passed": true
+    },
+    {
+      "name": "cancel_register_confirmed_on_testnet",
+      "passed": true
+    },
+    {
+      "name": "cancel_postpone_confirmed_on_testnet",
+      "passed": true
+    },
+    {
+      "name": "cancel_cancel_confirmed_on_testnet",
+      "passed": true
+    },
+    {
+      "name": "cancelled_vault_releases_no_shares",
+      "passed": true
+    },
+    {
+      "name": "confirmed_expiration_releases_threshold_shares",
+      "passed": true
+    },
+    {
+      "name": "recipient_decryption_matches_original_sha256",
+      "passed": true
+    },
+    {
+      "name": "recipient_inbox_exposes_verified_release",
+      "passed": true
+    },
+    {
+      "name": "cancelled_keeper_databases_preserve_sequence_and_requested_postpone_expiry",
+      "passed": true
+    },
+    {
+      "name": "released_keeper_databases_preserve_registration_sequence_and_expiry",
+      "passed": true
+    }
+  ],
+  "transactions": [
+    {
+      "label": "release_register",
+      "network": "testnet",
+      "txid": "1d4797966b97aac313b4ce7db58a4e546593c1e5efacfa992b3c73519cf90ecb",
+      "blockHeight": 4546656
+    },
+    {
+      "label": "cancel_register",
+      "network": "testnet",
+      "txid": "35bfb606f1e822215e5827dafc6f788319d798cb96fa14f368dedcdfecd56be0",
+      "blockHeight": 4546660
+    },
+    {
+      "label": "cancel_postpone",
+      "network": "testnet",
+      "txid": "60d30eb17342311926d39c94164393d0ce9042bb3fe5e1bb3c3311d19a002f66",
+      "blockHeight": 4546671
+    },
+    {
+      "label": "cancel_cancel",
+      "network": "testnet",
+      "txid": "32e76a242961415eee02df615778d8ab0f26427256c47bcdf258e661fbe1d865",
+      "blockHeight": 4546677
+    }
+  ],
+  "vaults": [
+    {
+      "scenario": "release",
+      "switchId": "6da8f69b887d28b49ebcaf7ddd40e461fd8839c17ee6127717baccb827509a59",
+      "lifecycle": "RELEASED",
+      "shareCount": 5,
+      "packageDigestHex": "2172b765308056e0f45649e2e7c80ee630519db1c37ddd63d7e10ba9f18b0233",
+      "recoveredDigestHex": "e05e833a180c72954315c0165cf79dc921221065f65263b408bcf99ba362d2d2",
+      "keeperAgreement": 5,
+      "keeperLastSequence": "0",
+      "keeperExpiryHeight": 4546658
+    },
+    {
+      "scenario": "cancel",
+      "switchId": "d138bf3d2277924891e21b2ba658a794fe671af60d1bb6a0b88e8451e527d3de",
+      "lifecycle": "CANCELLED",
+      "shareCount": 0,
+      "packageDigestHex": "8e8a2e02d5d7b80968fe01279cf6905f6487a06f5425537c8eed926fb93a00cb",
+      "keeperAgreement": 5,
+      "keeperLastSequence": "2",
+      "keeperExpiryHeight": 4546761
+    }
+  ],
+  "limitations": [
+    "Five isolated keeper processes run on one Windows PC; this is not five independent operators.",
+    "Live Zcash testnet TAZ is valueless; no mainnet transactions are performed.",
+    "This runner verifies API and cryptographic behavior, not browser appearance.",
+    "An exact two-share API window was not observed; the pre-release threshold gate was checked instead."
+  ]
+}

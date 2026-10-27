@@ -1,0 +1,3 @@
+PASS cancelled_keeper_databases_preserve_sequence_and_requested_postpone_expiry
+PASS released_keeper_databases_preserve_registration_sequence_and_expiry
+This run is already complete. Existing evidence preserved; no new vaults or transactions created.

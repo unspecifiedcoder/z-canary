@@ -1,0 +1,215 @@
+{
+  "version": 1,
+  "runs": [
+    {
+      "limitations": [
+        "Locally operated keepers; not independent organizations.",
+        "Synthetic authenticated block feed, not a testnet scanner.",
+        "Demo passphrases exist only in runner memory; encrypted test artifacts cannot be reopened after runner exits."
+      ],
+      "checks": [
+        {
+          "name": "five separate processes, keys, ports and SQLite databases",
+          "passed": true
+        },
+        {
+          "name": "keeper endpoints reject incorrect authentication",
+          "passed": true
+        },
+        {
+          "name": "source and recipient encrypted identities exported and restored",
+          "passed": true
+        },
+        {
+          "name": "lost provisioning acknowledgements can be retried without changing the stored share",
+          "passed": true
+        },
+        {
+          "name": "all five durable signed provisioning acknowledgements verified before registration",
+          "passed": true
+        },
+        {
+          "name": "postponement during grace prevents release at the old deadline",
+          "passed": true
+        },
+        {
+          "name": "cancellation in the inclusive last grace block prevents all five releases",
+          "passed": true
+        },
+        {
+          "name": "all five processes restart with the same keys and suspend dispatch until fresh scan",
+          "passed": true
+        },
+        {
+          "name": "an incomplete scan suspends release dispatch",
+          "passed": true
+        },
+        {
+          "name": "two delivered shares cannot decrypt",
+          "passed": true
+        },
+        {
+          "name": "three valid shares decrypt the exact synthetic PDF with two keepers offline",
+          "passed": true
+        },
+        {
+          "name": "acknowledged deliveries are not offered again",
+          "passed": true
+        }
+      ],
+      "mode": "synthetic-chain",
+      "transactions": [],
+      "label": "Five isolated local keeper processes"
+    },
+    {
+      "limitations": [
+        "Public transport fixture only; these commands do not register a protected dossier.",
+        "The previous in-memory wallet had no saved recovery material. Current wallet recovery is encrypted and restart-tested."
+      ],
+      "checks": [
+        {
+          "name": "Encrypted wallet restored in a separate process",
+          "passed": true
+        },
+        {
+          "name": "Wallet reports 100000000 spendable zatoshi after faucet confirmation",
+          "passed": true
+        },
+        {
+          "name": "REGISTER, POSTPONE and CANCEL confirmed with exact512-byte memo recovery by a UFVK-only scanner",
+          "passed": true
+        }
+      ],
+      "mode": "testnet",
+      "transactions": [
+        {
+          "blockHeight": 4546067,
+          "network": "testnet",
+          "txid": "f0701ee36548c63c9729838766db72f39b50925ad55f995b544832b8b76243a3",
+          "label": "Replacement faucet receipt (1 TAZ)"
+        },
+        {
+          "blockHeight": 4546108,
+          "network": "testnet",
+          "txid": "4c8d93227d41f826a0f2e6b01961fe5789df6b86241f7da08feea54fce05dbcd",
+          "label": "REGISTER"
+        },
+        {
+          "blockHeight": 4546115,
+          "network": "testnet",
+          "txid": "eb88105b26d0a33bcf51ca4ecff29b2d608e20231ca6ce357578401481c34ef8",
+          "label": "POSTPONE"
+        },
+        {
+          "blockHeight": 4546123,
+          "network": "testnet",
+          "txid": "07e4e41413971119d85f282f698e52b963152d26d40224aec022df151ad1299e",
+          "label": "CANCEL"
+        }
+      ],
+      "label": "Persistent wallet and signed shielded command transport"
+    },
+    {
+      "label": "Native API → shielded testnet → five keeper processes → recipient recovery",
+      "mode": "testnet",
+      "checks": [
+        {
+          "name": "unauthenticated_api_rejected",
+          "passed": true
+        },
+        {
+          "name": "unapproved_browser_origin_rejected",
+          "passed": true
+        },
+        {
+          "name": "native_testnet_runtime_and_five_keepers_available",
+          "passed": true
+        },
+        {
+          "name": "recipient_identity_restores_across_cli_processes",
+          "passed": true
+        },
+        {
+          "name": "release_five_verified_keeper_acknowledgements",
+          "passed": true
+        },
+        {
+          "name": "subthreshold_recipient_recovery_rejected",
+          "passed": true
+        },
+        {
+          "name": "cancel_five_verified_keeper_acknowledgements",
+          "passed": true
+        },
+        {
+          "name": "release_register_confirmed_on_testnet",
+          "passed": true
+        },
+        {
+          "name": "cancel_register_confirmed_on_testnet",
+          "passed": true
+        },
+        {
+          "name": "cancel_postpone_confirmed_on_testnet",
+          "passed": true
+        },
+        {
+          "name": "cancel_cancel_confirmed_on_testnet",
+          "passed": true
+        },
+        {
+          "name": "cancelled_vault_releases_no_shares",
+          "passed": true
+        },
+        {
+          "name": "confirmed_expiration_releases_threshold_shares",
+          "passed": true
+        },
+        {
+          "name": "recipient_decryption_matches_original_sha256",
+          "passed": true
+        },
+        {
+          "name": "recipient_inbox_exposes_verified_release",
+          "passed": true
+        },
+        {
+          "name": "All five keeper databases applied POSTPONE and advanced expiry",
+          "passed": true
+        }
+      ],
+      "transactions": [
+        {
+          "label": "release_register",
+          "network": "testnet",
+          "txid": "1d4797966b97aac313b4ce7db58a4e546593c1e5efacfa992b3c73519cf90ecb",
+          "blockHeight": 4546656
+        },
+        {
+          "label": "cancel_register",
+          "network": "testnet",
+          "txid": "35bfb606f1e822215e5827dafc6f788319d798cb96fa14f368dedcdfecd56be0",
+          "blockHeight": 4546660
+        },
+        {
+          "label": "cancel_postpone",
+          "network": "testnet",
+          "txid": "60d30eb17342311926d39c94164393d0ce9042bb3fe5e1bb3c3311d19a002f66",
+          "blockHeight": 4546671
+        },
+        {
+          "label": "cancel_cancel",
+          "network": "testnet",
+          "txid": "32e76a242961415eee02df615778d8ab0f26427256c47bcdf258e661fbe1d865",
+          "blockHeight": 4546677
+        }
+      ],
+      "limitations": [
+        "Five local processes share one operator and a UFVK-only scanner/indexer.",
+        "Exact two-share rejection verified by native crypto tests; live delivery reached five shares.",
+        "Testnet prototype, not independent infrastructure or a security audit."
+      ]
+    }
+  ],
+  "label": "Z-Canary verification evidence"
+}

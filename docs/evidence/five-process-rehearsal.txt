@@ -1,0 +1,45 @@
+Z-Canary: five real local keeper processes, synthetic block progression. No blockchain transactions.
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.52s
+PASS five separate processes, keys, ports and SQLite databases
+PASS keeper endpoints reject incorrect authentication
+PASS source and recipient encrypted identities exported and restored
+PASS lost provisioning acknowledgements can be retried without changing the stored share
+PASS all five durable signed provisioning acknowledgements verified before registration
+PASS postponement during grace prevents release at the old deadline
+PASS cancellation in the inclusive last grace block prevents all five releases
+PASS all five processes restart with the same keys and suspend dispatch until fresh scan
+PASS an incomplete scan suspends release dispatch
+PASS two delivered shares cannot decrypt
+PASS three valid shares decrypt the exact synthetic PDF with two keepers offline
+PASS acknowledged deliveries are not offered again
+{
+  "mode": "synthetic-chain",
+  "live_transactions": false,
+  "completed": true,
+  "checks": [
+    "five separate processes, keys, ports and SQLite databases",
+    "keeper endpoints reject incorrect authentication",
+    "source and recipient encrypted identities exported and restored",
+    "lost provisioning acknowledgements can be retried without changing the stored share",
+    "all five durable signed provisioning acknowledgements verified before registration",
+    "postponement during grace prevents release at the old deadline",
+    "cancellation in the inclusive last grace block prevents all five releases",
+    "all five processes restart with the same keys and suspend dispatch until fresh scan",
+    "an incomplete scan suspends release dispatch",
+    "two delivered shares cannot decrypt",
+    "three valid shares decrypt the exact synthetic PDF with two keepers offline",
+    "acknowledged deliveries are not offered again"
+  ],
+  "decryption": {
+    "bytes": 612,
+    "decrypted": true,
+    "mode": "synthetic-chain",
+    "sha256": "f456bc10921252dd2d2536eabf9a7375183f44bf92539bdb874413612216d6da"
+  },
+  "limitations": [
+    "Locally operated keepers; not independent organizations.",
+    "Synthetic authenticated block feed, not a testnet scanner.",
+    "Demo passphrases exist only in runner memory; encrypted test artifacts cannot be reopened after runner exits."
+  ]
+}
+Public evidence and encrypted synthetic artifacts: C:\Users\Pramod\Documents\Codex\2026-10-26\can\work\z-canary\backend\state\rehearsal-2026-10-27T03-00-22.832Z

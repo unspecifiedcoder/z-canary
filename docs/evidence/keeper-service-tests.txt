@@ -1,0 +1,11 @@
+   Compiling zcanary-keeper-service v0.1.0 (C:\Users\Pramod\Documents\Codex\2026-10-26\can\work\z-canary\backend\crates\zcanary-keeper-service)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 2.31s
+     Running unittests src\main.rs (C:\Users\Pramod\Documents\Codex\2026-10-26\can\work\zingolib-spike\target\debug\deps\zcanary_keeper_service-be7051aa9336a26a.exe)
+
+running 3 tests
+test http_tests::parses_bounded_loopback_request_headers ... ok
+test http_tests::rejects_origin_transfer_encoding_and_duplicate_headers ... ok
+test http_tests::rejects_invalid_or_oversized_content_length_and_header_block ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+

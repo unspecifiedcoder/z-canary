@@ -1,0 +1,25 @@
+PASS unauthenticated_api_rejected
+PASS unapproved_browser_origin_rejected
+PASS native_testnet_runtime_and_five_keepers_available
+PASS recipient_identity_restores_across_cli_processes
+PASS release_five_verified_keeper_acknowledgements
+PASS subthreshold_recipient_recovery_rejected
+PASS cancel_five_verified_keeper_acknowledgements
+release_register: broadcast
+release_register: confirmed
+PASS release_register_confirmed_on_testnet
+cancel_register: broadcast
+cancel_register: confirmed
+PASS cancel_register_confirmed_on_testnet
+cancel_postpone: broadcast
+cancel_postpone: confirmed
+PASS cancel_postpone_confirmed_on_testnet
+cancel_cancel: broadcast
+cancel_cancel: confirmed
+PASS cancel_cancel_confirmed_on_testnet
+PASS cancelled_vault_releases_no_shares
+release: RELEASED, 5/3 verified shares
+PASS confirmed_expiration_releases_threshold_shares
+PASS recipient_decryption_matches_original_sha256
+PASS recipient_inbox_exposes_verified_release
+COMPLETE 15 checks; 4 confirmed shielded commands.

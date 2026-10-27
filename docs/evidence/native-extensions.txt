@@ -1,0 +1,6 @@
+PASS actual wallet proposal provides a bounded fee estimate without submission
+PASS authenticated event history and integrity-checked ciphertext export match the vault
+PASS source encrypted identity export and same-key restore succeed; wrong passphrase is rejected
+PASS recipient encrypted identity export and same-key restore succeed; wrong passphrase is rejected
+PASS separate shielded support request contains no evidence identifier or memo
+COMPLETE 5 native extension checks; no commands submitted.

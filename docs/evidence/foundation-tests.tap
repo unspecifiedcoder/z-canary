@@ -1,0 +1,105 @@
+TAP version 13
+# Subtest: Ed25519 uses RFC 8032 public keys and verifies independently in Node
+ok 1 - Ed25519 uses RFC 8032 public keys and verifies independently in Node
+  ---
+  duration_ms: 262.1885
+  ...
+# Subtest: a source public key alone cannot forge a cancellation
+ok 2 - a source public key alone cannot forge a cancellation
+  ---
+  duration_ms: 37.2724
+  ...
+# Subtest: memo integers and hex are rejected instead of truncated
+ok 3 - memo integers and hex are rejected instead of truncated
+  ---
+  duration_ms: 27.291
+  ...
+# Subtest: X25519 public key matches RFC 7748
+ok 4 - X25519 public key matches RFC 7748
+  ---
+  duration_ms: 2.5016
+  ...
+# Subtest: AES-256-GCM ciphertext and tag match Node OpenSSL
+ok 5 - AES-256-GCM ciphertext and tag match Node OpenSSL
+  ---
+  duration_ms: 5.48
+  ...
+# Subtest: binary dossier roundtrips, wrong recipient and modified metadata fail
+ok 6 - binary dossier roundtrips, wrong recipient and modified metadata fail
+  ---
+  duration_ms: 24.6113
+  ...
+# Subtest: all ten distinct three-share subsets reconstruct
+ok 7 - all ten distinct three-share subsets reconstruct
+  ---
+  duration_ms: 6.7709
+  ...
+# Subtest: manifest signature binds the policy before any keeper release
+ok 8 - manifest signature binds the policy before any keeper release
+  ---
+  duration_ms: 41.8222
+  ...
+# Subtest: manifest verification rejects a changed protocol discriminator
+ok 9 - manifest verification rejects a changed protocol discriminator
+  ---
+  duration_ms: 29.3406
+  ...
+# Subtest: manifest signing rejects invalid policies even from the legitimate source
+ok 10 - manifest signing rejects invalid policies even from the legitimate source
+  ---
+  duration_ms: 44.2574
+  ...
+# Subtest: tip at grace boundary cannot release before that block confirms
+ok 11 - tip at grace boundary cannot release before that block confirms
+  ---
+  duration_ms: 82.3492
+  ...
+# Subtest: command included at inclusive grace boundary wins: 2
+ok 12 - command included at inclusive grace boundary wins: 2
+  ---
+  duration_ms: 171.1621
+  ...
+# Subtest: command included after grace cannot rescue a delayed keeper: 2
+ok 13 - command included after grace cannot rescue a delayed keeper: 2
+  ---
+  duration_ms: 79.9557
+  ...
+# Subtest: command included at inclusive grace boundary wins: 3
+ok 14 - command included at inclusive grace boundary wins: 3
+  ---
+  duration_ms: 139.5693
+  ...
+# Subtest: command included after grace cannot rescue a delayed keeper: 3
+ok 15 - command included after grace cannot rescue a delayed keeper: 3
+  ---
+  duration_ms: 71.5743
+  ...
+# Subtest: delayed scans and backward confirmed cursor suspend release
+ok 16 - delayed scans and backward confirmed cursor suspend release
+  ---
+  duration_ms: 52.2843
+  ...
+# Subtest: cancel remains terminal across repeated processing and duplicate events
+ok 17 - cancel remains terminal across repeated processing and duplicate events
+  ---
+  duration_ms: 150.8513
+  ...
+# Subtest: simulated reorg freezes future processing and does not pretend to recall delivered shares
+ok 18 - simulated reorg freezes future processing and does not pretend to recall delivered shares
+  ---
+  duration_ms: 88.5086
+  ...
+# Subtest: existing eight simulation checks pass and remain labelled as simulations
+ok 19 - existing eight simulation checks pass and remain labelled as simulations
+  ---
+  duration_ms: 480.3689
+  ...
+1..19
+# tests 19
+# suites 0
+# pass 19
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 8092.6875

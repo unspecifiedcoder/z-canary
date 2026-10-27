@@ -1,0 +1,30 @@
+{
+  "mode": "synthetic-chain",
+  "live_transactions": false,
+  "completed": true,
+  "checks": [
+    "five separate processes, keys, ports and SQLite databases",
+    "keeper endpoints reject incorrect authentication",
+    "source and recipient encrypted identities exported and restored",
+    "lost provisioning acknowledgements can be retried without changing the stored share",
+    "all five durable signed provisioning acknowledgements verified before registration",
+    "postponement during grace prevents release at the old deadline",
+    "cancellation in the inclusive last grace block prevents all five releases",
+    "all five processes restart with the same keys and suspend dispatch until fresh scan",
+    "an incomplete scan suspends release dispatch",
+    "two delivered shares cannot decrypt",
+    "three valid shares decrypt the exact synthetic PDF with two keepers offline",
+    "acknowledged deliveries are not offered again"
+  ],
+  "decryption": {
+    "bytes": 612,
+    "decrypted": true,
+    "mode": "synthetic-chain",
+    "sha256": "f456bc10921252dd2d2536eabf9a7375183f44bf92539bdb874413612216d6da"
+  },
+  "limitations": [
+    "Locally operated keepers; not independent organizations.",
+    "Synthetic authenticated block feed, not a testnet scanner.",
+    "Demo passphrases exist only in runner memory; encrypted test artifacts cannot be reopened after runner exits."
+  ]
+}
