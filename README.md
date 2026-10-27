@@ -9,7 +9,7 @@ It is a contingency plan for the work: **“If I become unavailable, this is who
 > **Current status:** a working, tested prototype with a browser simulation and a verified Zcash testnet path. Use synthetic files to explore it. It has not been independently security-audited and is not ready for real sensitive reporting.
 
 <p align="center">
-  <img src="docs/assets/canary-hero.svg" alt="Canary — keep a dossier encrypted until a permitted recovery" width="100%" />
+  <a href="https://unspecifiedcoder.github.io/z-canary/"><img src="docs/assets/canary-vault.webp" alt="Canary’s sealed reporting dossier — concept illustration" width="100%" /></a>
 </p>
 
 <p align="center">
@@ -42,7 +42,9 @@ A **keeper** is a service that holds one piece of the release key and checks whe
 
 [![Watch Maya and Noor's complete Canary demo](docs/assets/canary-demo-poster.jpg)](https://unspecifiedcoder.github.io/z-canary/)
 
-**[Watch the narrated demo · about 3 minutes 12 seconds](https://unspecifiedcoder.github.io/z-canary/)** · **[Try the example yourself](https://unspecifiedcoder.github.io/z-canary/app/#maya-noor)**
+**[Explore the live experience](https://unspecifiedcoder.github.io/z-canary/)** · **[Watch the narrated demo · 3:12](https://unspecifiedcoder.github.io/z-canary/#watch)** · **[Try the example yourself](https://unspecifiedcoder.github.io/z-canary/app/#maya-noor)**
+
+The live experience now uses an original sealed-dossier identity and a redesigned Maya → Keepers → Noor walkthrough. The film records the previous interface; its actions and recovery rules remain the same.
 
 Follow Maya from protecting a synthetic dossier to checking in, cancelling, missing a deadline, and Noor's permitted recovery. The film uses captured application steps, edited for time: a changed deadline, a rejected early attempt, a cancelled vault, stale scans, too few shares, a wrong recipient key, and the original file recovered. Browser simulation and recorded native testnet proof are explicitly labeled.
 
