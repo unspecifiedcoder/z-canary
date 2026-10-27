@@ -1,239 +1,134 @@
+import { x25519 } from '@noble/curves/ed25519.js';
+import { gcm } from '@noble/ciphers/aes.js';
+import { hkdf } from '@noble/hashes/hkdf.js';
+import { sha256 } from '@noble/hashes/sha2.js';
 import { bytesToHex, hexToBytes, sha256Bytes, sha256Hex } from './shamir';
 
-/**
- * Dual-Layer Authenticated Encryption & Recipient Delivery Engine
- *
- * Layer 1 (Inner): Encrypted to Recipient's X25519 Identity Key
- * Layer 2 (Outer): Encrypted with fresh random 256-bit ReleaseKey (split into 3-of-5 shares)
- */
+// Browser demonstration format. The planned Rust agent uses the age format.
+const FORMAT = 'ZCAN-DEMO-X25519-AES256GCM-V2' as const;
+const text = new TextEncoder();
+const INNER_DOMAIN = text.encode(FORMAT + ':inner');
+const OUTER_DOMAIN = text.encode(FORMAT + ':outer');
 
 export interface RecipientIdentity {
   label: string;
-  privateKeyHex: string; // 32-byte X25519 private scalar
-  publicKeyHex: string; // 32-byte X25519 public key
-  fingerprint: string; // Colon-separated 16-byte SHA-256 fingerprint
+  privateKeyHex: string;
+  publicKeyHex: string;
+  fingerprint: string;
 }
 
 export interface EncryptedVaultPackage {
+  format: typeof FORMAT;
   outerCiphertextBase64: string;
   outerNonceHex: string;
   innerNonceHex: string;
   ephemeralPubKeyHex: string;
-  outerPackageDigestHex: string; // SHA-256 of outer ciphertext
-  plaintextDigestHex: string; // SHA-256 of original document
+  outerPackageDigestHex: string;
+  plaintextDigestHex: string;
   originalSize: number;
   encryptedSize: number;
 }
 
+function keyBytes(hex: string): Uint8Array {
+  const key = hexToBytes(hex);
+  if (key.length !== 32) throw new Error('ERR_KEY_LENGTH: Expected 32 bytes');
+  return key;
+}
+
 export function computeKeyFingerprint(publicKeyHex: string): string {
-  const digest = sha256Bytes(hexToBytes(publicKeyHex));
-  return Array.from(digest.subarray(0, 12))
-    .map((b) => b.toString(16).padStart(2, '0').toUpperCase())
-    .join(':');
+  return Array.from(sha256Bytes(keyBytes(publicKeyHex)).subarray(0, 16))
+    .map(b => b.toString(16).padStart(2, '0').toUpperCase()).join(':');
 }
 
 export function deriveX25519PublicKey(privateKeyHex: string): string {
-  const priv = hexToBytes(privateKeyHex);
-  const domain = new TextEncoder().encode('ZCAN-X25519-PUB-V1');
-  const buf = new Uint8Array(domain.length + priv.length);
-  buf.set(domain, 0);
-  buf.set(priv, domain.length);
-  return bytesToHex(sha256Bytes(buf));
+  return bytesToHex(x25519.getPublicKey(keyBytes(privateKeyHex)));
 }
 
-export function generateRecipientIdentity(label = 'Legal Counsel — Elena Rostova'): RecipientIdentity {
-  const priv = new Uint8Array(32);
-  crypto.getRandomValues(priv);
-  const privateKeyHex = bytesToHex(priv);
+export function generateRecipientIdentity(label = 'Demo recipient'): RecipientIdentity {
+  const privateKeyHex = bytesToHex(crypto.getRandomValues(new Uint8Array(32)));
   const publicKeyHex = deriveX25519PublicKey(privateKeyHex);
-  return {
-    label,
-    privateKeyHex,
-    publicKeyHex,
-    fingerprint: computeKeyFingerprint(publicKeyHex),
-  };
+  return { label, privateKeyHex, publicKeyHex, fingerprint: computeKeyFingerprint(publicKeyHex) };
 }
 
-/**
- * Stream cipher + MAC authenticated transform using SHA-256 CTR + HMAC-SHA256
- * Provides deterministic, synchronous cross-browser authenticated encryption with strict tag verification
- */
-function deriveKeyStreamChunk(key32: Uint8Array, nonce12: Uint8Array, counter: number): Uint8Array {
-  const input = new Uint8Array(32 + 12 + 4);
-  input.set(key32, 0);
-  input.set(nonce12, 32);
-  const view = new DataView(input.buffer);
-  view.setUint32(44, counter >>> 0, false);
-  return sha256Bytes(input);
+export function aeadEncrypt(key: Uint8Array, nonce: Uint8Array, plaintext: Uint8Array): Uint8Array {
+  if (key.length !== 32 || nonce.length !== 12) throw new Error('ERR_AEAD_PARAMETERS');
+  return gcm(key, nonce).encrypt(plaintext);
 }
 
-function computeAuthTag(key32: Uint8Array, nonce12: Uint8Array, ciphertext: Uint8Array): Uint8Array {
-  const prefix = new TextEncoder().encode('ZCAN-AEAD-TAG-V1');
-  const buf = new Uint8Array(prefix.length + key32.length + nonce12.length + ciphertext.length);
-  let offset = 0;
-  buf.set(prefix, offset); offset += prefix.length;
-  buf.set(key32, offset); offset += key32.length;
-  buf.set(nonce12, offset); offset += nonce12.length;
-  buf.set(ciphertext, offset);
-  return sha256Bytes(buf).subarray(0, 16); // 128-bit authentication tag
+export function aeadDecrypt(key: Uint8Array, nonce: Uint8Array, ciphertext: Uint8Array): Uint8Array {
+  if (key.length !== 32 || nonce.length !== 12) throw new Error('ERR_AEAD_PARAMETERS');
+  return gcm(key, nonce).decrypt(ciphertext);
 }
 
-export function aeadEncrypt(key32: Uint8Array, nonce12: Uint8Array, plaintext: Uint8Array): Uint8Array {
-  const body = new Uint8Array(plaintext.length);
-  for (let offset = 0; offset < plaintext.length; offset += 32) {
-    const block = deriveKeyStreamChunk(key32, nonce12, offset >>> 5);
-    const limit = Math.min(32, plaintext.length - offset);
-    for (let i = 0; i < limit; i++) {
-      body[offset + i] = plaintext[offset + i] ^ block[i];
-    }
-  }
-  const tag16 = computeAuthTag(key32, nonce12, body);
-  const out = new Uint8Array(body.length + 16);
-  out.set(body, 0);
-  out.set(tag16, body.length);
-  return out;
-}
-
-export function aeadDecrypt(key32: Uint8Array, nonce12: Uint8Array, ciphertextWithTag: Uint8Array): Uint8Array {
-  if (ciphertextWithTag.length < 16) {
-    throw new Error('ERR_AEAD_TRUNCATED: Ciphertext shorter than 128-bit authentication tag');
-  }
-  const bodyLen = ciphertextWithTag.length - 16;
-  const body = ciphertextWithTag.subarray(0, bodyLen);
-  const providedTag = ciphertextWithTag.subarray(bodyLen);
-  const expectedTag = computeAuthTag(key32, nonce12, body);
-
-  let diff = 0;
-  for (let i = 0; i < 16; i++) {
-    diff |= providedTag[i] ^ expectedTag[i];
-  }
-  if (diff !== 0) {
-    throw new Error('ERR_AEAD_AUTH_FAILED: Ciphertext integrity check or key mismatch');
-  }
-
-  const plaintext = new Uint8Array(bodyLen);
-  for (let offset = 0; offset < bodyLen; offset += 32) {
-    const block = deriveKeyStreamChunk(key32, nonce12, offset >>> 5);
-    const limit = Math.min(32, bodyLen - offset);
-    for (let i = 0; i < limit; i++) {
-      plaintext[offset + i] = body[offset + i] ^ block[i];
-    }
-  }
-  return plaintext;
-}
-
-function uint8ToBase64(bytes: Uint8Array): string {
+export function bytesToBase64(bytes: Uint8Array): string {
   let binary = '';
-  for (let i = 0; i < bytes.length; i++) {
-    binary += String.fromCharCode(bytes[i]);
-  }
+  for (const byte of bytes) binary += String.fromCharCode(byte);
   return btoa(binary);
 }
 
-function base64ToUint8(b64: string): Uint8Array {
-  const binary = atob(b64);
-  const out = new Uint8Array(binary.length);
-  for (let i = 0; i < binary.length; i++) {
-    out[i] = binary.charCodeAt(i);
-  }
-  return out;
+export function base64ToBytes(value: string): Uint8Array {
+  return Uint8Array.from(atob(value), char => char.charCodeAt(0));
 }
 
-function deriveInnerKey(recipientPubKeyHex: string, ephemeralNonceHex: string): Uint8Array {
-  const label = new TextEncoder().encode('ZCAN-AGE-X25519-INNER-KEY-V1');
-  const pub = hexToBytes(recipientPubKeyHex);
-  const nonce = hexToBytes(ephemeralNonceHex);
-  const combined = new Uint8Array(label.length + pub.length + nonce.length);
-  combined.set(label, 0);
-  combined.set(pub, label.length);
-  combined.set(nonce, label.length + pub.length);
-  return sha256Bytes(combined);
+function innerKey(secret: Uint8Array, peer: Uint8Array, ephemeral: Uint8Array, recipient: Uint8Array): Uint8Array {
+  const shared = x25519.getSharedSecret(secret, peer);
+  const salt = new Uint8Array([...ephemeral, ...recipient]);
+  const key = hkdf(sha256, shared, salt, INNER_DOMAIN, 32);
+  shared.fill(0);
+  return key;
 }
 
-/**
- * Encrypts plaintext dossier in two distinct layers:
- * 1. Inner layer bound to Recipient X25519 public key
- * 2. Outer layer bound to random 32-byte ReleaseKey (which is split across 5 Keepers)
- */
-export function encryptDossierDualLayer(
-  plaintextBytes: Uint8Array,
-  recipientPubKeyHex: string,
-  releaseKey32: Uint8Array
-): EncryptedVaultPackage {
-  if (releaseKey32.length !== 32) {
-    throw new Error('ReleaseKey must be 32 bytes');
-  }
-
-  const innerNonce = new Uint8Array(12);
-  const outerNonce = new Uint8Array(12);
-  const ephemeralSecret = new Uint8Array(32);
-  crypto.getRandomValues(innerNonce);
-  crypto.getRandomValues(outerNonce);
-  crypto.getRandomValues(ephemeralSecret);
-
-  const innerNonceHex = bytesToHex(innerNonce);
-  const outerNonceHex = bytesToHex(outerNonce);
-  const ephemeralPubKeyHex = deriveX25519PublicKey(bytesToHex(ephemeralSecret));
-
-  // Inner encryption (Recipient X25519 layer)
-  const innerKey = deriveInnerKey(recipientPubKeyHex, innerNonceHex);
-  const innerCiphertext = aeadEncrypt(innerKey, innerNonce, plaintextBytes);
-
-  // Outer encryption (Keeper threshold release layer)
-  const outerCiphertext = aeadEncrypt(releaseKey32, outerNonce, innerCiphertext);
-
-  const outerCiphertextBase64 = uint8ToBase64(outerCiphertext);
-  const outerPackageDigestHex = sha256Hex(outerCiphertext);
-  const plaintextDigestHex = sha256Hex(plaintextBytes);
-
-  return {
-    outerCiphertextBase64,
-    outerNonceHex,
-    innerNonceHex,
-    ephemeralPubKeyHex,
-    outerPackageDigestHex,
-    plaintextDigestHex,
-    originalSize: plaintextBytes.length,
-    encryptedSize: outerCiphertext.length,
-  };
+export function packageDigest(pkg: Omit<EncryptedVaultPackage, 'outerPackageDigestHex'>): string {
+  return sha256Hex(JSON.stringify([
+    pkg.format, pkg.ephemeralPubKeyHex, pkg.innerNonceHex, pkg.outerNonceHex,
+    pkg.plaintextDigestHex, pkg.originalSize, pkg.encryptedSize, pkg.outerCiphertextBase64,
+  ]));
 }
 
-/**
- * Decrypts outer layer using reconstructed ReleaseKey and inner layer using Recipient private key
- */
-export function decryptDossierDualLayer(
-  pkg: EncryptedVaultPackage,
-  reconstructedReleaseKey32: Uint8Array,
-  recipientPrivateKeyHex: string,
-  expectedRecipientPubKeyHex: string
-): Uint8Array {
-  // Verify recipient private key corresponds to expected public key
-  const derivedPub = deriveX25519PublicKey(recipientPrivateKeyHex);
-  if (derivedPub.toLowerCase() !== expectedRecipientPubKeyHex.toLowerCase()) {
-    throw new Error('ERR_WRONG_RECIPIENT_KEY: Provided recipient private key does not match manifest recipient public key');
+export function encryptDossierDualLayer(plaintext: Uint8Array, recipientPubKeyHex: string, releaseKey: Uint8Array): EncryptedVaultPackage {
+  if (releaseKey.length !== 32 || plaintext.length > 10 * 1024 * 1024) throw new Error('ERR_PACKAGE_PARAMETERS');
+  const recipient = keyBytes(recipientPubKeyHex);
+  const ephemeralSecret = crypto.getRandomValues(new Uint8Array(32));
+  const ephemeral = x25519.getPublicKey(ephemeralSecret);
+  const innerNonce = crypto.getRandomValues(new Uint8Array(12));
+  const outerNonce = crypto.getRandomValues(new Uint8Array(12));
+  const key = innerKey(ephemeralSecret, recipient, ephemeral, recipient);
+  try {
+    const inner = gcm(key, innerNonce, INNER_DOMAIN).encrypt(plaintext);
+    const outer = gcm(releaseKey, outerNonce, OUTER_DOMAIN).encrypt(inner);
+    const pkg = {
+      format: FORMAT,
+      outerCiphertextBase64: bytesToBase64(outer),
+      outerNonceHex: bytesToHex(outerNonce),
+      innerNonceHex: bytesToHex(innerNonce),
+      ephemeralPubKeyHex: bytesToHex(ephemeral),
+      plaintextDigestHex: sha256Hex(plaintext),
+      originalSize: plaintext.length,
+      encryptedSize: outer.length,
+    };
+    return { ...pkg, outerPackageDigestHex: packageDigest(pkg) };
+  } finally {
+    key.fill(0);
+    ephemeralSecret.fill(0);
   }
+}
 
-  const outerCiphertext = base64ToUint8(pkg.outerCiphertextBase64);
-  const actualOuterDigest = sha256Hex(outerCiphertext);
-  if (actualOuterDigest.toLowerCase() !== pkg.outerPackageDigestHex.toLowerCase()) {
-    throw new Error('ERR_PAYLOAD_TAMPERED: Encrypted package SHA-256 digest does not match manifest commitment');
+export function decryptDossierDualLayer(pkg: EncryptedVaultPackage, releaseKey: Uint8Array, recipientPrivateKeyHex: string, expectedRecipientPubKeyHex: string, expectedPackageDigestHex: string): Uint8Array {
+  if (pkg.format !== FORMAT || releaseKey.length !== 32) throw new Error('ERR_PACKAGE_PARAMETERS');
+  const privateKey = keyBytes(recipientPrivateKeyHex);
+  const recipient = keyBytes(expectedRecipientPubKeyHex);
+  if (bytesToHex(x25519.getPublicKey(privateKey)) !== bytesToHex(recipient)) throw new Error('ERR_WRONG_RECIPIENT_KEY');
+  const actualDigest = packageDigest(pkg);
+  if (actualDigest !== expectedPackageDigestHex.toLowerCase() || actualDigest !== pkg.outerPackageDigestHex) throw new Error('ERR_PAYLOAD_TAMPERED');
+  const ephemeral = keyBytes(pkg.ephemeralPubKeyHex);
+  const key = innerKey(privateKey, ephemeral, ephemeral, recipient);
+  try {
+    const inner = gcm(releaseKey, hexToBytes(pkg.outerNonceHex), OUTER_DOMAIN).decrypt(base64ToBytes(pkg.outerCiphertextBase64));
+    const plaintext = gcm(key, hexToBytes(pkg.innerNonceHex), INNER_DOMAIN).decrypt(inner);
+    if (plaintext.length !== pkg.originalSize || sha256Hex(plaintext) !== pkg.plaintextDigestHex) throw new Error('ERR_PLAINTEXT_DIGEST_MISMATCH');
+    return plaintext;
+  } finally {
+    key.fill(0);
+    privateKey.fill(0);
   }
-
-  const outerNonce = hexToBytes(pkg.outerNonceHex);
-  const innerNonce = hexToBytes(pkg.innerNonceHex);
-
-  // Step 1: Decrypt outer layer with reconstructed threshold ReleaseKey
-  const innerCiphertext = aeadDecrypt(reconstructedReleaseKey32, outerNonce, outerCiphertext);
-
-  // Step 2: Decrypt inner layer with Recipient key
-  const innerKey = deriveInnerKey(derivedPub, pkg.innerNonceHex);
-  const plaintext = aeadDecrypt(innerKey, innerNonce, innerCiphertext);
-
-  // Step 3: Verify plaintext digest
-  const actualPlainDigest = sha256Hex(plaintext);
-  if (actualPlainDigest.toLowerCase() !== pkg.plaintextDigestHex.toLowerCase()) {
-    throw new Error('ERR_PLAINTEXT_DIGEST_MISMATCH: Decrypted plaintext digest mismatch');
-  }
-
-  return plaintext;
 }

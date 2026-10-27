@@ -1,3 +1,4 @@
+import { ed25519 } from '@noble/curves/ed25519.js';
 import { bytesToHex, hexToBytes, sha256Bytes } from './shamir';
 
 /**
@@ -59,62 +60,42 @@ export interface MemoDecodeValidationResult {
 const DOMAIN_SEPARATOR = new TextEncoder().encode('ZCANARY-MEMO-SIG-V1');
 const APP_MAGIC = new Uint8Array([0x5a, 0x43, 0x41, 0x4e]); // "ZCAN"
 
-/**
- * Derives a deterministic 32-byte public verification key from a source secret seed
- */
 export function deriveSourcePublicKey(sourceSecretHex: string): string {
-  const secretBytes = hexToBytes(sourceSecretHex);
-  const tag = new TextEncoder().encode('ZCAN-ED25519-PUBKEY-V1');
-  const combined = new Uint8Array(tag.length + secretBytes.length);
-  combined.set(tag, 0);
-  combined.set(secretBytes, tag.length);
-  return bytesToHex(sha256Bytes(combined));
+  return bytesToHex(ed25519.getPublicKey(hexToBytes(sourceSecretHex)));
 }
 
-/**
- * Computes a deterministic 64-byte cryptographic signature bound to sourcePubKey and body[0..448]
- * Verifiable using sourcePubKey without exposing private spending keys
- */
-export function signMemoBody(body448: Uint8Array, sourcePubKeyHex: string): Uint8Array {
-  if (body448.length !== 448) {
-    throw new Error('Memo body must be 448 bytes');
-  }
-  const pubKeyBytes = hexToBytes(sourcePubKeyHex);
-  const msg = new Uint8Array(DOMAIN_SEPARATOR.length + pubKeyBytes.length + body448.length);
-  msg.set(DOMAIN_SEPARATOR, 0);
-  msg.set(pubKeyBytes, DOMAIN_SEPARATOR.length);
-  msg.set(body448, DOMAIN_SEPARATOR.length + pubKeyBytes.length);
-
-  const r = sha256Bytes(msg);
-  const sInput = new Uint8Array(r.length + msg.length);
-  sInput.set(r, 0);
-  sInput.set(msg, r.length);
-  const s = sha256Bytes(sInput);
-
-  const sig64 = new Uint8Array(64);
-  sig64.set(r, 0);
-  sig64.set(s, 32);
-  return sig64;
+function signingMessage(body448: Uint8Array): Uint8Array {
+  if (body448.length !== 448) throw new Error('Memo body must be 448 bytes');
+  const message = new Uint8Array(DOMAIN_SEPARATOR.length + body448.length);
+  message.set(DOMAIN_SEPARATOR);
+  message.set(body448, DOMAIN_SEPARATOR.length);
+  return message;
 }
 
-export function verifyMemoSignature(
-  body448: Uint8Array,
-  signature64: Uint8Array,
-  sourcePubKeyHex: string
-): boolean {
+export function signMemoBody(body448: Uint8Array, sourceSecretHex: string): Uint8Array {
+  return ed25519.sign(signingMessage(body448), hexToBytes(sourceSecretHex));
+}
+
+export function verifyMemoSignature(body448: Uint8Array, signature64: Uint8Array, sourcePubKeyHex: string): boolean {
   if (signature64.length !== 64 || body448.length !== 448) return false;
-  const expected = signMemoBody(body448, sourcePubKeyHex);
-  let diff = 0;
-  for (let i = 0; i < 64; i++) {
-    diff |= expected[i] ^ signature64[i];
+  try {
+    return ed25519.verify(signature64, signingMessage(body448), hexToBytes(sourcePubKeyHex), { zip215: false });
+  } catch {
+    return false;
   }
-  return diff === 0;
 }
 
 /**
  * Encodes a ShieldedCommandPayload into the exact 512-byte ZIP-302 binary format
  */
-export function encodeShieldedMemo(payload: ShieldedCommandPayload): Uint8Array {
+export function encodeShieldedMemo(payload: ShieldedCommandPayload, sourceSecretHex: string): Uint8Array {
+  if (payload.version !== 1 || ![0, 1].includes(payload.network) || ![1, 2, 3].includes(payload.operation)) throw new Error('Invalid command header');
+  if (payload.sequence < 0n || payload.sequence > 0xffffffffffffffffn) throw new Error('Sequence must fit u64');
+  if (!Number.isInteger(payload.requestedExpiryHeight) || payload.requestedExpiryHeight < 0 || payload.requestedExpiryHeight > 0xffffffff) throw new Error('Expiry must fit u32');
+  if (payload.operation === MemoOperation.REGISTER && payload.sequence !== 0n) throw new Error('Registration sequence must be zero');
+  if (payload.operation !== MemoOperation.REGISTER && payload.sequence === 0n) throw new Error('Mutation sequence must be positive');
+  if (payload.operation === MemoOperation.CANCEL && payload.requestedExpiryHeight !== 0) throw new Error('Cancel expiry must be zero');
+  if (deriveSourcePublicKey(sourceSecretHex) !== payload.sourcePubKeyHex.toLowerCase()) throw new Error('Signing key does not match source public key');
   const switchId = hexToBytes(payload.switchIdHex);
   const manifestDigest = hexToBytes(payload.manifestDigestHex);
   const sourcePubKey = hexToBytes(payload.sourcePubKeyHex);
@@ -149,7 +130,7 @@ export function encodeShieldedMemo(payload: ShieldedCommandPayload): Uint8Array 
   // [116..448] Zero padding (already 0x00 in Uint8Array)
 
   // [448..512] 64-byte signature over first 448 bytes
-  const sig = signMemoBody(memo.subarray(0, 448), payload.sourcePubKeyHex);
+  const sig = signMemoBody(memo.subarray(0, 448), sourceSecretHex);
   memo.set(sig, 448);
 
   return memo;
@@ -239,6 +220,11 @@ export function decodeAndValidateMemo(
   const switchIdHex = bytesToHex(memoBytes.subarray(8, 40));
   const sequence = view.getBigUint64(40, true);
   const requestedExpiryHeight = view.getUint32(48, true);
+  if ((operation === MemoOperation.REGISTER && sequence !== 0n) ||
+      (operation !== MemoOperation.REGISTER && sequence === 0n) ||
+      (operation === MemoOperation.CANCEL && requestedExpiryHeight !== 0)) {
+    return { valid: false, errorCode: 'ERR_MEMO_COMMAND_FIELDS', errorMessage: 'Invalid sequence or cancellation expiry' };
+  }
   const manifestDigestHex = bytesToHex(memoBytes.subarray(52, 84));
   const sourcePubKeyHex = bytesToHex(memoBytes.subarray(84, 116));
   const signatureBytes = memoBytes.subarray(448, 512);
