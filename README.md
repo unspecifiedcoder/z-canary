@@ -1,12 +1,28 @@
-# Canary
+# Canary — an encrypted safety handoff for whistleblowers
 
-## Keep it private now. Make it recoverable if you stop checking in.
+## Keep evidence sealed while you check in. If you go silent, release it only to the person you chose.
 
-**Canary helps a journalist leave an encrypted reporting dossier for a trusted editor—without handing over access immediately.** The journalist checks in to keep the handoff on hold. If check-ins stop, a deadline and grace period pass, and enough keepers participate, the chosen editor can recover the file using their own private key.
+**Canary gives a whistleblower or journalist a third option between sharing evidence too early and letting it disappear with them.** They encrypt a file for a trusted editor, lawyer, or newsroom and check in to keep it locked. If check-ins stop, the deadline and grace period pass, and enough keepers participate, only the chosen recipient can decrypt it with their private key.
 
-It is a contingency plan for the work: **“If I become unavailable, this is who should be able to continue.”**
+> **The simple version:** put a file in a locked box. Press “I’m okay” to keep it locked. If you stop, three helpers provide pieces of the key—but only your chosen recipient can open the box.
+
+**[Create your own Canary](https://unspecifiedcoder.github.io/z-canary/app/#create)** · **[Try Maya & Noor’s story](https://unspecifiedcoder.github.io/z-canary/app/#maya-noor)** · **[Watch the 60–90 second proof](https://unspecifiedcoder.github.io/z-canary/#watch)** · **[Verify the Zcash transactions](#a-real-testnet-proof)**
+
+> **Maya is reporting a story. Noor is the editor she trusts. Maya does not want to share her notes today—but she wants Noor to have a controlled recovery path if she becomes unavailable.**
+
+| Who | What they need | What Canary does |
+|---|---|---|
+| **Maya · journalist** | Keep her reporting private while she is present. | Encrypts the file and lets signed check-ins keep recovery on hold. |
+| **Noor · trusted editor** | Continue the work only when the recovery conditions are satisfied. | Requires the keeper threshold **and** Noor's private key before decryption. |
 
 > **Current status:** a working, tested prototype with a browser simulation and a verified Zcash testnet path. Use synthetic files to explore it. It has not been independently security-audited and is not ready for real sensitive reporting.
+
+| What a judge can inspect | Where |
+|---|---|
+| Create a harmless encrypted handoff and exercise its lifecycle | [Hosted application](https://unspecifiedcoder.github.io/z-canary/app/#create) |
+| Understand what is real, simulated, and recorded | [Architecture](docs/ARCHITECTURE.md) |
+| Review failure cases, collusion limits, and unfinished guarantees | [Threat model](docs/THREAT-MODEL.md) |
+| Inspect the four confirmed testnet commands and exact-file recovery | [Verification record](docs/evidence/VERIFICATION.md) |
 
 <p align="center">
   <a href="https://unspecifiedcoder.github.io/z-canary/"><img src="docs/assets/canary-vault.webp" alt="Canary’s sealed reporting dossier — concept illustration" width="100%" /></a>
@@ -22,11 +38,11 @@ It is a contingency plan for the work: **“If I become unavailable, this is who
 
 ---
 
-## A concrete example: Maya's reporting, Noor's next step
+## The use case in one minute: Maya's reporting, Noor's next step
 
 *Maya and Noor are fictional people. Their dossier is a synthetic demonstration file.*
 
-Maya is preparing a story. Her editor, Noor, may need the supporting notes if Maya becomes unavailable, but Maya is not ready to grant access today. Sending the file now is too early. Keeping the only usable copy with Maya leaves no handoff plan.
+Maya is preparing a story. Her editor, Noor, may need the supporting notes if Maya becomes unavailable, but Maya is not ready to grant access today. Sending the file now is too early. Keeping the only usable copy with Maya leaves no handoff plan. Canary gives the file a controlled path from **private now** to **recoverable later**.
 
 With Canary, Maya:
 
@@ -38,15 +54,17 @@ A **keeper** is a service that holds one piece of the release key and checks whe
 
 **The result is a recoverable file in the recipient workflow.** Canary does not automatically email the dossier, publish a story, or decide whether Maya is safe. It responds to the check-in record.
 
-## Watch the complete example
+## Watch the 60–90 second proof
 
-[![Watch Maya and Noor's complete Canary demo](docs/assets/canary-demo-poster.jpg)](https://unspecifiedcoder.github.io/z-canary/)
+[![Watch Canary's short Maya and Noor demo](docs/assets/canary-demo-poster.jpg)](https://unspecifiedcoder.github.io/z-canary/)
 
-**[Explore the live experience](https://unspecifiedcoder.github.io/z-canary/)** · **[Watch the narrated demo · 3:12](https://unspecifiedcoder.github.io/z-canary/#watch)** · **[Try the example yourself](https://unspecifiedcoder.github.io/z-canary/app/#maya-noor)**
+**[Explore the live experience](https://unspecifiedcoder.github.io/z-canary/)** · **[Watch the short demo](https://unspecifiedcoder.github.io/z-canary/#watch)** · **[Try the example yourself](https://unspecifiedcoder.github.io/z-canary/app/#maya-noor)**
 
-The live experience now uses an original sealed-dossier identity and a redesigned Maya → Keepers → Noor walkthrough. The film records the previous interface; its actions and recovery rules remain the same.
+<!-- DEMO_V3_DIRECT_URL: replace this comment with the verified demo-v3 release link after upload. -->
 
-Follow Maya from protecting a synthetic dossier to checking in, cancelling, missing a deadline, and Noor's permitted recovery. The film uses captured application steps, edited for time: a changed deadline, a rejected early attempt, a cancelled vault, stale scans, too few shares, a wrong recipient key, and the original file recovered. Browser simulation and recorded native testnet proof are explicitly labeled.
+In the short film, Maya protects a fictional reporting file for Noor. Noor is blocked from opening it early. Maya checks in and the deadline moves. When a later check-in is missed, grace prevents an instant release. Two keeper shares are still insufficient; three shares permit the next step, but the wrong recipient key still fails. Noor's matching key recovers the original file byte for byte.
+
+The browser walkthrough uses real local encryption, signatures and decryption with simulated blocks and keeper records. The recorded native Zcash testnet proof is labeled separately; the film does not present simulated actions as on-chain transactions.
 
 ## What happens in each scenario?
 
@@ -345,6 +363,8 @@ Canary demonstrates a privacy-conscious continuity protocol; it is not a product
 
 ## Design and engineering notes
 
+- [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) — real/simulated/recorded ledger, data flow, state machine, Zcash role
+- [docs/THREAT-MODEL.md](docs/THREAT-MODEL.md) — assets, attacker paths, controls, residual risks, production blockers
 - [SPEC.md](SPEC.md) — system model, invariants, recovery conditions
 - [TASKS.md](TASKS.md) — delivered scope and remaining deployment work
 - [docs/EXPERIENCE.md](docs/EXPERIENCE.md) — visual system, motion, browser QA
