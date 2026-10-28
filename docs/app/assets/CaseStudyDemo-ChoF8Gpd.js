@@ -1,4 +1,4 @@
-import{A as e,C as t,D as n,E as r,M as i,N as a,O as o,S as s,T as c,_ as l,b as u,d,f,g as p,h as m,j as h,l as g,m as _,p as v,r as y,s as b,t as x,u as S,v as C,x as w,y as T}from"./index-heQazOUd.js";var E=h(`clock-3`,[[`path`,{d:`M12 6v6h4`,key:`135r8i`}],[`circle`,{cx:`12`,cy:`12`,r:`10`,key:`1mglay`}]]),D=h(`x`,[[`path`,{d:`M18 6 6 18`,key:`1bl5f8`}],[`path`,{d:`m6 6 12 12`,key:`d8bk6v`}]]),O=a(i(),1),k=`RIVERGATE REPORTING NOTES — FICTIONAL DEMO
+import{A as e,C as t,D as n,E as r,M as i,N as a,O as o,S as s,T as c,_ as l,b as u,d,f,g as p,h as m,j as h,l as g,m as _,p as v,r as y,s as b,t as x,u as S,v as C,x as w,y as T}from"./index-DkLwIDX8.js";var E=h(`clock-3`,[[`path`,{d:`M12 6v6h4`,key:`135r8i`}],[`circle`,{cx:`12`,cy:`12`,r:`10`,key:`1mglay`}]]),D=h(`x`,[[`path`,{d:`M18 6 6 18`,key:`1bl5f8`}],[`path`,{d:`m6 6 12 12`,key:`d8bk6v`}]]),O=a(i(),1),k=`RIVERGATE REPORTING NOTES — FICTIONAL DEMO
 Owner: Maya, reporter
 Designated recipient: Noor, editor
 

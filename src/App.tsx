@@ -36,6 +36,7 @@ import { EvidenceAndKeepersPanel } from './components/EvidenceAndKeepersPanel';
 import { JudgeJourney } from './components/JudgeJourney';
 import NativeVaultWorkspace from './components/NativeVaultWorkspace';
 import { tabForDirectHash, tabForHash, type PublicAppTab } from './experience/routes';
+import type { ExternalWalletSubmission } from './zcash/zip321';
 
 const GuidedExperience = lazy(() => import('./components/GuidedExperience'));
 const CaseStudyDemo = lazy(() => import('./components/CaseStudyDemo'));
@@ -72,6 +73,7 @@ export default function App() {
     initialData.transactions[0]?.txid || null
   );
   const [toastMessage, setToastMessage] = useState<string | null>(null);
+  const [externalWalletSubmission, setExternalWalletSubmission] = useState<ExternalWalletSubmission | null>(null);
 
   const [supportHistory, setSupportHistory] = useState<ShieldedSupportTransaction[]>([
     {
@@ -348,6 +350,7 @@ export default function App() {
     setTransactions(fresh.transactions);
     setWalletBalanceZatoshi(480000);
     setSelectedTxidForMemo(fresh.transactions[0]?.txid || null);
+    setExternalWalletSubmission(null);
     showToast('Reset deterministic harness to clean initial state (#2,845,100).');
   };
 
@@ -485,16 +488,19 @@ export default function App() {
             recipientIdentity={recipientIdentity}
             currentBlockHeight={currentBlockHeight}
             walletBalanceZatoshi={walletBalanceZatoshi}
-            onVaultCreated={(newVault, regTx, fee, newRecipient) => {
+            onVaultCreated={(newVault, regTx, fee, newRecipient, externalSubmission) => {
               const nextTxs = [...transactions, regTx];
               setWalletBalanceZatoshi((b) => Math.max(0, b - fee));
               setTransactions(nextTxs);
               setVault(newVault);
               setRecipientIdentity(newRecipient);
               setSelectedTxidForMemo(regTx.txid);
+              setExternalWalletSubmission(externalSubmission ?? null);
               setActiveTab('sentinel');
               showToast(
-                'Demo vault encrypted and local REGISTER simulation prepared. Advance simulated confirmation blocks to activate.'
+                externalSubmission
+                  ? 'External wallet txid saved. Check its testnet explorer status; the lifecycle controls below remain a separate browser simulation.'
+                  : 'Demo vault encrypted and local REGISTER simulation prepared. Advance simulated confirmation blocks to activate.'
               );
             }}
             onCancel={() => setActiveTab('sentinel')}
@@ -591,7 +597,27 @@ export default function App() {
         {activeTab === 'demo' && <Suspense fallback={<div className="scene-loading">Preparing the guided experience…</div>}><GuidedExperience onNative={() => setActiveTab('native')} /></Suspense>}
       </div></main>
 
-      <footer className="canary-footer"><span className="footer-wordmark">canary.</span><p>Private by design. Deliberate by protocol.<br/><span>Zcash testnet · {vault.manifest.threshold}-of-5 threshold · Signed shielded memos</span></p><button onClick={()=>setActiveTab('evidence')}>Inspect the evidence ↗</button></footer>
+      <footer className="canary-footer">
+        <div className="canary-footer-main">
+          <span className="footer-wordmark">canary.</span>
+          <p>Private by design. Deliberate by protocol.<br/><span>Zcash testnet · {vault.manifest.threshold}-of-5 threshold · Signed shielded memos</span></p>
+          <button onClick={()=>setActiveTab('evidence')}>Inspect the evidence ↗</button>
+        </div>
+        {externalWalletSubmission && (
+          <a className="external-proof-link" href={externalWalletSubmission.explorerUrl} target="_blank" rel="noreferrer">
+            Latest external wallet tx · {externalWalletSubmission.txid.slice(0, 12)}… · Check explorer status ↗
+          </a>
+        )}
+        <details className="prototype-boundaries">
+          <summary>Prototype boundaries & trust model <span>Read the technical scope +</span></summary>
+          <div>
+            <p><strong>Hosted browser lab.</strong> File encryption, command signatures, threshold reconstruction, recipient-key decryption, and digest checks run for real in your browser. Its block clock, keeper records, and lifecycle confirmations are a resettable simulation.</p>
+            <p><strong>External wallet handoff.</strong> Canary creates a ZIP-321 testnet request containing the locally verified signed REGISTER memo. A pasted txid opens the explorer; this static site does not independently query a lightwalletd service or mark it confirmed.</p>
+            <p><strong>Native proof.</strong> The recorded native run used real Zcash testnet transactions and five keeper processes with durable state. Those demo processes share one operator and scanner endpoint; they are not five independent organizations.</p>
+            <p><strong>Security status.</strong> Testnet prototype, not audited. The threshold assumes fewer than {vault.manifest.threshold} keepers collude; shares already delivered cannot be recalled by a later cancellation.</p>
+          </div>
+        </details>
+      </footer>
     </div>
   );
 }
