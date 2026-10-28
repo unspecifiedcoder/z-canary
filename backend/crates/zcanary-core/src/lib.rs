@@ -358,6 +358,7 @@ pub fn verify_manifest(manifest: &ImmutableManifest) -> bool {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use proptest::prelude::*;
 
     fn seed() -> [u8; 32] {
         std::array::from_fn(|i| (i as u8).wrapping_mul(29).wrapping_add(7))
@@ -561,6 +562,35 @@ mod tests {
                 "{}",
                 entry["name"]
             );
+        }
+    }
+
+    proptest! {
+        #![proptest_config(ProptestConfig::with_cases(2_048))]
+
+        #[test]
+        fn arbitrary_memo_bytes_never_panic(bytes in proptest::collection::vec(any::<u8>(), 0..=768), network in any::<u8>()) {
+            let result = std::panic::catch_unwind(|| decode_and_verify_memo(&bytes, network));
+            prop_assert!(result.is_ok());
+        }
+
+        #[test]
+        fn sampled_single_bit_mutations_of_a_signed_memo_are_rejected(bit in 0usize..4096) {
+            let seed = seed();
+            let command = command(&seed);
+            let mut encoded = encode_memo(&command, &seed).unwrap();
+            encoded[bit / 8] ^= 1 << (bit % 8);
+            prop_assert!(decode_and_verify_memo(&encoded, 1).is_err());
+        }
+
+        #[test]
+        fn valid_postpone_sequences_roundtrip(sequence in 1u64..=u64::MAX, expiry in any::<u32>()) {
+            let seed = seed();
+            let mut command = command(&seed);
+            command.sequence = sequence;
+            command.requested_expiry_height = expiry;
+            let encoded = encode_memo(&command, &seed).unwrap();
+            prop_assert_eq!(decode_and_verify_memo(&encoded, 1).unwrap(), command);
         }
     }
 }

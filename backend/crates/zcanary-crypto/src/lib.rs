@@ -858,6 +858,7 @@ fn age_decrypt(
 #[cfg(test)]
 mod tests {
     use super::*;
+    use proptest::prelude::*;
 
     #[test]
     fn signed_manifest_package_digest_rejects_same_key_context_substitution() {
@@ -898,5 +899,33 @@ mod tests {
         let plaintext =
             decrypt_package(&original, &key, context, original_digest, &recipient).unwrap();
         assert_eq!(plaintext.as_slice(), b"original document bytes");
+    }
+
+    proptest! {
+        #![proptest_config(ProptestConfig::with_cases(2_048))]
+
+        #[test]
+        fn arbitrary_package_and_envelope_bytes_never_panic(bytes in proptest::collection::vec(any::<u8>(), 0..=8_192)) {
+            let package = std::panic::catch_unwind(|| EncryptedPackage::from_bytes(&bytes));
+            let envelope = std::panic::catch_unwind(|| RecipientShareEnvelope::from_bytes(&bytes));
+            prop_assert!(package.is_ok());
+            prop_assert!(envelope.is_ok());
+        }
+
+        #[test]
+        fn bounded_recipient_envelopes_roundtrip(ciphertext in proptest::collection::vec(any::<u8>(), 0..=4_096)) {
+            let envelope = RecipientShareEnvelope { version: SHARE_ENVELOPE_VERSION, ciphertext };
+            let encoded = envelope.to_bytes().unwrap();
+            prop_assert!(encoded.len() <= 4_105);
+            prop_assert!(RecipientShareEnvelope::from_bytes(&encoded).unwrap() == envelope);
+        }
+
+        #[test]
+        fn declared_lengths_cannot_smuggle_trailing_envelope_bytes(ciphertext in proptest::collection::vec(any::<u8>(), 0..4_096), trailing in any::<u8>()) {
+            let envelope = RecipientShareEnvelope { version: SHARE_ENVELOPE_VERSION, ciphertext };
+            let mut encoded = envelope.to_bytes().unwrap();
+            encoded.push(trailing);
+            prop_assert!(matches!(RecipientShareEnvelope::from_bytes(&encoded), Err(CryptoError::InvalidEnvelope)));
+        }
     }
 }

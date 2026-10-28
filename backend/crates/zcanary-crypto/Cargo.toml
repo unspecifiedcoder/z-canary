@@ -15,6 +15,7 @@ vsss-rs = { version = "=6.0.1", features = ["std", "zeroize"] }
 zeroize = { version = "=1.9.1", features = ["alloc"] }
 
 [dev-dependencies]
+proptest = "=1.9.0"
 ed25519-dalek = { version = "=2.2.0", default-features = false, features = ["std", "zeroize"] }
 hex = "=0.4.3"
 zcanary-core = { path = "../zcanary-core" }

@@ -803,6 +803,7 @@ fn parse_lifecycle(s: &str) -> Result<Lifecycle> {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use proptest::prelude::*;
     use ed25519_dalek::SigningKey;
     use std::{
         fs,
@@ -1216,6 +1217,29 @@ mod tests {
         assert_eq!(k.claim_delivery(c).unwrap(), None);
         drop(k);
         let _ = fs::remove_file(path);
+    }
+
+    proptest! {
+        #![proptest_config(ProptestConfig::with_cases(64))]
+        #[test]
+        fn on_time_cancellation_is_terminal_across_later_commands(
+            cancel_height in 1usize..=13,
+            later_sequence in 2u64..=u64::MAX,
+            later_expiry in 14u32..=1_000,
+        ) {
+            let path = db_path("cancel-property");
+            let k = setup(&path);
+            let mut bs = blocks(0, 30, [0; 32]);
+            bs[0] = with_memo(bs[0].clone(), main_memo(Operation::Register, 0, 10));
+            bs[cancel_height] = with_memo(bs[cancel_height].clone(), main_memo(Operation::Cancel, 1, 0));
+            bs[14] = with_memo(bs[14].clone(), main_memo(Operation::Postpone, later_sequence, later_expiry));
+            let cursor = k.process_confirmed_batch(batch(bs, 30, 31)).unwrap();
+            prop_assert_eq!(k.lifecycle([1; 32]).unwrap(), Lifecycle::Cancelled);
+            prop_assert!(k.claim_delivery(cursor).unwrap().is_none());
+            prop_assert_eq!(k.vault_state([1; 32]).unwrap().last_sequence, Some(1));
+            drop(k);
+            let _ = fs::remove_file(path);
+        }
     }
     #[test]
     fn postpone_in_last_grace_block_wins_and_outbox_retries_keep_stable_key() {
