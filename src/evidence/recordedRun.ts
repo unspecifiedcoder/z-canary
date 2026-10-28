@@ -36,7 +36,7 @@ export interface NativeRunTransaction {
   blockHeight: number;
 }
 
-/** Protected-document acceptance run. Memo bytes were not archived for these transactions. */
+/** Protected-document acceptance run. Recovered memo bytes are in nativeMemos.ts. */
 export const NATIVE_RUN_TRANSACTIONS: readonly NativeRunTransaction[] = [
   { label: 'release_register', txid: '1d4797966b97aac313b4ce7db58a4e546593c1e5efacfa992b3c73519cf90ecb', blockHeight: 4546656 },
   { label: 'cancel_register', txid: '35bfb606f1e822215e5827dafc6f788319d798cb96fa14f368dedcdfecd56be0', blockHeight: 4546660 },

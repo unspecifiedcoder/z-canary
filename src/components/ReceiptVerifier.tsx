@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { CheckCircle2, ExternalLink, XCircle } from 'lucide-react';
-import { NATIVE_RUN_TRANSACTIONS, TRANSPORT_RECEIPTS } from '../evidence/recordedRun';
+import { TRANSPORT_RECEIPTS } from '../evidence/recordedRun';
+import { NATIVE_MEMO_RECEIPTS } from '../evidence/nativeMemos';
 import { ReceiptVerification, verifyReceiptHex } from '../evidence/verifyReceipt';
 
 const explorerUrl = (txid: string) => `https://testnet.cipherscan.app/tx/${txid}`;
@@ -33,7 +34,7 @@ const VerificationLine: React.FC<{ result: ReceiptVerification }> = ({ result })
 
 export const ReceiptVerifier: React.FC<{ labMemoHex?: string }> = ({ labMemoHex }) => {
   const verified = useMemo(
-    () => TRANSPORT_RECEIPTS.map(receipt => ({ receipt, result: verifyReceiptHex(receipt.memoHex) })),
+    () => [...NATIVE_MEMO_RECEIPTS, ...TRANSPORT_RECEIPTS].map(receipt => ({ receipt, result: verifyReceiptHex(receipt.memoHex) })),
     [],
   );
   const [pasted, setPasted] = useState(labMemoHex ?? '');
@@ -45,15 +46,16 @@ export const ReceiptVerifier: React.FC<{ labMemoHex?: string }> = ({ labMemoHex 
       <div className="border-b border-[#222938] px-4 py-4 space-y-1">
         <h2 id="receipt-verifier-title" className="text-sm font-semibold text-[#F8FAFC]">Verify the receipts yourself</h2>
         <p className="max-w-3xl text-xs leading-relaxed text-[#94A3B8]">
-          Shielded memos are encrypted, so Zcash Explorer shows only that a transaction exists at a block. These three
-          recorded memos were recovered by a viewing-only scanner. Your browser re-runs the same strict 512-byte format and
-          Ed25519 checks the keepers apply, so you do not have to take our word for what each transaction said.
+          All four commands from the protected-document run were recovered in a fresh viewing-only scan and matched
+          byte for byte to the original signed journals. Your browser checks their 512-byte format and Ed25519 signatures
+          here. Three earlier transport receipts follow them.
         </p>
       </div>
 
       <ol className="divide-y divide-[#1E2430]">
         {verified.map(({ receipt, result }) => (
           <li key={receipt.txid} className="px-4 py-3">
+            <p className="mb-2 text-[11px] text-[#94A3B8]">{'label' in receipt ? NATIVE_LABELS[receipt.label] : 'Earlier transport run · public signing fixture'}</p>
             <details>
               <summary className="grid cursor-pointer grid-cols-[1fr_auto] items-center gap-x-4 gap-y-1 md:grid-cols-[9rem_1fr_auto_auto]">
                 <strong className="text-[13px] font-semibold text-[#ececea]">{result.operation ?? 'INVALID'}</strong>
@@ -75,7 +77,8 @@ export const ReceiptVerifier: React.FC<{ labMemoHex?: string }> = ({ labMemoHex 
                 <dl className="mt-3 grid gap-3 border-l-2 border-[#2A3343] pl-3 md:grid-cols-3">
                   <Detail label="Switch ID" value={result.switchIdHex!} />
                   <Detail label="Manifest digest" value={result.manifestDigestHex!} />
-                  <Detail label="Signing key (public test fixture)" value={result.sourcePubKeyHex!} />
+                  <Detail label="Signing public key" value={result.sourcePubKeyHex!} />
+                  <div className="md:col-span-3"><Detail label="Original signed memo (512 bytes, hexadecimal)" value={receipt.memoHex} /></div>
                 </dl>
               )}
             </details>
@@ -83,9 +86,10 @@ export const ReceiptVerifier: React.FC<{ labMemoHex?: string }> = ({ labMemoHex 
         ))}
       </ol>
       <p className="border-t border-[#1E2430] px-4 py-3 text-[11px] leading-relaxed text-[#64748B]">
-        All three share one switch ID, manifest digest and signing key. This earlier transport run used a public signing
-        fixture, so it demonstrates the transport and the verifier, not a protected document. The signature proves the
-        command was authored by that key; it does not make the key a real person’s identity.
+        The first four receipts cover the release and cancellation vaults. The last three share an earlier public signing
+        fixture and demonstrate transport only. A valid signature proves authorship by its key, not a person's identity
+        or transaction inclusion. The recorded scanner supplies the memo-to-transaction association.
+        {' '}<a className="text-[#F59E0B] underline" href="https://github.com/unspecifiedcoder/z-canary/blob/main/docs/evidence/native-live-memos.json" target="_blank" rel="noreferrer">Read the scan provenance and exact records</a>.
       </p>
 
       <div className="border-t border-[#222938] px-4 py-4 space-y-2">
@@ -116,30 +120,6 @@ export const ReceiptVerifier: React.FC<{ labMemoHex?: string }> = ({ labMemoHex 
         </div>
       </div>
 
-      <div className="border-t border-[#222938]">
-        <p className="px-4 pt-3 text-[11px] leading-relaxed text-[#64748B]">
-          The four commands from the protected-document run are confirmed on testnet, but their memo bytes were not archived
-          in this release, so they link to the explorer only.
-        </p>
-        <ul className="divide-y divide-[#1E2430]">
-          {NATIVE_RUN_TRANSACTIONS.map(tx => (
-            <li key={tx.txid}>
-              <a
-                href={explorerUrl(tx.txid)}
-                target="_blank"
-                rel="noreferrer"
-                className="grid grid-cols-[1fr_auto] items-center gap-3 px-4 py-2.5 hover:bg-[#141820] md:grid-cols-[1fr_auto_auto]"
-              >
-                <span className="text-xs text-[#E2E8F0]">{NATIVE_LABELS[tx.label] ?? tx.label}</span>
-                <span className="hidden text-[11px] font-mono text-[#64748B] md:block">block {tx.blockHeight.toLocaleString()}</span>
-                <span className="inline-flex items-center gap-1 text-[11px] font-mono text-[#F59E0B]">
-                  {shortHex(tx.txid)} <ExternalLink className="h-3 w-3" aria-hidden="true" />
-                </span>
-              </a>
-            </li>
-          ))}
-        </ul>
-      </div>
     </section>
   );
 };

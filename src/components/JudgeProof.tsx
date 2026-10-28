@@ -1,6 +1,7 @@
 import React, { useMemo, useState } from 'react';
 import { ArrowUpRight, Check, Copy, ExternalLink, FileCheck2, RadioTower, ShieldCheck, UsersRound } from 'lucide-react';
-import { NATIVE_RUN_TRANSACTIONS, NATIVE_RUN_VAULTS, TRANSPORT_RECEIPTS } from '../evidence/recordedRun';
+import { NATIVE_RUN_TRANSACTIONS, NATIVE_RUN_VAULTS } from '../evidence/recordedRun';
+import { NATIVE_MEMO_RECEIPTS } from '../evidence/nativeMemos';
 import { verifyReceiptHex } from '../evidence/verifyReceipt';
 import { ReceiptVerifier } from './ReceiptVerifier';
 import { RealRunReplay } from './RealRunReplay';
@@ -12,7 +13,7 @@ const explorer = (txid: string) => `https://testnet.cipherscan.app/tx/${txid}`;
 const labels: Record<string, string> = { release_register: 'Maya seals the release vault', cancel_register: 'Maya seals a second vault', cancel_postpone: 'Maya checks in', cancel_cancel: 'Maya cancels the second vault' };
 
 export const JudgeProof: React.FC = () => {
-  const verifiedMemos = useMemo(() => TRANSPORT_RECEIPTS.filter(receipt => verifyReceiptHex(receipt.memoHex).valid).length, []);
+  const verifiedMemos = useMemo(() => NATIVE_MEMO_RECEIPTS.filter(receipt => verifyReceiptHex(receipt.memoHex).valid).length, []);
   const [copyStatus, setCopyStatus] = useState('');
   const copyDigest = async () => {
     try { await navigator.clipboard.writeText(NATIVE_RUN_VAULTS.release.recoveredDigestHex); setCopyStatus('SHA-256 copied.'); }
@@ -35,7 +36,7 @@ export const JudgeProof: React.FC = () => {
       <article><span>01 / ZCASH TESTNET</span><strong>4</strong><p>commands in the recorded protected-document workflow</p></article>
       <article><span>02 / EXPIRED VAULT</span><strong>{NATIVE_RUN_VAULTS.release.shareCount}<small> shares</small></strong><p>delivered encrypted to the designated recipient</p></article>
       <article><span>03 / CANCELLED VAULT</span><strong>{NATIVE_RUN_VAULTS.cancel.shareCount}<small> shares</small></strong><p>released after the owner cancelled before delivery</p></article>
-      <article><span>04 / VERIFY HERE</span><strong>{verifiedMemos}<small> / 3</small></strong><p>earlier transport memo signatures checked in this browser</p></article>
+      <article><span>04 / VERIFY HERE</span><strong>{verifiedMemos}<small> / 4</small></strong><p>protected-document command signatures checked in this browser</p></article>
     </section>
 
     <section className="judge-proof__transactions" aria-labelledby="judge-transactions-title">
@@ -62,7 +63,7 @@ export const JudgeProof: React.FC = () => {
       <div className="judge-proof__digest"><span>RECOVERED FILE SHA-256</span><code>{NATIVE_RUN_VAULTS.release.recoveredDigestHex}</code><button type="button" onClick={copyDigest} aria-label="Copy recorded recovered file SHA-256"><Copy size={15} /> Copy</button></div><p className="judge-proof__copy-status" role="status">{copyStatus}</p>
     </section>
 
-    <div className="judge-proof__verification-intro"><span>CHECK THE SIGNATURES YOURSELF</span><h2>Real checks in your browser.</h2><p>The three archived memos below belong to an earlier transport run using a public signing fixture. They are separate from the four protected-document transactions above. Signature verification checks authorship and integrity; it does not independently prove that these memo bytes were inside a particular shielded transaction.</p></div>
+    <div className="judge-proof__verification-intro"><span>CHECK THE SIGNATURES YOURSELF</span><h2>The original commands. Verified here.</h2><p>A fresh viewing-only scan recovered all four protected-document memos from their recorded transactions. Each matches the original signed journal. Your browser now checks all four signatures, plus three earlier transport receipts. Signature verification checks authorship and integrity; the archived scanner record supplies transaction association, not an independent inclusion proof.</p></div>
     <div className="judge-proof__live-tools"><RealRunReplay /><ReceiptVerifier /></div>
 
     <section className="judge-proof__reproduce" aria-labelledby="reproduce-title">
