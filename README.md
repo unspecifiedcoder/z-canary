@@ -6,7 +6,13 @@
 
 > **The simple version:** put a file in a locked box. Press “I’m okay” to keep it locked. If you stop, three helpers provide pieces of the key—but only your chosen recipient can open the box.
 
-**[Create your own Canary](https://unspecifiedcoder.github.io/z-canary/app/#create)** · **[Try Maya & Noor’s story](https://unspecifiedcoder.github.io/z-canary/app/#maya-noor)** · **[See the native testnet connection](https://unspecifiedcoder.github.io/z-canary/app/#native)** · **[Verify the Zcash transactions](#a-real-testnet-proof)**
+**[Try to break the vault](https://z-canary.vercel.app/#break-vault)** · **[Judge Proof: transactions, keepers and recovery](https://z-canary.vercel.app/#judge)** · **[Create your own Canary](https://z-canary.vercel.app/#create)**
+
+### Judge it by trying to break it
+
+Open the challenge with no account or wallet. Try two shares: recovery fails. Restore the third keeper, then try a different recipient key: it still fails. Use Noor’s key and download the exact original file. You can also test stale scans and cancellation. These run actual cryptographic checks with simulated chain timing.
+
+The **Judge Proof** page puts four recorded Zcash testnet transactions, five keeper database states, cancellation with zero delivered shares, the recovered file hash, and the memo signature verifier on one page. For a local process-level test, follow the [delivery rehearsal](docs/REHEARSAL.md); the added [security regression evidence](docs/SECURITY-REVIEW.md) explains what each check establishes.
 
 > **Maya is reporting a story. Noor is the editor she trusts. Maya does not want to share her notes today—but she wants Noor to have a controlled recovery path if she becomes unavailable.**
 
@@ -32,8 +38,8 @@
 <p align="center">
   <a href="https://github.com/unspecifiedcoder/z-canary/actions/workflows/verification.yml"><img alt="Verification" src="https://github.com/unspecifiedcoder/z-canary/actions/workflows/verification.yml/badge.svg" /></a>
   <img alt="Zcash testnet" src="https://img.shields.io/badge/network-Zcash_testnet-F4B728?style=flat-square&labelColor=101613" />
-  <img alt="Rust tests" src="https://img.shields.io/badge/Rust_tests-66_passed-67D7AE?style=flat-square&labelColor=101613" />
-  <img alt="Frontend tests" src="https://img.shields.io/badge/frontend_tests-52_passed-67D7AE?style=flat-square&labelColor=101613" />
+  <img alt="Rust tests" src="https://img.shields.io/badge/Rust_tests-73_passed-67D7AE?style=flat-square&labelColor=101613" />
+  <img alt="Frontend and relay tests" src="https://img.shields.io/badge/frontend_and_relay_tests-60_passed-67D7AE?style=flat-square&labelColor=101613" />
   <img alt="Threshold" src="https://img.shields.io/badge/recovery-3_of_5-DBA04F?style=flat-square&labelColor=101613" />
   <img alt="Status" src="https://img.shields.io/badge/status-tested_prototype-8FA79E?style=flat-square&labelColor=101613" />
 </p>
@@ -341,8 +347,8 @@ z-canary/
 
 | Area | Result | Evidence |
 |---|---:|---|
-| Rust workspace | **66 tests passed** | [backend test log](docs/evidence/backend-tests.txt) |
-| Frontend | **52 tests passed** | `npm test -- --run` (includes ZIP-321 encoding, memo length, amount, address and txid validation) |
+| Rust workspace | **73 tests passed** | [security regression coverage](docs/SECURITY-REVIEW.md) |
+| Frontend and relay | **60 tests passed** | `npm test` (includes wallet requests, browser challenges and actual HTTP relay checks) |
 | Submitted commit | frontend, Rust, committed + regenerated Pages verification | [GitHub verification workflow](.github/workflows/verification.yml) |
 | TypeScript + Vite | **passed** | [production build log](docs/evidence/frontend-build.txt) |
 | Five-process rehearsal | **12 checks passed** | [rehearsal record](docs/evidence/five-process-rehearsal.json) |
@@ -352,7 +358,7 @@ z-canary/
 | Browser QA | desktop, tablet, mobile | [experience record](docs/EXPERIENCE.md) |
 | Earlier clean source archive | offline install/test/build passed | [clean extraction log](docs/evidence/clean-source-check.txt) |
 
-The final main bundle is about 436 kB minified and the lazy Three.js scene about 545 kB. The scene retains Vite's chunk-size warning. No formal security audit, FPS benchmark, WCAG certification, or broad cross-browser certification is claimed.
+The Three.js scene loads separately and retains Vite's chunk-size warning. No formal security audit, FPS benchmark, WCAG certification, or broad cross-browser certification is claimed.
 
 ## Threat model and honest limits
 

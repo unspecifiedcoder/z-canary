@@ -1,6 +1,15 @@
 # Verification record
 
-Updated 27 October 2026. The automated summary below is reconciled with the current public release; machine-readable native evidence retains the exact revision and timestamp of each recorded run. All evidence distinguishes simulated chain input from actual testnet transactions.
+Updated 29 October 2026. Machine-readable native evidence retains the exact revision and timestamp of each recorded run. All evidence distinguishes simulated chain input from actual testnet transactions.
+
+## Judge challenge release — 29 October 2026
+
+- **73 Rust tests and 60 frontend/relay tests passed**, along with TypeScript checking and the production build. The added [security regression coverage](../SECURITY-REVIEW.md) includes generated malformed inputs, signature mutations, terminal cancellation and HTTP mailbox isolation.
+- Browser actions verified two-share failure, wrong-key failure on the same vault, correct-recipient recovery, stale-scan blocking, signed cancellation, reset, and download. The downloaded 500-byte public file independently matched SHA-256 `cf2f6149b05ac93ed0e5116c506ea1791641c0606f6a7fe10a040a395bc9e20f`.
+- The new Judge Proof page displays recorded transactions and keeper snapshots, verifies the three archived signatures locally, and rejects malformed pasted memos. The copy-digest control reports successful copying. Mobile (390×844), tablet (820×1180), and desktop layouts were inspected in a real browser.
+- Five local Rust keeper services and an authenticated HTTP relay completed the [recipient delivery rehearsal](../REHEARSAL.md), using synthetic blocks and real encryption/decryption. Docker execution was not verified on this machine.
+
+The earlier automated counts and logs below are historical results from 27 October, not the current suite totals.
 
 ## Automated checks
 

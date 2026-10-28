@@ -32,7 +32,7 @@ async function checkReference(from, raw, { fragment = false } = {}) {
     if (!(await stat(target)).isFile()) throw new Error('not a file');
     checked++;
     // These hashes are application routes, not server-rendered element IDs.
-    const isAppRoute = label(target) === 'app/index.html' && ['maya-noor', 'create'].includes(hash);
+    const isAppRoute = label(target) === 'app/index.html' && ['maya-noor', 'create', 'break-vault', 'judge', 'native', 'evidence', 'recipient'].includes(hash);
     if (fragment && hash && !isAppRoute && extname(target) === '.html') {
       const ids = htmlIds(await readFile(target, 'utf8'));
       if (!ids.includes(decodeURIComponent(hash))) fail(`${label(from)}: missing anchor ${raw}`);
