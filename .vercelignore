@@ -1,0 +1,13 @@
+.git/
+.github/
+.vercel/
+.wallet-upstream/
+backend/
+coverage/
+dist/
+docs/
+node_modules/
+outputs/
+wallet-gate/
+work/
+*.log

@@ -10,3 +10,4 @@ coverage/
 /wallet-gate/state/
 /wallet-gate/target/
 /wallet-gate/*.log
+/.vercel/
