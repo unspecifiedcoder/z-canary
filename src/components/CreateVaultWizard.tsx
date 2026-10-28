@@ -40,7 +40,6 @@ import {
   ContinuityVault,
   formatBlockHash,
   KeeperInstance,
-  SYNTHETIC_DOSSIER_CONTENT,
 } from '../engine/protocolStore';
 import {
   buildZip321RegistrationRequest,
@@ -59,6 +58,16 @@ interface CreateVaultWizardProps {
 }
 
 const MAX_FILE_SIZE_BYTES = 10 * 1024 * 1024; // 10 MiB
+const MAYA_REPORTING_NOTES = `MAYA'S REPORTING NOTES — FICTIONAL DEMONSTRATION
+
+Maya is a journalist investigating pollution in the fictional town of Rivergate.
+Noor is her editor. These public sample notes contain no real allegations or sources.
+
+Maya wants to keep her notes private while she checks in. If she becomes unreachable,
+Noor should be able to recover them only after the deadline, safety window, and required
+keeper participation. Noor's private key is still needed to open the file.
+
+Replace this text or choose a harmless file to test your own scenario.`;
 const EXTERNAL_WALLET_AMOUNT_ZATOSHI = 10_000;
 const EXTERNAL_WALLET_ADDRESS = import.meta.env.VITE_CANARY_TESTNET_REGISTER_ADDRESS
   ?? 'utest170vmkzw3hjx8yltquph5pr7d32j097g7nwq7xty2kr04us00g96fc3kf7dpp0qk6sa4rmem00dhvznxsnxc48ss33xjfd0w7s3kdy2y9qzrrjkd9gu8x9xspgzv583fq6e9nhyp5cwe5uyxuqx8d8ctw0930678aamn2u7dqxqa0hwcq';
@@ -77,16 +86,16 @@ export const CreateVaultWizard: React.FC<CreateVaultWizardProps> = ({
   onCancel,
 }) => {
   const [step, setStep] = useState<1 | 2 | 3 | 4>(1);
-  const [title, setTitle] = useState('Meridian Liquidity Audit — Supplemental Annex');
-  const [fileName, setFileName] = useState('Synthetic-Evidence-Annex-B.txt');
-  const [fileContent, setFileContent] = useState(SYNTHETIC_DOSSIER_CONTENT);
+  const [title, setTitle] = useState('Maya’s reporting notes for Noor');
+  const [fileName, setFileName] = useState('Maya-Reporting-Notes.txt');
+  const [fileContent, setFileContent] = useState(MAYA_REPORTING_NOTES);
   const [uploadedBytes, setUploadedBytes] = useState<Uint8Array | null>(null);
   const [fileLoading, setFileLoading] = useState(false);
   const [fileError, setFileError] = useState<string | null>(null);
   const [provisioningError, setProvisioningError] = useState<string | null>(null);
 
   const [generatedRecipient, setGeneratedRecipient] = useState<RecipientIdentity>(() =>
-    generateRecipientIdentity('Judge-created recovery recipient')
+    generateRecipientIdentity('Noor — demo editor')
   );
   const [recipientPubKey, setRecipientPubKey] = useState(generatedRecipient.publicKeyHex);
   const [fingerprintVerified, setFingerprintVerified] = useState(false);
@@ -418,29 +427,29 @@ export const CreateVaultWizard: React.FC<CreateVaultWizardProps> = ({
     <div className="max-w-4xl mx-auto space-y-8 pb-16">
       <div className="flex items-center justify-between border-b border-[#222938] pb-5">
         <div>
-          <h1 className="text-2xl font-bold text-[#F8FAFC]">Create an Encrypted Safety Handoff</h1>
+          <h1 className="text-2xl font-bold text-[#F8FAFC]">Your file. Your trusted recipient.</h1>
           <p className="text-sm text-[#CBD5E1]">
-            Lock a file so only the person you choose can open it if you go silent. Any file works, up to 10 MiB, and it is encrypted in your browser.
+            Try Maya’s reporting notes or bring a harmless file, up to 10 MiB. Encrypt it for one person, then test what happens when you check in—or go silent.
           </p>
           <p className="text-sm text-[#94A3B8]">
-            Check-ins and releases are signed commands that travel as Zcash shielded memos. This browser lab runs the real encryption and simulates the chain, so you can test every recovery rule without sending a transaction.
+            Real encryption happens in your browser. The walkthrough simulates time and keepers; an optional external wallet request can carry your signed registration on Zcash testnet.
           </p>
         </div>
         <button
           onClick={onCancel}
           className="px-4 py-2 text-xs font-medium text-[#94A3B8] hover:text-[#F8FAFC] border border-[#222938] rounded cursor-pointer"
         >
-          Return to Console
+          Back to vault
         </button>
       </div>
 
       {/* Stepper Header */}
       <div aria-label="Creation progress" className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs">
         {[
-          { num: 1, label: '01. Choose File' },
-          { num: 2, label: '02. Choose Recipient' },
-          { num: 3, label: '03. Set Recovery Rules' },
-          { num: 4, label: '04. Protect Locally' },
+          { num: 1, label: '01. Your file' },
+          { num: 2, label: '02. Who receives it' },
+          { num: 3, label: '03. When to recover' },
+          { num: 4, label: '04. Start the handoff' },
         ].map((s) => (
           <div
             key={s.num}
@@ -463,7 +472,7 @@ export const CreateVaultWizard: React.FC<CreateVaultWizardProps> = ({
         <div className="border border-[#222938] bg-[#141820] p-6 lg:p-8 space-y-6">
           <div className="space-y-2">
             <label htmlFor="vault-reference" className="block text-xs text-[#94A3B8]">
-              Vault Reference Label (Local Only — Never Included in Manifest or Chain Memo)
+              Name this handoff — stays in this browser
             </label>
             <input
               id="vault-reference"
@@ -476,12 +485,12 @@ export const CreateVaultWizard: React.FC<CreateVaultWizardProps> = ({
 
           <div className="space-y-2">
             <label id="dossier-document-label" className="block text-xs text-[#94A3B8]">
-              Dossier Document (Max 10 MiB · Encrypted Locally Before Any Network Activity)
+              Choose a harmless file — any type, up to 10 MiB
             </label>
             <label onDragOver={e => e.preventDefault()} onDrop={e => { e.preventDefault(); void loadFile(e.dataTransfer.files[0]); }} className="flex flex-col items-center justify-center border border-dashed border-[#2E3748] hover:border-[#F59E0B] bg-[#0B0D11] p-8 rounded cursor-pointer transition-colors">
               <Upload className="w-6 h-6 text-[#F59E0B] mb-2" />
               <span className="text-sm font-medium text-[#F8FAFC]">
-                Drop dossier file here or click to select
+                Drop your file here or choose one below
               </span>
               <span className="text-xs text-[#64748B] mt-1">
                 Active selection: {fileName} ({uploadedBytes?.length ?? new TextEncoder().encode(fileContent).length} bytes)
@@ -495,28 +504,32 @@ export const CreateVaultWizard: React.FC<CreateVaultWizardProps> = ({
 
           <div className="space-y-2">
             <div className="flex items-center justify-between text-xs text-[#94A3B8]">
-              <span>Synthetic Dossier Preview (Plaintext SHA-256: {sha256Hex(uploadedBytes ?? fileContent).slice(0, 20)}…)</span>
+              <span>{uploadedBytes ? 'Your selected file' : 'Or edit these fictional reporting notes'}</span>
               <button
                 type="button"
                 onClick={() => {
                   setUploadedBytes(null);
                   setFileError(null);
-                  setFileName('Synthetic-Evidence-Annex-B.txt');
-                  setFileContent(SYNTHETIC_DOSSIER_CONTENT);
+                  setFileName('Maya-Reporting-Notes.txt');
+                  setFileContent(MAYA_REPORTING_NOTES);
                 }}
                 className="text-[#F59E0B] hover:underline cursor-pointer"
               >
-                Reset to Default Synthetic Dossier
+                Use Maya’s sample
               </button>
             </div>
             <textarea
               rows={6}
-              aria-label="Synthetic text dossier"
+              aria-label="Fictional reporting notes"
               disabled={uploadedBytes !== null}
               value={uploadedBytes ? 'Binary file selected. Exact bytes will be encrypted and downloaded.' : fileContent}
               onChange={(e) => setFileContent(e.target.value)}
               className="w-full p-3 bg-[#0B0D11] border border-[#222938] rounded font-mono text-xs text-[#CBD5E1] focus:outline-none focus:border-[#F59E0B]"
             />
+            <details className="text-xs text-[#94A3B8]">
+              <summary className="cursor-pointer">File integrity details</summary>
+              <p className="mt-2 break-all">SHA-256: {sha256Hex(uploadedBytes ?? fileContent)}</p>
+            </details>
           </div>
 
           <div className="flex justify-end pt-2">
@@ -525,7 +538,7 @@ export const CreateVaultWizard: React.FC<CreateVaultWizardProps> = ({
               onClick={() => setStep(2)}
               className="px-5 py-2.5 bg-[#F59E0B] hover:bg-[#D97706] text-[#0B0D11] font-semibold text-sm rounded transition-colors flex items-center gap-2 cursor-pointer"
             >
-              <span>Continue to Recipient Verification</span>
+              <span>Choose who can recover it</span>
               <ArrowRight className="w-4 h-4" />
             </button>
           </div>
@@ -537,35 +550,38 @@ export const CreateVaultWizard: React.FC<CreateVaultWizardProps> = ({
         <div className="border border-[#222938] bg-[#141820] p-6 lg:p-8 space-y-6">
           <div className="space-y-2">
             <h2 className="text-lg font-semibold text-[#F8FAFC]">
-              Designated Recipient X25519 Identity
+              Who should be able to open it?
             </h2>
             <p className="text-sm text-[#94A3B8]">
-              Canary created a fresh browser-only recipient identity for this walkthrough. You can
-              use it immediately, regenerate it, or paste a public key supplied by another recipient.
+              Noor is Maya’s editor in this example. We created a fresh demo key for Noor here,
+              so you can play both roles and test recovery without installing anything.
             </p>
           </div>
 
           <div className="p-4 bg-[#071611] border border-[#10B981]/40 space-y-3">
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
               <div>
-                <div className="text-xs text-[#10B981]">Demo recipient generated locally</div>
-                <p className="text-xs text-[#94A3B8] mt-1">The private key stays in this browser session and is used later to prove recipient-only recovery.</p>
+                <div className="text-xs text-[#10B981]">{recipientPubKey === generatedRecipient.publicKeyHex ? 'Noor — ready for the walkthrough' : 'Using another recipient’s public key'}</div>
+                <p className="text-xs text-[#94A3B8] mt-1">{recipientPubKey === generatedRecipient.publicKeyHex ? 'Noor’s demo private key stays in this browser session. Later you will use it to open the file.' : 'That recipient will need their matching private key. Canary cannot generate or recover it for them.'}</p>
               </div>
               <button
                 type="button"
                 onClick={() => {
-                  const next = generateRecipientIdentity('Judge-created recovery recipient');
+                  const next = generateRecipientIdentity('Noor — demo editor');
                   setGeneratedRecipient(next);
                   setRecipientPubKey(next.publicKeyHex);
                   setFingerprintVerified(false);
                 }}
                 className="px-3 py-2 text-xs font-semibold text-[#10B981] border border-[#10B981]/50 hover:bg-[#10B981]/10 cursor-pointer"
               >
-                Generate another identity
+                Create a fresh demo key
               </button>
             </div>
           </div>
 
+          <details className="space-y-3 text-sm text-[#94A3B8]">
+            <summary className="cursor-pointer">Use another recipient or inspect the key</summary>
+            <p className="text-xs">For another person, paste their X25519 public key and compare its fingerprint through a trusted channel. Never paste their private key here.</p>
           <div className="space-y-2">
             <label htmlFor="recipient-public-key" className="block text-xs text-[#94A3B8]">
               Recipient Public Key (32-Byte Hex)
@@ -591,9 +607,10 @@ export const CreateVaultWizard: React.FC<CreateVaultWizardProps> = ({
               {displayedFingerprint}
             </div>
             <div className="text-xs text-[#94A3B8]">
-              Designated Profile: {recipientPubKey === generatedRecipient.publicKeyHex ? generatedRecipient.label : recipientIdentity.label}
+              Recipient: {recipientPubKey === generatedRecipient.publicKeyHex ? generatedRecipient.label : 'Your chosen recipient'}
             </div>
           </div>
+          </details>
 
           <label className="flex items-center gap-3 text-sm text-[#E2E8F0] cursor-pointer">
             <input
@@ -603,14 +620,15 @@ export const CreateVaultWizard: React.FC<CreateVaultWizardProps> = ({
               className="w-4 h-4 accent-[#F59E0B]"
             />
             <span>
-              I have verified this X25519 key fingerprint with the designated recipient over an
-              authenticated channel.
+              {recipientPubKey === generatedRecipient.publicKeyHex
+                ? 'Use Noor’s demo key. I will play the recipient in this browser.'
+                : 'I compared this key’s fingerprint with my recipient through a trusted channel.'}
             </span>
           </label>
 
           {!fingerprintVerified && (
             <p id="recipient-step-hint" className="text-xs text-[#EFAD45]">
-              Tick the fingerprint box above to continue. In this demo the recipient key was generated in your browser, so you can confirm it yourself.
+              {recipientPubKey === generatedRecipient.publicKeyHex ? 'Confirm the demo recipient above to continue.' : 'Confirm your recipient’s fingerprint above before continuing.'}
             </p>
           )}
           <div className="flex justify-between pt-2">
@@ -626,7 +644,7 @@ export const CreateVaultWizard: React.FC<CreateVaultWizardProps> = ({
               onClick={() => setStep(3)}
               className="px-5 py-2.5 bg-[#F59E0B] disabled:opacity-40 hover:bg-[#D97706] text-[#0B0D11] font-semibold text-sm rounded transition-colors flex items-center gap-2 cursor-pointer"
             >
-              <span>Configure Release Policy</span>
+              <span>Choose recovery rules</span>
               <ArrowRight className="w-4 h-4" />
             </button>
           </div>
@@ -638,11 +656,11 @@ export const CreateVaultWizard: React.FC<CreateVaultWizardProps> = ({
         <div className="border border-[#222938] bg-[#141820] p-6 lg:p-8 space-y-6">
           <div className="space-y-2">
             <h2 className="text-lg font-semibold text-[#F8FAFC]">
-              Block-Based Release Policy & Confirmation Threshold
+              Give yourself time to check in.
             </h2>
             <p className="text-sm text-[#94A3B8]">
-              Select either the accelerated Testnet Demonstration profile or the full 8,064-block
-              production interval. Deadlines are evaluated strictly by confirmed block height.
+              A missed check-in starts a safety window before recovery can begin. Use the quick
+              walkthrough to advance time with buttons, or explore a longer interval.
             </p>
           </div>
 
@@ -656,13 +674,12 @@ export const CreateVaultWizard: React.FC<CreateVaultWizardProps> = ({
                   : 'border-[#222938] bg-[#0B0D11]/50 hover:border-[#2E3748]'
               }`}
             >
-              <div className="text-xs text-[#F59E0B]">Testnet demonstration profile</div>
+              <div className="text-xs text-[#F59E0B]">Quick walkthrough · recommended</div>
               <div className="text-base font-semibold text-[#F8FAFC]">
-                24 Blocks Interval · 6 Blocks Grace
+                Short interval + safety window
               </div>
               <p className="text-xs text-[#94A3B8]">
-                Requires 2 confirmations. Designed for live verification of check-ins, grace
-                recovery, and threshold release.
+                24 blocks between check-ins, then 6 blocks of grace. In the browser lab, advance them instantly with buttons.
               </p>
             </button>
 
@@ -675,17 +692,19 @@ export const CreateVaultWizard: React.FC<CreateVaultWizardProps> = ({
                   : 'border-[#222938] bg-[#0B0D11]/50 hover:border-[#2E3748]'
               }`}
             >
-              <div className="text-xs text-[#94A3B8]">Standard interval simulation</div>
+              <div className="text-xs text-[#94A3B8]">Longer interval · simulation</div>
               <div className="text-base font-semibold text-[#F8FAFC]">
-                8,064 Blocks Interval · 12 Blocks Grace
+                About a week between check-ins
               </div>
               <p className="text-xs text-[#94A3B8]">
-                Requires 6 simulated confirmations. The roughly 7-day interval is an estimate at 75 seconds per block.
+                8,064 blocks, then 12 blocks of grace. About seven days at 75 seconds per block; actual block times vary.
               </p>
             </button>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-2 text-xs">
+          <details className="text-sm text-[#94A3B8]">
+            <summary className="cursor-pointer">Exact block deadlines and confirmation rules</summary>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-3 text-xs">
             <div className="p-3.5 bg-[#0B0D11] border border-[#222938] space-y-1">
               <span className="text-[#64748B]">Initial Expiry Height</span>
               <div className="text-sm font-semibold text-[#F8FAFC] tabular-nums">
@@ -698,17 +717,19 @@ export const CreateVaultWizard: React.FC<CreateVaultWizardProps> = ({
                 #{(currentBlockHeight + intervalBlocks + graceBlocks).toLocaleString()} (+{graceBlocks} grace)
               </div>
             </div>
-            <div className="p-3.5 bg-[#0B0D11] border border-[#222938] space-y-1">
-              <span className="text-[#64748B]">Keeper Committee</span>
+          </div>
+          <p className="text-xs mt-3">Commands require {confirmationTarget} confirmations. This browser lab simulates those blocks; deadlines use confirmed height, not a wall-clock timer.</p>
+          </details>
+            <div className="p-4 bg-[#0B0D11] border border-[#222938] space-y-2">
+              <label htmlFor="keeper-threshold" className="text-sm text-[#F8FAFC]">How many keepers must participate?</label>
               <label className="block text-sm font-semibold text-[#10B981] tabular-nums" htmlFor="keeper-threshold">
                 <span className="sr-only">Keeper threshold</span>
                 <select id="keeper-threshold" value={threshold} onChange={event => setThreshold(Number(event.target.value))} className="w-full bg-transparent text-[#10B981] border-0 p-0 focus:outline-none cursor-pointer">
-                  {[2,3,4,5].map(value => <option key={value} value={value} className="bg-[#0B0D11]">{value}-of-5 Threshold</option>)}
+                  {[2,3,4,5].map(value => <option key={value} value={value} className="bg-[#0B0D11]">{value} of 5 keepers{value === 3 ? ' · recommended' : ''}</option>)}
                 </select>
               </label>
-              <span className="text-[10px] text-[#64748B]">Choose how many distinct shares recovery requires.</span>
+              <p className="text-xs text-[#94A3B8]">Each keeper holds one piece of the release key. Recovery needs {threshold} different pieces and the recipient’s private key.</p>
             </div>
-          </div>
 
           {policyValidationError && (
             <p role="alert" className="text-xs text-[#EF4444]">{policyValidationError}</p>
@@ -729,7 +750,7 @@ export const CreateVaultWizard: React.FC<CreateVaultWizardProps> = ({
               onClick={initiateEncryptionAndProvisioning}
               className="px-5 py-2.5 bg-[#F59E0B] disabled:opacity-40 hover:bg-[#D97706] text-[#0B0D11] font-semibold text-sm rounded transition-colors flex items-center gap-2 cursor-pointer"
             >
-              <span>Encrypt Dossier & Provision 5 Keepers</span>
+              <span>Encrypt my file</span>
               <ArrowRight className="w-4 h-4" />
             </button>
           </div>
@@ -741,18 +762,20 @@ export const CreateVaultWizard: React.FC<CreateVaultWizardProps> = ({
         <div className="border border-[#222938] bg-[#141820] p-6 lg:p-8 space-y-6">
           <div className="space-y-1">
             <div className="text-xs text-[#10B981]">
-              LOCAL DUAL-LAYER ENCRYPTION · 5 KEEPER RECORDS · {threshold}-OF-5 RECOVERY
+              FILE ENCRYPTED HERE · {threshold} OF 5 KEEPERS REQUIRED
             </div>
             <h2 className="text-lg font-semibold text-[#F8FAFC]">
-              Verify Simulated Keeper Acknowledgements & Prepare Registration Memo
+              Your file is encrypted. Try the handoff.
             </h2>
             <p className="text-xs text-[#94A3B8]">
-              This browser lab uses five in-memory keeper records. The separate native implementation uses authenticated keeper services and durable SQLite state.
+              Test a check-in, miss a deadline, and recover as the recipient. Five simulated keeper records are ready; your file and private keys stay in this session.
             </p>
           </div>
 
           {/* Individual Keeper Acknowledgements Table */}
-          <div className="border border-[#222938] bg-[#0B0D11] divide-y divide-[#1E2430] text-xs">
+          <details className="text-sm text-[#94A3B8]">
+            <summary className="cursor-pointer">Inspect the five simulated keepers</summary>
+          <div className="border border-[#222938] bg-[#0B0D11] divide-y divide-[#1E2430] text-xs mt-3">
             {generatedShares.map((s) => (
               <div key={s.index} className="p-3 flex items-center justify-between gap-4">
                 <div className="flex items-center gap-3">
@@ -767,9 +790,10 @@ export const CreateVaultWizard: React.FC<CreateVaultWizardProps> = ({
               </div>
             ))}
           </div>
+          </details>
 
           <div className="space-y-3">
-            <div className="text-xs text-[#94A3B8]">Choose how to carry the signed REGISTER command</div>
+            <div className="text-sm text-[#F8FAFC]">Choose your next step</div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3" role="radiogroup" aria-label="Registration transport">
               <button
                 type="button"
@@ -778,8 +802,8 @@ export const CreateVaultWizard: React.FC<CreateVaultWizardProps> = ({
                 onClick={() => setRegistrationMode('simulation')}
                 className={`p-4 border text-left space-y-2 transition-colors ${registrationMode === 'simulation' ? 'border-[#F59E0B] bg-[#0B0D11]' : 'border-[#222938] bg-[#0B0D11]/50 hover:border-[#2E3748]'}`}
               >
-                <div className="flex items-center gap-2 text-sm font-semibold text-[#F8FAFC]"><Server className="w-4 h-4 text-[#F59E0B]"/>Browser lifecycle lab</div>
-                <p className="text-xs text-[#94A3B8]">Fast, resettable path. Runs the full policy locally with a simulated chain and keeper records.</p>
+                <div className="flex items-center gap-2 text-sm font-semibold text-[#F8FAFC]"><Server className="w-4 h-4 text-[#F59E0B]"/>Try the full walkthrough</div>
+                <p className="text-xs text-[#94A3B8]">Recommended. Real encryption and recovery, simulated time and keepers. No wallet or funds needed.</p>
               </button>
               <button
                 type="button"
@@ -794,7 +818,9 @@ export const CreateVaultWizard: React.FC<CreateVaultWizardProps> = ({
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+          <details className="text-sm text-[#94A3B8]" open={registrationMode === 'external' || undefined}>
+            <summary className="cursor-pointer">{registrationMode === 'external' ? 'Testnet amount and signing details' : 'Simulated fee and signing details'}</summary>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs mt-3">
             <div className="p-4 bg-[#0B0D11] border border-[#222938] space-y-1.5">
               <div className="text-[#64748B]">{registrationMode === 'external' ? 'Requested testnet amount' : 'Browser simulation fee assumption'}</div>
               <div className="text-sm font-semibold text-[#F8FAFC] tabular-nums">10,000 zatoshi (0.00010000 TAZ)</div>
@@ -809,6 +835,7 @@ export const CreateVaultWizard: React.FC<CreateVaultWizardProps> = ({
               <div className="text-[#94A3B8]">The full demo key remains in browser memory and is never rendered or sent to the wallet.</div>
             </div>
           </div>
+          </details>
 
           <label className="flex items-center gap-3 text-sm text-[#E2E8F0] cursor-pointer">
             <input
@@ -818,7 +845,7 @@ export const CreateVaultWizard: React.FC<CreateVaultWizardProps> = ({
               className="w-4 h-4 accent-[#F59E0B]"
             />
             <span>
-              I have saved the recovery details for this demo session. The wallet receives only the payment request and signed REGISTER memo, never the file or a private key.
+              I understand this is a temporary walkthrough. Refreshing or closing the page loses the demo keys and progress. I am using a harmless file.
             </span>
           </label>
 
@@ -862,7 +889,7 @@ export const CreateVaultWizard: React.FC<CreateVaultWizardProps> = ({
             </button>
             {registrationMode === 'simulation' ? (
               <button disabled={!backupConfirmed || provisionedKeepers.length < 5} onClick={handleSimulateRegistration} className="px-5 py-2.5 bg-[#F59E0B] disabled:opacity-40 hover:bg-[#D97706] text-[#0B0D11] font-semibold text-sm rounded transition-colors flex items-center gap-2 cursor-pointer">
-                <Lock className="w-4 h-4"/><span>Start Browser Lifecycle</span>
+                <Lock className="w-4 h-4"/><span>Start my walkthrough</span>
               </button>
             ) : !externalRequest ? (
               <button disabled={!backupConfirmed || provisionedKeepers.length < 5} onClick={handlePrepareExternalRequest} className="px-5 py-2.5 bg-[#10B981] disabled:opacity-40 hover:bg-[#0EA371] text-[#071611] font-semibold text-sm rounded transition-colors flex items-center gap-2 cursor-pointer">
