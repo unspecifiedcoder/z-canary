@@ -9,6 +9,9 @@ import {
   ArrowRight,
   Lock,
   Server,
+  Copy,
+  ExternalLink,
+  WalletCards,
 } from 'lucide-react';
 import {
   bytesToHex,
@@ -19,6 +22,7 @@ import {
 } from '../crypto/shamir';
 import {
   deriveSourcePublicKey,
+  decodeAndValidateMemo,
   encodeShieldedMemo,
   MemoOperation,
   ZcashNetwork,
@@ -38,16 +42,32 @@ import {
   KeeperInstance,
   SYNTHETIC_DOSSIER_CONTENT,
 } from '../engine/protocolStore';
+import {
+  buildZip321RegistrationRequest,
+  ExternalWalletSubmission,
+  normalizeTestnetTxid,
+  testnetExplorerUrl,
+  Zip321RegistrationRequest,
+} from '../zcash/zip321';
 
 interface CreateVaultWizardProps {
   recipientIdentity: RecipientIdentity;
   currentBlockHeight: number;
   walletBalanceZatoshi: number;
-  onVaultCreated: (vault: ContinuityVault, regTx: ChainTransaction, feeZatoshi: number, recipient: RecipientIdentity) => void;
+  onVaultCreated: (vault: ContinuityVault, regTx: ChainTransaction, feeZatoshi: number, recipient: RecipientIdentity, externalSubmission?: ExternalWalletSubmission) => void;
   onCancel: () => void;
 }
 
 const MAX_FILE_SIZE_BYTES = 10 * 1024 * 1024; // 10 MiB
+const EXTERNAL_WALLET_AMOUNT_ZATOSHI = 10_000;
+const EXTERNAL_WALLET_ADDRESS = import.meta.env.VITE_CANARY_TESTNET_REGISTER_ADDRESS
+  ?? 'utest170vmkzw3hjx8yltquph5pr7d32j097g7nwq7xty2kr04us00g96fc3kf7dpp0qk6sa4rmem00dhvznxsnxc48ss33xjfd0w7s3kdy2y9qzrrjkd9gu8x9xspgzv583fq6e9nhyp5cwe5uyxuqx8d8ctw0930678aamn2u7dqxqa0hwcq';
+
+interface RegistrationBundle {
+  newVault: ContinuityVault;
+  regTx: ChainTransaction;
+  selectedRecipient: RecipientIdentity;
+}
 
 export const CreateVaultWizard: React.FC<CreateVaultWizardProps> = ({
   recipientIdentity,
@@ -84,6 +104,12 @@ export const CreateVaultWizard: React.FC<CreateVaultWizardProps> = ({
   const [switchIdHex, setSwitchIdHex] = useState('');
   const [sourceSecretHex, setSourceSecretHex] = useState('');
   const [backupConfirmed, setBackupConfirmed] = useState(false);
+  const [registrationMode, setRegistrationMode] = useState<'simulation' | 'external'>('simulation');
+  const [preparedRegistration, setPreparedRegistration] = useState<RegistrationBundle | null>(null);
+  const [externalRequest, setExternalRequest] = useState<Zip321RegistrationRequest | null>(null);
+  const [externalTxid, setExternalTxid] = useState('');
+  const [walletMessage, setWalletMessage] = useState<string | null>(null);
+  const [walletError, setWalletError] = useState<string | null>(null);
 
   const estimatedFeeZatoshi = 10000; // Simulation assumption; the future wallet adapter estimates fees.
 
@@ -148,8 +174,8 @@ export const CreateVaultWizard: React.FC<CreateVaultWizardProps> = ({
     }
   };
 
-  const handleSimulateRegistration = () => {
-    if (!encryptedPkg || generatedShares.length !== 5 || provisionedKeepers.length < 5) return;
+  const buildRegistration = (): RegistrationBundle | null => {
+    if (!encryptedPkg || generatedShares.length !== 5 || provisionedKeepers.length < 5) return null;
 
     const sourcePubKeyHex = deriveSourcePublicKey(sourceSecretHex);
     const shareCommitments: Record<number, string> = {};
@@ -295,7 +321,64 @@ export const CreateVaultWizard: React.FC<CreateVaultWizardProps> = ({
           publicKeyHex: recipientPubKey,
           fingerprint: computeKeyFingerprint(recipientPubKey),
         };
-    onVaultCreated(newVault, regTx, estimatedFeeZatoshi, selectedRecipient);
+    return { newVault, regTx, selectedRecipient };
+  };
+
+  const handleSimulateRegistration = () => {
+    const registration = buildRegistration();
+    if (!registration) return;
+    onVaultCreated(registration.newVault, registration.regTx, estimatedFeeZatoshi, registration.selectedRecipient);
+  };
+
+  const handlePrepareExternalRequest = () => {
+    setWalletError(null);
+    setWalletMessage(null);
+    try {
+      const registration = buildRegistration();
+      if (!registration) throw new Error('Complete encryption and keeper provisioning first.');
+      const request = buildZip321RegistrationRequest({
+        address: EXTERNAL_WALLET_ADDRESS,
+        amountZatoshi: EXTERNAL_WALLET_AMOUNT_ZATOSHI,
+        memoHex: registration.regTx.memoHex,
+      });
+      const validation = decodeAndValidateMemo(hexToBytes(request.memoHex), ZcashNetwork.TESTNET);
+      if (!validation.valid || !validation.decoded?.signatureValid) {
+        throw new Error('Canary refused to create a wallet request because memo verification failed.');
+      }
+      setPreparedRegistration(registration);
+      setExternalRequest(request);
+      setExternalTxid('');
+      setWalletMessage('Signed REGISTER memo verified locally. The wallet request is ready.');
+    } catch (error) {
+      setWalletError(error instanceof Error ? error.message : 'Could not prepare the external wallet request.');
+    }
+  };
+
+  const copyWalletValue = async (value: string, label: string) => {
+    try {
+      await navigator.clipboard.writeText(value);
+      setWalletError(null);
+      setWalletMessage(`${label} copied.`);
+    } catch {
+      setWalletError('Clipboard access is unavailable. Select the value and copy it manually.');
+    }
+  };
+
+  const handleRecordExternalSubmission = () => {
+    if (!preparedRegistration || !externalRequest) return;
+    const txid = normalizeTestnetTxid(externalTxid);
+    if (!txid) {
+      setWalletError('Paste the 64-character testnet transaction ID returned by your wallet.');
+      return;
+    }
+    const explorerUrl = testnetExplorerUrl(txid);
+    onVaultCreated(
+      preparedRegistration.newVault,
+      preparedRegistration.regTx,
+      0,
+      preparedRegistration.selectedRecipient,
+      { request: externalRequest, txid, explorerUrl },
+    );
   };
 
   const displayedFingerprint = (() => {
@@ -329,6 +412,7 @@ export const CreateVaultWizard: React.FC<CreateVaultWizardProps> = ({
     }
     return null;
   })();
+  const normalizedExternalTxid = normalizeTestnetTxid(externalTxid);
 
   return (
     <div className="max-w-4xl mx-auto space-y-8 pb-16">
@@ -684,26 +768,45 @@ export const CreateVaultWizard: React.FC<CreateVaultWizardProps> = ({
             ))}
           </div>
 
-          {/* Fee Estimate & Source Recovery Instructions */}
+          <div className="space-y-3">
+            <div className="text-xs text-[#94A3B8]">Choose how to carry the signed REGISTER command</div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3" role="radiogroup" aria-label="Registration transport">
+              <button
+                type="button"
+                role="radio"
+                aria-checked={registrationMode === 'simulation'}
+                onClick={() => setRegistrationMode('simulation')}
+                className={`p-4 border text-left space-y-2 transition-colors ${registrationMode === 'simulation' ? 'border-[#F59E0B] bg-[#0B0D11]' : 'border-[#222938] bg-[#0B0D11]/50 hover:border-[#2E3748]'}`}
+              >
+                <div className="flex items-center gap-2 text-sm font-semibold text-[#F8FAFC]"><Server className="w-4 h-4 text-[#F59E0B]"/>Browser lifecycle lab</div>
+                <p className="text-xs text-[#94A3B8]">Fast, resettable path. Runs the full policy locally with a simulated chain and keeper records.</p>
+              </button>
+              <button
+                type="button"
+                role="radio"
+                aria-checked={registrationMode === 'external'}
+                onClick={() => setRegistrationMode('external')}
+                className={`p-4 border text-left space-y-2 transition-colors ${registrationMode === 'external' ? 'border-[#10B981] bg-[#071611]' : 'border-[#222938] bg-[#0B0D11]/50 hover:border-[#2E3748]'}`}
+              >
+                <div className="flex items-center gap-2 text-sm font-semibold text-[#F8FAFC]"><WalletCards className="w-4 h-4 text-[#10B981]"/>External testnet wallet</div>
+                <p className="text-xs text-[#94A3B8]">Creates a real ZIP-321 payment request carrying this signed memo. You send it with a compatible Zcash testnet wallet.</p>
+              </button>
+            </div>
+          </div>
+
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
             <div className="p-4 bg-[#0B0D11] border border-[#222938] space-y-1.5">
-              <div className="text-[#64748B]">Browser simulation fee assumption</div>
-              <div className="text-sm font-semibold text-[#F8FAFC] tabular-nums">
-                10,000 zatoshi (0.00010000 TAZ)
-              </div>
+              <div className="text-[#64748B]">{registrationMode === 'external' ? 'Requested testnet amount' : 'Browser simulation fee assumption'}</div>
+              <div className="text-sm font-semibold text-[#F8FAFC] tabular-nums">10,000 zatoshi (0.00010000 TAZ)</div>
               <div className="text-[#94A3B8] tabular-nums">
-                Available Source Balance: {walletBalanceZatoshi.toLocaleString()} zatoshi
+                {registrationMode === 'external' ? 'Paid by your external wallet; Canary never requests a seed phrase.' : `Available Source Balance: ${walletBalanceZatoshi.toLocaleString()} zatoshi`}
               </div>
             </div>
 
             <div className="p-4 bg-[#0B0D11] border border-[#222938] space-y-1.5">
-              <div className="text-[#64748B]">Synthetic signing-key reference (redacted)</div>
-              <div className="text-xs text-[#F59E0B] truncate tabular-nums">
-                {sha256Hex(sourceSecretHex).slice(0, 16)}…
-              </div>
-              <div className="text-[#94A3B8]">
-                The full demo key remains in browser memory and is never rendered.
-              </div>
+              <div className="text-[#64748B]">Browser-only signing-key reference (redacted)</div>
+              <div className="text-xs text-[#F59E0B] truncate tabular-nums">{sha256Hex(sourceSecretHex).slice(0, 16)}…</div>
+              <div className="text-[#94A3B8]">The full demo key remains in browser memory and is never rendered or sent to the wallet.</div>
             </div>
           </div>
 
@@ -715,10 +818,40 @@ export const CreateVaultWizard: React.FC<CreateVaultWizardProps> = ({
               className="w-4 h-4 accent-[#F59E0B]"
             />
             <span>
-              I understand this browser-only handoff activates after {confirmationTarget} simulated
-              confirmations. Native key backup and network confirmation rules are documented separately.
+              I have saved the recovery details for this demo session. The wallet receives only the payment request and signed REGISTER memo, never the file or a private key.
             </span>
           </label>
+
+          {registrationMode === 'external' && externalRequest && (
+            <section className="border border-[#10B981]/40 bg-[#071611] p-4 sm:p-5 space-y-4" aria-label="External wallet request">
+              <div className="flex items-start justify-between gap-4">
+                <div>
+                  <div className="text-xs text-[#10B981]">ZIP-321 REQUEST READY · MEMO SIGNATURE VALID</div>
+                  <h3 className="text-base font-semibold text-[#F8FAFC] mt-1">Send the registration from your wallet</h3>
+                </div>
+                <Check className="w-5 h-5 text-[#10B981] shrink-0" aria-hidden="true" />
+              </div>
+              <ol className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
+                <li className="border border-[#10B981]/20 p-3"><strong className="block text-[#F8FAFC] mb-1">1 · Open request</strong><span className="text-[#94A3B8]">Your wallet reviews the testnet address, amount, and memo.</span></li>
+                <li className="border border-[#10B981]/20 p-3"><strong className="block text-[#F8FAFC] mb-1">2 · Send</strong><span className="text-[#94A3B8]">Approve it in the wallet. Canary never sees wallet keys.</span></li>
+                <li className="border border-[#10B981]/20 p-3"><strong className="block text-[#F8FAFC] mb-1">3 · Paste txid</strong><span className="text-[#94A3B8]">Open the public transaction record in the testnet explorer.</span></li>
+              </ol>
+              <div className="flex flex-wrap gap-2">
+                <a href={externalRequest.uri} className="px-4 py-2.5 bg-[#10B981] text-[#071611] text-xs font-semibold rounded inline-flex items-center gap-2"><WalletCards className="w-4 h-4"/>Send with Zcash wallet</a>
+                <button type="button" onClick={() => void copyWalletValue(externalRequest.uri, 'ZIP-321 request')} className="px-4 py-2.5 border border-[#10B981]/40 text-[#10B981] text-xs font-semibold rounded inline-flex items-center gap-2"><Copy className="w-4 h-4"/>Copy request</button>
+                <button type="button" onClick={() => void copyWalletValue(externalRequest.memoHex, 'Signed memo')} className="px-4 py-2.5 border border-[#2E3748] text-[#CBD5E1] text-xs font-semibold rounded inline-flex items-center gap-2"><Copy className="w-4 h-4"/>Copy memo</button>
+              </div>
+              <div className="space-y-2">
+                <label htmlFor="external-wallet-txid" className="block text-xs text-[#94A3B8]">Transaction ID returned by the wallet</label>
+                <input id="external-wallet-txid" value={externalTxid} onChange={event => { setExternalTxid(event.target.value); setWalletError(null); }} placeholder="64 hexadecimal characters" spellCheck={false} autoComplete="off" className="w-full px-3.5 py-2.5 bg-[#0B0D11] border border-[#2E3748] rounded text-xs text-[#F8FAFC] font-mono focus:outline-none focus:border-[#10B981]" />
+                <p className="text-[11px] text-[#94A3B8]">A supplied txid is not treated as confirmation. The explorer is the source for inclusion and block status.</p>
+                {normalizedExternalTxid && <a href={testnetExplorerUrl(normalizedExternalTxid)} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 text-xs text-[#10B981] hover:underline">Open transaction in Zcash testnet explorer <ExternalLink className="w-3.5 h-3.5"/></a>}
+              </div>
+            </section>
+          )}
+
+          {walletMessage && <p role="status" className="text-xs text-[#10B981]">{walletMessage}</p>}
+          {walletError && <p role="alert" className="text-xs text-[#EF4444]">{walletError}</p>}
 
           <div className="flex justify-between pt-2">
             <button
@@ -727,14 +860,19 @@ export const CreateVaultWizard: React.FC<CreateVaultWizardProps> = ({
             >
               Back
             </button>
-            <button
-              disabled={!backupConfirmed || provisionedKeepers.length < 5}
-              onClick={handleSimulateRegistration}
-              className="px-5 py-2.5 bg-[#F59E0B] disabled:opacity-40 hover:bg-[#D97706] text-[#0B0D11] font-semibold text-sm rounded transition-colors flex items-center gap-2 cursor-pointer"
-            >
-              <Lock className="w-4 h-4" />
-              <span>Sign Local Memo & Simulate Registration</span>
-            </button>
+            {registrationMode === 'simulation' ? (
+              <button disabled={!backupConfirmed || provisionedKeepers.length < 5} onClick={handleSimulateRegistration} className="px-5 py-2.5 bg-[#F59E0B] disabled:opacity-40 hover:bg-[#D97706] text-[#0B0D11] font-semibold text-sm rounded transition-colors flex items-center gap-2 cursor-pointer">
+                <Lock className="w-4 h-4"/><span>Start Browser Lifecycle</span>
+              </button>
+            ) : !externalRequest ? (
+              <button disabled={!backupConfirmed || provisionedKeepers.length < 5} onClick={handlePrepareExternalRequest} className="px-5 py-2.5 bg-[#10B981] disabled:opacity-40 hover:bg-[#0EA371] text-[#071611] font-semibold text-sm rounded transition-colors flex items-center gap-2 cursor-pointer">
+                <WalletCards className="w-4 h-4"/><span>Prepare External Wallet Request</span>
+              </button>
+            ) : (
+              <button disabled={!normalizedExternalTxid} onClick={handleRecordExternalSubmission} className="px-5 py-2.5 bg-[#10B981] disabled:opacity-40 hover:bg-[#0EA371] text-[#071611] font-semibold text-sm rounded transition-colors flex items-center gap-2 cursor-pointer">
+                <Check className="w-4 h-4"/><span>Save Txid & Continue to Lifecycle Lab</span>
+              </button>
+            )}
           </div>
         </div>
       )}
