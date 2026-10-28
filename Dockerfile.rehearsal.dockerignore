@@ -1,0 +1,10 @@
+**
+!backend
+!backend/Cargo.toml
+!backend/Cargo.lock
+!backend/rust-toolchain.toml
+!backend/crates
+!backend/crates/**
+!backend/scripts
+!backend/scripts/delivery-relay.mjs
+!backend/scripts/docker-rehearsal.mjs

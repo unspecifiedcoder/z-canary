@@ -1,0 +1,54 @@
+name: zcanary-judge-rehearsal
+
+x-keeper: &keeper
+  build:
+    context: .
+    dockerfile: Dockerfile.rehearsal
+  restart: "no"
+  environment:
+    ZCANARY_ALLOW_PRIVATE_BIND: "1"
+    ZCANARY_IDENTITY_PASSPHRASE: "zcanary-compose-only-passphrase-never-use-in-production"
+  networks: [zcanary-private]
+  tmpfs: ["/workspace/state:uid=1000,gid=1000,mode=0700"]
+
+services:
+  keeper-01:
+    <<: *keeper
+    environment: { ZCANARY_ALLOW_PRIVATE_BIND: "1", ZCANARY_IDENTITY_PASSPHRASE: "zcanary-compose-only-passphrase-never-use-in-production", ZCANARY_KEEPER_TOKEN: "zcanary-compose-token-01-not-for-production" }
+    command: ["zcanary-keeper-service", "--db", "/workspace/state/keeper-01.sqlite", "--keeper-id", "keeper-01", "--network", "1", "--listen", "0.0.0.0:8788", "--mode", "synthetic-chain"]
+  keeper-02:
+    <<: *keeper
+    environment: { ZCANARY_ALLOW_PRIVATE_BIND: "1", ZCANARY_IDENTITY_PASSPHRASE: "zcanary-compose-only-passphrase-never-use-in-production", ZCANARY_KEEPER_TOKEN: "zcanary-compose-token-02-not-for-production" }
+    command: ["zcanary-keeper-service", "--db", "/workspace/state/keeper-02.sqlite", "--keeper-id", "keeper-02", "--network", "1", "--listen", "0.0.0.0:8788", "--mode", "synthetic-chain"]
+  keeper-03:
+    <<: *keeper
+    environment: { ZCANARY_ALLOW_PRIVATE_BIND: "1", ZCANARY_IDENTITY_PASSPHRASE: "zcanary-compose-only-passphrase-never-use-in-production", ZCANARY_KEEPER_TOKEN: "zcanary-compose-token-03-not-for-production" }
+    command: ["zcanary-keeper-service", "--db", "/workspace/state/keeper-03.sqlite", "--keeper-id", "keeper-03", "--network", "1", "--listen", "0.0.0.0:8788", "--mode", "synthetic-chain"]
+  keeper-04:
+    <<: *keeper
+    environment: { ZCANARY_ALLOW_PRIVATE_BIND: "1", ZCANARY_IDENTITY_PASSPHRASE: "zcanary-compose-only-passphrase-never-use-in-production", ZCANARY_KEEPER_TOKEN: "zcanary-compose-token-04-not-for-production" }
+    command: ["zcanary-keeper-service", "--db", "/workspace/state/keeper-04.sqlite", "--keeper-id", "keeper-04", "--network", "1", "--listen", "0.0.0.0:8788", "--mode", "synthetic-chain"]
+  keeper-05:
+    <<: *keeper
+    environment: { ZCANARY_ALLOW_PRIVATE_BIND: "1", ZCANARY_IDENTITY_PASSPHRASE: "zcanary-compose-only-passphrase-never-use-in-production", ZCANARY_KEEPER_TOKEN: "zcanary-compose-token-05-not-for-production" }
+    command: ["zcanary-keeper-service", "--db", "/workspace/state/keeper-05.sqlite", "--keeper-id", "keeper-05", "--network", "1", "--listen", "0.0.0.0:8788", "--mode", "synthetic-chain"]
+  delivery-relay:
+    build: { context: ., dockerfile: Dockerfile.rehearsal }
+    environment: { ZCANARY_RELAY_HOST: "0.0.0.0", ZCANARY_RELAY_PORT: "8790", ZCANARY_RELAY_STATE: "/workspace/state/relay.json", ZCANARY_RELAY_ADMIN_TOKEN: "zcanary-compose-relay-admin-not-for-production" }
+    command: ["node", "backend/scripts/delivery-relay.mjs"]
+    networks: [zcanary-private]
+    tmpfs: ["/workspace/state:uid=1000,gid=1000,mode=0700"]
+  judge-rehearsal:
+    build: { context: ., dockerfile: Dockerfile.rehearsal }
+    depends_on: [keeper-01, keeper-02, keeper-03, keeper-04, keeper-05, delivery-relay]
+    environment:
+      ZCANARY_DEMO_PASSPHRASE: "zcanary-compose-recipient-passphrase-never-use-in-production"
+      ZCANARY_REHEARSAL_OUTPUT: "/workspace/artifacts/latest"
+      ZCANARY_RELAY_URL: "http://delivery-relay:8790"
+      ZCANARY_RELAY_ADMIN_TOKEN: "zcanary-compose-relay-admin-not-for-production"
+    command: ["node", "backend/scripts/docker-rehearsal.mjs"]
+    networks: [zcanary-private]
+
+networks:
+  zcanary-private:
+    internal: true

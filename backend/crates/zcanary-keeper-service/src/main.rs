@@ -150,8 +150,11 @@ fn main() {
 }
 fn run() -> Result<(), String> {
     let c = config()?;
-    if !c.listen.ip().is_loopback() {
-        return Err("listener must bind to loopback".into());
+    let docker_private_bind = env::var("ZCANARY_ALLOW_PRIVATE_BIND").as_deref() == Ok("1")
+        && c.mode == MODE
+        && c.listen.ip().is_unspecified();
+    if !c.listen.ip().is_loopback() && !docker_private_bind {
+        return Err("listener must bind to loopback (or an explicitly enabled private container interface)".into());
     }
     let token = env::var("ZCANARY_KEEPER_TOKEN").map_err(|_| "ZCANARY_KEEPER_TOKEN is required")?;
     let pass = SecretString::from(

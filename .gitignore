@@ -11,3 +11,6 @@ coverage/
 /wallet-gate/target/
 /wallet-gate/*.log
 /.vercel/
+/artifacts/
+/rehearsal-artifacts/
+/state/

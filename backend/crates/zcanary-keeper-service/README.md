@@ -1,6 +1,6 @@
 # `zcanary-keeper-service`
 
-Standalone keeper process for local rehearsals. Each process owns one SQLite database, one age identity encrypted at rest using `zcanary-storage`, and one loopback port. The current executable supports **synthetic-chain mode only**. Its confirmed-batch endpoint is an authenticated adapter boundary; it does not scan Zcash or prove that supplied blocks are canonical.
+Standalone keeper process for synthetic rehearsals and the native testnet runtime. Each process owns one SQLite database, one age identity encrypted at rest using `zcanary-storage`, and an authenticated HTTP listener. The executable supports `synthetic-chain` and `testnet-chain` modes. Its confirmed-batch endpoint is an authenticated adapter boundary; the keeper itself does not scan Zcash or independently prove that supplied blocks are canonical.
 
 ## Start one keeper
 
@@ -12,7 +12,11 @@ $env:ZCANARY_IDENTITY_PASSPHRASE = 'a locally supplied passphrase of at least 32
 zcanary-keeper-service --db .\state\keeper-01.sqlite --keeper-id keeper-01 --network 1 --listen 127.0.0.1:9411 --mode synthetic-chain
 ```
 
-The same passphrase must be supplied after restart. Database and encrypted identity files must either both exist or both be absent; this prevents silent key replacement or empty-state startup after one file is lost. The service does not print tokens, passphrases, identities, shares, or request bodies. This executable requires testnet (`--network 1`) and explicit `--mode synthetic-chain`; it has no live mode. Only loopback addresses are accepted. Requests with an `Origin` header are rejected. Every endpoint requires `Authorization: Bearer <token>` and bodies are capped at 256 KiB. Tokens and identity passphrases must each contain at least 32 characters.
+The same passphrase must be supplied after restart. Database and encrypted identity files must either both exist or both be absent; this prevents silent key replacement or empty-state startup after one file is lost. The service does not print tokens, passphrases, identities, shares, or request bodies. This executable requires testnet (`--network 1`) and an explicit mode. Requests with an `Origin` header are rejected. Every endpoint requires `Authorization: Bearer <token>` and bodies are capped at 256 KiB. Tokens and identity passphrases must each contain at least 32 characters.
+
+For live operation, use `--mode testnet-chain` with `--checkpoint-height` and `--checkpoint-hash` from a verified checkpoint. The native runtime supplies complete confirmed batches from its viewing-only scanner. After startup or restart, a complete accepted batch is required before dispatch. In live mode, the most recent accepted scan must also be no older than 120 seconds; stale scans suspend delivery.
+
+Listeners bind to loopback by default. The Docker rehearsal can opt into an unspecified interface (`0.0.0.0` or `::`) by setting `ZCANARY_ALLOW_PRIVATE_BIND=1`, **only in `synthetic-chain` mode**. Live mode rejects non-loopback addresses even with that setting. The opt-in does not itself enforce network isolation; the supplied Compose file provides a private network without published ports.
 
 ## API
 
@@ -41,11 +45,11 @@ On success, HTTP 201 returns a durable signed acknowledgement. Its Ed25519 signa
 "z-canary/keeper-provision-ack/v1\0" || keeper_id UTF-8 || keeper_index byte || switch_id[32] || epoch little-endian u32 || manifest_digest[32] || envelope_digest[32]
 ```
 
-`envelope_digest` is SHA-256 of compact UTF-8 JSON in this exact key order and spelling: `{"version":N,"keeper_id_hex":"…","index":N,"ciphertext_hex":"…"}`. The response carries all signed fields and `signing_pubkey_hex`. Duplicate provisioning is rejected. The acknowledgement signing key is generated independently from the age keeper identity and both secrets are stored in the encrypted identity bundle.
+`envelope_digest` is SHA-256 of compact UTF-8 JSON in this exact key order and spelling: `{"version":N,"keeper_id_hex":"…","index":N,"ciphertext_hex":"…"}`. The response carries all signed fields and `signing_pubkey_hex`. Identical provisioning retries are accepted; conflicting provisioning is rejected. The acknowledgement signing key is generated independently from the age keeper identity and both secrets are stored in the encrypted identity bundle.
 
 ### `POST /v1/confirmed-batch`
 
-Body has `adapter:"synthetic-chain"`, `network`, `complete:true`, `confirmed_through`, `observed_tip_height`, and a `blocks` array. Each block contains `height`, 32-byte `hash_hex`, 32-byte `previous_hash_hex`, and transactions; transactions contain 32-byte `txid_hex`, `tx_index`, and outputs; outputs contain matching `tx_index`, `output_index`, and exactly 512 memo bytes as `memo_hex`. Empty blocks are represented with `transactions:[]`. Authenticated requests suspend dispatch before parsing. A malformed or rejected batch leaves the keeper unhealthy until a later complete valid scan is accepted. The keeper library validates contiguous blocks, linkage, order, complete confirmed range, confirmation depth, and every raw command signature. This route's bearer authentication does not make synthetic batch values canonical chain evidence.
+Body has `adapter` matching the configured mode (`synthetic-chain` or `testnet-chain`), `network`, `complete:true`, `confirmed_through`, `observed_tip_height`, and a `blocks` array. Each block contains `height`, 32-byte `hash_hex`, 32-byte `previous_hash_hex`, and transactions; transactions contain 32-byte `txid_hex`, `tx_index`, and outputs; outputs contain matching `tx_index`, `output_index`, and exactly 512 memo bytes as `memo_hex`. Empty blocks are represented with `transactions:[]`. Authenticated requests suspend dispatch before parsing. A malformed or rejected batch leaves the keeper unhealthy until a later complete valid scan is accepted. The keeper library validates contiguous blocks, linkage, order, complete confirmed range, confirmation depth, and every raw command signature. An adapter label or bearer authentication alone does not prove canonical chain evidence; live batches must come from the trusted scanner.
 
 ### Delivery
 
@@ -57,4 +61,4 @@ The recipient payload remains encrypted. This process does not reconstruct a rel
 
 ## Limits
 
-This is a locally operated rehearsal service, not an independently operated keeper network. All five loopback processes share one machine and may share one operator. The synthetic batch API deliberately cannot be selected as a live mode. Live operation requires a separate authenticated adapter implementation that establishes block canonicality, confirmation policy, complete scans, and transaction-fetch completeness before invoking the keeper library.
+The demonstrated deployment runs five locally operated processes on one machine, not independent organizations. A keeper configured for live mode rejects batches labelled `synthetic-chain`. The native runtime's authenticated viewing-only scanner supplies live batches; the keeper trusts that adapter for chain provenance and completeness while separately checking signatures, ordering, confirmation coverage, checkpoint linkage, and release policy. The Compose rehearsal uses synthetic blocks and is distinct from the recorded native testnet run.
