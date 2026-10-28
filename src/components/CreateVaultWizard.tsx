@@ -335,8 +335,11 @@ export const CreateVaultWizard: React.FC<CreateVaultWizardProps> = ({
       <div className="flex items-center justify-between border-b border-[#222938] pb-5">
         <div>
           <h1 className="text-2xl font-bold text-[#F8FAFC]">Create an Encrypted Safety Handoff</h1>
+          <p className="text-sm text-[#CBD5E1]">
+            Lock a file so only the person you choose can open it if you go silent. Any file works, up to 10 MiB, and it is encrypted in your browser.
+          </p>
           <p className="text-sm text-[#94A3B8]">
-            Protect a harmless file locally, choose who may recover it, and test every recovery condition without sending a transaction.
+            Check-ins and releases are signed commands that travel as Zcash shielded memos. This browser lab runs the real encryption and simulates the chain, so you can test every recovery rule without sending a transaction.
           </p>
         </div>
         <button

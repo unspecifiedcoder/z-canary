@@ -12,6 +12,9 @@ import {
 } from 'lucide-react';
 import { ChainTransaction, ContinuityVault } from '../engine/protocolStore';
 import { phaseLabels, projectVault } from '../experience/model';
+import { decodeAndValidateMemo, MemoOperation, ZcashNetwork } from '../crypto/memoCodec';
+import { hexToBytes } from '../crypto/shamir';
+import { RealCounterpart } from './RealCounterpart';
 
 interface VaultDetailConsoleProps {
   vault: ContinuityVault;
@@ -91,6 +94,12 @@ export const VaultDetailConsole: React.FC<VaultDetailConsoleProps> = ({
       currentBlockHeight - tx.minedAtHeight + 1 < vault.manifest.confirmationTarget
   );
 
+  const operationOfTx = (txid: string): MemoOperation | null => {
+    const tx = transactions.find(t => t.txid === txid);
+    if (!tx) return null;
+    const result = decodeAndValidateMemo(new Uint8Array(hexToBytes(tx.memoHex)), ZcashNetwork.TESTNET);
+    return result.valid && result.decoded ? result.decoded.operation : null;
+  };
   const visual = projectVault(vault, currentBlockHeight);
   const canAct = (primaryState === 'ACTIVE' || primaryState === 'GRACE') && visual.phase !== 'suspended';
   const remainingRatio = Math.min(1, Math.max(0, blocksUntilExpiry / vault.manifest.initialIntervalBlocks));
@@ -166,13 +175,16 @@ export const VaultDetailConsole: React.FC<VaultDetailConsoleProps> = ({
                   </div>
                   <p className="text-xs text-[#94A3B8] leading-relaxed">{ev.detail}</p>
                   {ev.txid && (
-                    <button
-                      onClick={() => onInspectMemo(ev.txid!)}
-                      className="text-[11px] font-mono text-[#F59E0B] hover:underline flex items-center gap-1 pt-0.5 cursor-pointer"
-                    >
-                      <span>Inspect Local 512B Memo (id: {ev.txid.slice(0, 14)}…)</span>
-                      <ArrowUpRight className="w-3 h-3" />
-                    </button>
+                    <>
+                      <button
+                        onClick={() => onInspectMemo(ev.txid!)}
+                        className="text-[11px] font-mono text-[#F59E0B] hover:underline flex items-center gap-1 pt-0.5 cursor-pointer"
+                      >
+                        <span>Verify this memo’s signature (id: {ev.txid.slice(0, 14)}…)</span>
+                        <ArrowUpRight className="w-3 h-3" />
+                      </button>
+                      <RealCounterpart operation={operationOfTx(ev.txid)} />
+                    </>
                   )}
                 </div>
                 <span className="text-[11px] font-mono text-[#64748B] whitespace-nowrap shrink-0 tabular-nums">

@@ -412,8 +412,8 @@ export default function App() {
         <button className={`native-nav ${activeTab==='native'?'is-active':''}`} onClick={()=>setActiveTab('native')}><span className="signal-dot"/>Native testnet <span aria-hidden="true">↗</span></button>
       </header>
       <div className={`environment-strip ${activeTab==='native'?'environment-strip--native':''}`} role="note">
-        <span>{activeTab==='native'?'AUTHENTICATED LOCAL WORKSPACE':'BROWSER SIMULATION'}</span>
-        <p>{activeTab==='native'?'Actual state is reported by your local agent. Testnet only.':'Synthetic evidence only · Simulated chain and keeper records · No transactions sent'}</p>
+        <span>{activeTab==='native'?'AUTHENTICATED LOCAL WORKSPACE':'Browser lab'}</span>
+        <p>{activeTab==='native'?'Actual state is reported by your local agent. Testnet only.':'Real local encryption · simulated chain and keeper records · synthetic evidence · no transactions sent'}</p>
         {activeTab!=='case'&&<button onClick={()=>setActiveTab('case')}>Try Maya & Noor's example ↗</button>}
         {activeTab==='case'&&<button onClick={()=>setActiveTab('demo')}>Protocol tour ↗</button>}
       </div>
