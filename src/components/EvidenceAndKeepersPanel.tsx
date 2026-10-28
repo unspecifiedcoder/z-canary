@@ -123,7 +123,7 @@ export const EvidenceAndKeepersPanel: React.FC<EvidenceAndKeepersPanelProps> = (
             </p>
           </div>
           <div className="flex flex-wrap gap-2 text-xs font-mono">
-            <a href="https://github.com/unspecifiedcoder/z-canary/blob/main/docs/evidence/VERIFICATION.md" target="_blank" rel="noreferrer" className="px-3 py-2 border border-[#F59E0B]/60 text-[#F59E0B] hover:bg-[#F59E0B]/10 inline-flex items-center gap-1.5">Verification record <ExternalLink className="w-3.5 h-3.5" /></a>
+            <a href="https://github.com/unspecifiedcoder/z-canary/blob/main/docs/evidence/VERIFICATION.md" target="_blank" rel="noreferrer" className="px-3 py-2 border border-[#F59E0B]/60 text-[#F59E0B] hover:bg-[#2b2413] inline-flex items-center gap-1.5">Verification record <ExternalLink className="w-3.5 h-3.5" /></a>
             <a href="https://github.com/unspecifiedcoder/z-canary/blob/main/docs/ARCHITECTURE.md" target="_blank" rel="noreferrer" className="px-3 py-2 border border-[#30394A] text-[#CBD5E1] hover:border-[#94A3B8] inline-flex items-center gap-1.5">Architecture <ExternalLink className="w-3.5 h-3.5" /></a>
             <a href="https://github.com/unspecifiedcoder/z-canary/blob/main/docs/THREAT-MODEL.md" target="_blank" rel="noreferrer" className="px-3 py-2 border border-[#30394A] text-[#CBD5E1] hover:border-[#94A3B8] inline-flex items-center gap-1.5">Threat model <ExternalLink className="w-3.5 h-3.5" /></a>
           </div>
