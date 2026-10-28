@@ -33,7 +33,7 @@
   <a href="https://github.com/unspecifiedcoder/z-canary/actions/workflows/verification.yml"><img alt="Verification" src="https://github.com/unspecifiedcoder/z-canary/actions/workflows/verification.yml/badge.svg" /></a>
   <img alt="Zcash testnet" src="https://img.shields.io/badge/network-Zcash_testnet-F4B728?style=flat-square&labelColor=101613" />
   <img alt="Rust tests" src="https://img.shields.io/badge/Rust_tests-66_passed-67D7AE?style=flat-square&labelColor=101613" />
-  <img alt="Frontend tests" src="https://img.shields.io/badge/frontend_tests-49_passed-67D7AE?style=flat-square&labelColor=101613" />
+  <img alt="Frontend tests" src="https://img.shields.io/badge/frontend_tests-52_passed-67D7AE?style=flat-square&labelColor=101613" />
   <img alt="Threshold" src="https://img.shields.io/badge/recovery-3_of_5-DBA04F?style=flat-square&labelColor=101613" />
   <img alt="Status" src="https://img.shields.io/badge/status-tested_prototype-8FA79E?style=flat-square&labelColor=101613" />
 </p>
@@ -56,15 +56,15 @@ A **keeper** is a service that holds one piece of the release key and checks whe
 
 **The result is a recoverable file in the recipient workflow.** Canary does not automatically email the dossier, publish a story, or decide whether Maya is safe. It responds to the check-in record.
 
-## Watch the 90-second demo
+## Watch the 88-second demo
 
-**[Watch the submission demo (90 s)](https://drive.google.com/file/d/1egWEOCd8EIoyrCp-ZxAMxmOp1cu2m5QC/view?usp=sharing)** · **[Create your own Canary](https://unspecifiedcoder.github.io/z-canary/app/#create)** · **[Verify the receipts](https://unspecifiedcoder.github.io/z-canary/app/#evidence)**
+**[Watch the submission demo (88 s)](https://unspecifiedcoder.github.io/z-canary/assets/canary-demo-v6.mp4)** · **[Create your own Canary](https://unspecifiedcoder.github.io/z-canary/app/#create)** · **[Verify the receipts](https://unspecifiedcoder.github.io/z-canary/app/#evidence)**
 
 The demo is a recording of the live application, not a mock-up. It shows the browser lab (real local encryption, signatures and threshold recovery; simulated blocks and keeper timing) and the real Zcash testnet transactions on a block explorer. Its tracker, captions and subtitles are added in editing.
 
-> The landing page at https://unspecifiedcoder.github.io/z-canary/ also hosts an earlier, longer walkthrough that predates the current interface. The 90-second demo above and the live **Create your own Canary** flow are the authoritative versions.
+The landing page at https://unspecifiedcoder.github.io/z-canary/ embeds this same 88-second cut with chapters and downloadable captions. Detailed prototype boundaries live in the page and application footers so the film can stay focused on the use case.
 
-In the demo, Maya protects a fictional reporting file for Noor. Noor is blocked from opening it early. Maya checks in and the deadline moves. When a later check-in is missed, grace prevents an instant release. Two keeper shares are still insufficient; three shares permit the next step, but the wrong recipient key still fails. Noor's matching key recovers the original file byte for byte.
+In the demo, Maya protects a fictional reporting file for Noor. Noor is blocked from opening it early. Maya checks in and the deadline moves. When Maya later goes silent, the safety window and keeper threshold control recovery; only Noor's matching key can recover the original file. The final scene links the same signed command format to the confirmed Zcash testnet receipts.
 
 The browser walkthrough uses real local encryption, signatures and decryption with simulated blocks and keeper records. The recorded native Zcash testnet proof is labeled separately; the demo does not present simulated actions as on-chain transactions.
 
@@ -112,6 +112,7 @@ The app also includes the **Living Vault**, the original six-chapter protocol gu
 | Experience | What you can verify | What is simulated or limited |
 |---|---|---|
 | **Browser demonstration** | File encryption, signed commands, check-in and cancellation behavior, threshold recovery, and exact-byte verification. | Blocks, transactions, keeper records, and timing are simulated in one browser. No wallet or real transaction is needed. |
+| **External wallet handoff** | Builds a ZIP-321 testnet request containing the browser-verified signed 512-byte REGISTER memo, opens it in a compatible wallet, and links a supplied txid to the explorer. | A supplied txid is not treated as confirmation; the static site does not query lightwalletd. The lifecycle controls remain a separate browser simulation. |
 | **Native Zcash testnet** | Connects the authenticated local Zingolib wallet, displays its real testnet address, balance and synced height, submits actual shielded commands, runs five keeper processes, and recovers the original test file. | This is a local-runtime connection, not a universal injected browser-wallet standard. The five keeper services share one local operator and scanner. Native mode currently targets Windows. |
 
 The browser's encryption format is separate from the native format. Test results and recorded transactions are linked below so a reviewer can inspect the implementation, not just watch an animation.
@@ -225,7 +226,9 @@ npm run typecheck
 npm run dev
 ```
 
-Open `http://127.0.0.1:3000` and choose **Try Maya & Noor's story**. The example supplies a fictional reporting file and runs real browser encryption, signed commands, threshold checks, and decryption against simulated chain and keeper records. It is repeatable and resettable; it never connects to a wallet or sends a transaction. Use **Vault Sentinel** for additional owner actions, **Recipient Inbox** for recovery, and **Evidence & Keepers** to inspect keeper participation.
+Open `http://127.0.0.1:3000` and choose **Try Maya & Noor's story**. The example supplies a fictional reporting file and runs real browser encryption, signed commands, threshold checks, and decryption against simulated chain and keeper records. It is repeatable and resettable. Use **Vault Sentinel** for additional owner actions, **Recipient Inbox** for recovery, and **Evidence & Keepers** to inspect keeper participation.
+
+For a judge-initiated testnet transaction, choose **Create your own Canary**, finish local encryption, select **External testnet wallet**, and prepare the request. Canary verifies its own signed REGISTER memo before displaying the ZIP-321 URI. Send it from a compatible Zcash testnet wallet, paste the returned txid, and open the explorer record. No seed phrase or private wallet key enters Canary.
 
 The verified Maya/Noor browser run recovered the original **500-byte** `Maya-Rivergate-demo-notes.txt` file. Its SHA-256 is `cf2f6149b05ac93ed0e5116c506ea1791641c0606f6a7fe10a040a395bc9e20f`. This is separate from the **136-byte native testnet fixture** above. [Case-study tests](tests/caseStudy.test.ts) cover the complete recovery path, signed cancellation, check-in during grace, and clean reset.
 
@@ -339,7 +342,7 @@ z-canary/
 | Area | Result | Evidence |
 |---|---:|---|
 | Rust workspace | **66 tests passed** | [backend test log](docs/evidence/backend-tests.txt) |
-| Frontend | **49 tests passed** | [frontend test log](docs/evidence/frontend-tests.tap) |
+| Frontend | **52 tests passed** | `npm test -- --run` (includes ZIP-321 encoding, memo length, amount, address and txid validation) |
 | Submitted commit | frontend, Rust, committed + regenerated Pages verification | [GitHub verification workflow](.github/workflows/verification.yml) |
 | TypeScript + Vite | **passed** | [production build log](docs/evidence/frontend-build.txt) |
 | Five-process rehearsal | **12 checks passed** | [rehearsal record](docs/evidence/five-process-rehearsal.json) |

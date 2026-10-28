@@ -1,10 +1,8 @@
 
     const chapters = [
-      [0, 'Meet Maya and Noor'], [14.566667, 'What Canary does'], [29.266667, 'Protect the file'],
-      [43.566667, 'Early recovery is blocked'], [53.533333, 'Maya checks in'], [64.9, 'Cancel the handoff'],
-      [77.266667, 'Miss a check-in'], [88.433333, 'Return during grace'], [100.433333, 'Stale scans: release waits'],
-      [110.6, 'Two shares: not enough'], [120.933333, 'Restore the third keeper'], [131.233333, 'Try the wrong recipient key'],
-      [141.166667, 'Recover and download'], [155.666667, 'Recorded native testnet proof'], [175.766667, 'Try the example yourself']
+      [0, 'Meet Maya and Noor'], [9.773, 'The third option'], [18.487, 'Why Zcash'],
+      [30.741, 'Create a handoff'], [44.392, 'Register and test early access'], [50.747, 'Maya checks in'],
+      [55.684, 'Inspect the real counterpart'], [69.036, 'Controlled recovery'], [78.645, 'Verify testnet receipts']
     ];
     const video = document.getElementById('canary-video');
     const list = document.getElementById('chapters');
@@ -47,9 +45,9 @@
         lastChapter = current;
       }
       const t = video.currentTime;
-      const simulated = t >= 29.266667 && t < 155.666667;
+      const simulated = t >= 30.741 && t < 78.645;
       mode.classList.toggle('simulation', simulated);
-      mode.textContent = simulated ? 'BROWSER SIMULATION / CAPTURED ACTIONS, EDITED FOR TIME' : t >= 155.666667 && t < 175.766667 ? 'NATIVE TESTNET / RECORDED VERIFICATION EVIDENCE' : 'MAYA & NOOR / FICTIONAL EXAMPLE';
+      mode.textContent = simulated ? 'BROWSER LAB / CAPTURED ACTIONS, EDITED FOR TIME' : t >= 78.645 ? 'ZCASH TESTNET / RECORDED VERIFICATION EVIDENCE' : 'MAYA & NOOR / FICTIONAL EXAMPLE';
     }
     video.addEventListener('timeupdate', updateChapter);
     video.addEventListener('loadedmetadata', updateChapter);
@@ -57,4 +55,4 @@
     video.addEventListener('error', showMediaError);
     video.querySelector('source').addEventListener('error', showMediaError);
     updateChapter();
-  
+

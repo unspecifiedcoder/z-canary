@@ -1,148 +1,49 @@
 WEBVTT
 
 1
-00:00:00.650 --> 00:00:06.665
-Maya is a journalist. If she becomes unavailable, her editor
-Noor may need her reporting notes.
+00:00:00.100 --> 00:00:09.273
+Maya is a journalist investigating corruption. Sending her evidence now could expose her. Keeping the only usable copy could make it disappear with her.
 
 2
-00:00:06.965 --> 00:00:13.066
-Sending them now is too early. Keeping the only usable copy
-with Maya leaves no handoff plan.
+00:00:09.773 --> 00:00:17.987
+Canary gives her a third option: keep a file encrypted while she checks in, and hand it only to Noor, the editor she trusts, if she goes silent.
 
 3
-00:00:15.217 --> 00:00:18.746
-Canary is an encrypted handoff for this exact problem.
+00:00:18.487 --> 00:00:30.241
+Check-ins travel as shielded Zcash memos, so the public chain shows only encrypted memos. Seven real transactions on Zcash testnet are confirmed, and the page shows them up front.
 
 4
-00:00:19.046 --> 00:00:27.735
-Keep checking in, and recovery stays on hold. If check-ins
-stop and the recovery rules are met, the chosen recipient can
-open the file.
+00:00:30.741 --> 00:00:37.717
+Here is the browser lab. It sends no transaction, so anyone can safely test every rule. I choose my own file.
 
 5
-00:00:29.917 --> 00:00:35.948
-Let's do it. These are fictional notes. The encryption is
-real; blocks and keepers are simulated.
+00:00:38.217 --> 00:00:43.892
+I encrypt it locally for one recipient and split the release key into five shares, with three required.
 
 6
-00:00:36.248 --> 00:00:42.050
-Maya presses Protect. Canary encrypts the file for Noor and
-prepares five keeper shares.
+00:00:44.392 --> 00:00:46.781
+The first signed command registers the vault.
 
 7
-00:00:44.217 --> 00:00:47.789
-Noor tries to open it immediately. Recovery is blocked.
+00:00:47.281 --> 00:00:50.247
+Noor tries to recover the file early. She is blocked.
 
 8
-00:00:48.089 --> 00:00:52.023
-Being the chosen recipient does not bypass the release
-conditions.
+00:00:50.747 --> 00:00:55.184
+Maya checks in. Her signed command moves the deadline, and no shares are released.
 
 9
-00:00:54.183 --> 00:00:59.155
-Maya checks in. Watch the deadline change after her signed
-command is applied.
+00:00:55.684 --> 00:01:03.343
+Every simulated command shows its real counterpart: the matching transaction on Zcash testnet, with a link to the explorer.
 
 10
-00:00:59.455 --> 00:01:03.369
-Noor still has zero released shares. The handoff stays on
-hold.
+00:01:03.843 --> 00:01:08.536
+The lab's own memo goes through the same verifier that checks the real transactions.
 
 11
-00:01:05.550 --> 00:01:11.618
-Maya can cancel before release. Here, the vault becomes
-cancelled and releases zero shares.
+00:01:09.036 --> 00:01:18.145
+If Maya goes silent, a safety window starts. After it, enough shares are released, and only Noor's matching key recovers the exact original file.
 
 12
-00:01:11.918 --> 00:01:15.737
-Cancellation cannot take back shares that were already
-delivered.
-
-13
-00:01:17.917 --> 00:01:22.343
-Now start a fresh example for the other outcome. Maya misses
-her check-in.
-
-14
-00:01:22.643 --> 00:01:26.921
-The vault enters a grace window. The file does not open
-immediately.
-
-15
-00:01:29.083 --> 00:01:34.672
-If Maya returns during grace, an on-time valid check-in can
-still extend the deadline.
-
-16
-00:01:34.972 --> 00:01:38.919
-Here it does. Then we advance this example to another missed
-check-in.
-
-17
-00:01:41.083 --> 00:01:44.231
-Grace ends, but the keepers have stale chain data.
-
-18
-00:01:44.531 --> 00:01:49.096
-They pause release. Missing information is not permission to
-share the key.
-
-19
-00:01:51.250 --> 00:01:55.867
-Two keepers catch up and provide valid shares. Noor tries
-recovery again.
-
-20
-00:01:56.167 --> 00:01:59.408
-It fails. The rule is three distinct shares, not two.
-
-21
-00:02:01.583 --> 00:02:07.577
-Restore the third keeper. Now three valid shares are
-available, even with two keepers offline.
-
-22
-00:02:07.877 --> 00:02:09.714
-The release threshold is met.
-
-23
-00:02:11.883 --> 00:02:15.745
-Could somebody else use those shares? We try a different
-recipient key.
-
-24
-00:02:16.045 --> 00:02:19.651
-Decryption fails. Noor's private key is still required.
-
-25
-00:02:21.817 --> 00:02:27.309
-Now Noor decrypts. Here are Maya's actual demonstration notes,
-recovered inside the app.
-
-26
-00:02:27.609 --> 00:02:34.136
-The original and recovered fingerprints match. Noor downloads
-the verified file and can continue the work.
-
-27
-00:02:36.317 --> 00:02:47.109
-The native path has also completed a real Zcash testnet
-recovery, including confirmed registration, postponement,
-cancellation, and an exact file match.
-
-28
-00:02:47.409 --> 00:02:54.257
-This is a prototype, not a security audit. The five native
-keepers currently share one operator and scanner.
-
-29
-00:02:56.417 --> 00:03:04.245
-Canary doesn't publish your story or decide whether you're
-safe. It creates a conditional recovery path for the person
-you chose.
-
-30
-00:03:04.545 --> 00:03:10.380
-Try Maya and Noor's example. Keep the file private now.
-Prepare someone to carry it forward.
+00:01:18.645 --> 00:01:27.328
+On testnet, shielded transactions carried the real registration, check-in and cancellation commands, and your browser verifies each signature.

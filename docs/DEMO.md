@@ -4,14 +4,14 @@ The example follows a fictional journalist who wants her editor to recover a rep
 
 - [Watch the narrated example](https://unspecifiedcoder.github.io/z-canary/)
 - [Run the interactive example](https://unspecifiedcoder.github.io/z-canary/app/#maya-noor)
-- [Download the video and editable film source](https://github.com/unspecifiedcoder/z-canary/releases/tag/demo-v2)
+- [Download the 88-second submission video](assets/canary-demo-v6.mp4)
 - [Inspect the verification record](evidence/VERIFICATION.md)
 
 ## What the video shows
 
-The 3:12 film is an edited walkthrough of actual browser actions and their results. It uses captured app states and editorial action highlights; it is not a continuous screen recording. The fictional scenario sends no blockchain transactions. Encryption, signatures, threshold reconstruction, recipient-key rejection and decryption execute in the browser using the existing demonstration engine.
+The 1:28 film is an edited walkthrough of actual browser actions and their results. It uses captured app states and editorial action highlights; it is not a continuous screen recording. The fictional scenario sends no blockchain transactions. Encryption, signatures, threshold reconstruction, recipient-key rejection and decryption execute in the browser using the existing demonstration engine.
 
-The story covers protection, early recovery rejection, check-in, cancellation, a fresh missed-check-in branch, grace-period check-in, stale scanner suspension, insufficient shares, recovery with two keepers offline, the wrong recipient key and verified download. A final chapter presents previously recorded native Zcash testnet evidence separately.
+The story covers the whistleblower use case, local protection, early recovery rejection, a check-in, controlled recovery, recipient-only decryption and the matching Zcash testnet receipts. Detailed trust boundaries stay in the landing-page and application footers so the film can remain focused on the core story.
 
 The native 136-byte fixture and browser 500-byte fixture are different. Five native keeper processes share one operator and scanner. Three colluding keepers could release early; cancellation cannot recall delivered shares. This remains a prototype rather than an audited tool for sensitive reporting.
 
@@ -30,14 +30,10 @@ node scripts/build-public-demo.mjs
 
 The explicit Vite command also works in PowerShell environments that strip npm's forwarded `--base` argument. The copy helper refuses absolute asset paths and unmarked output folders. Only the browser build is copied; wallet databases, identities, bearer tokens and local native configuration are not deployment inputs.
 
-The film is hosted as a GitHub release asset. English captions and the poster are ordinary repository assets. Chapter buttons seek the actual video; an MP4 link remains available when embedded playback fails.
-
-## Edit the film
-
-The release's source ZIP contains the deterministic HTML/GSAP scenes, captured public example states, narration timeline, captions and mixed audio. Install its pinned Node dependencies and use its documented HyperFrames check, preview and render commands. The included audio is ready to use; voice model weights are not required to re-render the film. Credits and reproduction notes are included in that archive.
+The film, English captions and poster are repository assets published by GitHub Pages. Chapter buttons seek the actual video; an MP4 link remains available when embedded playback fails.
 
 ## Encoded video verification
 
-The published MP4 is 191.9 seconds, 1920×1080 H.264 at 30 fps with stereo AAC. A complete decode passed without errors, and decoded frames were inspected across the chapters. Fast-start metadata is present. Measured integrated audio is −16.07 LUFS with −2.93 dBTP true peak. [Machine-readable media report](evidence/demo-video-v2.json).
+The published MP4 is 88 seconds, 1280×720 H.264 at 30 fps with stereo AAC. It ends before the source film's technical-boundary chapter and fades cleanly after the testnet verification scene. A complete decode passed without errors and fast-start metadata is present. [Machine-readable media report](evidence/demo-video-v6.json).
 
 The signed-out public GitHub README link, hosted video playback and chapter seeking were verified in a real browser. The complete Maya/Noor scenario was repeated on GitHub Pages and downloaded the matching 500-byte file. [Hosted smoke record](evidence/public-demo-smoke.json) · [Recovered file screenshot](evidence/experience/case-public-recovered.jpg).
