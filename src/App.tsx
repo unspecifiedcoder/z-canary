@@ -412,13 +412,13 @@ export default function App() {
         <button className={`native-nav ${activeTab==='native'?'is-active':''}`} onClick={()=>setActiveTab('native')}><span className="signal-dot"/>Native testnet <span aria-hidden="true">↗</span></button>
       </header>
       <div className={`environment-strip ${activeTab==='native'?'environment-strip--native':''}`} role="note">
-        <span>{activeTab==='native'?'AUTHENTICATED LOCAL WORKSPACE':'Browser lab'}</span>
-        <p>{activeTab==='native'?'Actual state is reported by your local agent. Testnet only.':'Real local encryption · simulated chain and keeper records · synthetic evidence · no transactions sent'}</p>
+        <span>{activeTab==='native'?'Authenticated local workspace':'Browser lab'}</span>
+        <p>{activeTab==='native'?'Actual state is reported by your local agent. Testnet only.':'Try it safely in your browser: real encryption, simulated chain and keepers, no transactions sent. Real testnet proof is on the Evidence tab.'}</p>
         {activeTab!=='case'&&<button onClick={()=>setActiveTab('case')}>Try Maya & Noor's example ↗</button>}
         {activeTab==='case'&&<button onClick={()=>setActiveTab('demo')}>Protocol tour ↗</button>}
       </div>
       {!['native','welcome','demo','case'].includes(activeTab)&&<details className="simulation-tools">
-        <summary><span>SIMULATION CONTROLS</span><span>#{currentBlockHeight.toLocaleString()} · {walletBalanceZatoshi.toLocaleString()} zat</span><span>Expand +</span></summary>
+        <summary><span>Simulation controls</span><span>#{currentBlockHeight.toLocaleString()} · {walletBalanceZatoshi.toLocaleString()} zat</span><span>Expand +</span></summary>
         <div><button onClick={()=>handleAdvanceBlocks(1)}><Pickaxe size={14}/>Mine +1 block</button><button onClick={()=>handleAdvanceBlocks(6)}>Mine +6 blocks</button><button onClick={handleJumpToGrace}>Enter grace</button><button onClick={handleJumpPastGraceToExpire}><FastForward size={14}/>Evaluate expiry</button><button onClick={handleResetDemo}><RotateCcw size={14}/>Reset harness</button><button onClick={()=>setActiveTab('create')}>New demo vault ↗</button></div>
       </details>}
 
@@ -438,9 +438,9 @@ export default function App() {
       {/* Toast Feedback Banner */}
       {toastMessage && (
         <div role="status" aria-live="polite" className="max-w-7xl w-full mx-auto px-6 pt-4">
-          <div className="p-3.5 bg-[#141820] border border-[#F59E0B] text-xs font-mono text-[#F8FAFC] flex items-center justify-between gap-4">
+          <div className="p-3.5 bg-[#141820] border border-[#2a2b2e] rounded-lg text-[13px] text-[#F8FAFC] flex items-center justify-between gap-4">
             <div className="flex items-center gap-2.5">
-              <CheckCircle2 className="w-4 h-4 text-[#F59E0B] shrink-0" />
+              <CheckCircle2 className="w-4 h-4 text-[#10B981] shrink-0" />
               <span>{toastMessage}</span>
             </div>
             <button

@@ -15,7 +15,7 @@ const NATIVE_LABELS: Record<string, string> = {
 
 const Detail: React.FC<{ label: string; value: string }> = ({ label, value }) => (
   <div>
-    <dt className="text-[10px] font-mono tracking-wider text-[#64748B]">{label}</dt>
+    <dt className="text-xs text-[#a3a39e]">{label}</dt>
     <dd className="break-all font-mono text-[11px] text-[#AEB8C8]">{value}</dd>
   </div>
 );
@@ -56,7 +56,7 @@ export const ReceiptVerifier: React.FC<{ labMemoHex?: string }> = ({ labMemoHex 
           <li key={receipt.txid} className="px-4 py-3">
             <details>
               <summary className="grid cursor-pointer grid-cols-[1fr_auto] items-center gap-x-4 gap-y-1 md:grid-cols-[9rem_1fr_auto_auto]">
-                <strong className="text-xs font-mono text-[#F8FAFC]">{result.operation ?? 'INVALID'}</strong>
+                <strong className="text-[13px] font-semibold text-[#ececea]">{result.operation ?? 'INVALID'}</strong>
                 <span className="text-[11px] font-mono text-[#94A3B8]">
                   seq {result.sequence ?? '–'} · expiry {result.requestedExpiryHeight ? result.requestedExpiryHeight.toLocaleString() : 'none'} · block {receipt.blockHeight.toLocaleString()}
                 </span>
@@ -73,9 +73,9 @@ export const ReceiptVerifier: React.FC<{ labMemoHex?: string }> = ({ labMemoHex 
               </summary>
               {result.valid && (
                 <dl className="mt-3 grid gap-3 border-l-2 border-[#2A3343] pl-3 md:grid-cols-3">
-                  <Detail label="SWITCH ID" value={result.switchIdHex!} />
-                  <Detail label="MANIFEST DIGEST" value={result.manifestDigestHex!} />
-                  <Detail label="SIGNING KEY (PUBLIC TEST FIXTURE)" value={result.sourcePubKeyHex!} />
+                  <Detail label="Switch ID" value={result.switchIdHex!} />
+                  <Detail label="Manifest digest" value={result.manifestDigestHex!} />
+                  <Detail label="Signing key (public test fixture)" value={result.sourcePubKeyHex!} />
                 </dl>
               )}
             </details>

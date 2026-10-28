@@ -118,7 +118,7 @@ export const EvidenceAndKeepersPanel: React.FC<EvidenceAndKeepersPanelProps> = (
       <section className="border border-[#D6A84B]/50 bg-[#141820] p-6 lg:p-8 space-y-7" aria-labelledby="judge-proof-title">
         <div className="flex flex-col xl:flex-row xl:items-end justify-between gap-5 border-b border-[#222938] pb-6">
           <div className="max-w-3xl space-y-2">
-            <div className="text-xs font-mono text-[#F59E0B]">JUDGE PROOF MAP · RECORDED 27 OCTOBER 2026</div>
+            
             <h1 id="judge-proof-title" className="text-2xl lg:text-3xl font-bold text-[#F8FAFC]">
               One lifecycle. Three different kinds of evidence.
             </h1>
@@ -128,7 +128,7 @@ export const EvidenceAndKeepersPanel: React.FC<EvidenceAndKeepersPanelProps> = (
               run that used genuine shielded Zcash testnet commands and recovered a public fixture byte for byte.
             </p>
           </div>
-          <div className="flex flex-wrap gap-2 text-xs font-mono">
+          <div className="flex flex-wrap gap-2 text-xs">
             <a href="https://github.com/unspecifiedcoder/z-canary/blob/main/docs/evidence/VERIFICATION.md" target="_blank" rel="noreferrer" className="px-3 py-2 border border-[#F59E0B]/60 text-[#F59E0B] hover:bg-[#2b2413] inline-flex items-center gap-1.5">Verification record <ExternalLink className="w-3.5 h-3.5" /></a>
             <a href="https://github.com/unspecifiedcoder/z-canary/blob/main/docs/ARCHITECTURE.md" target="_blank" rel="noreferrer" className="px-3 py-2 border border-[#30394A] text-[#CBD5E1] hover:border-[#94A3B8] inline-flex items-center gap-1.5">Architecture <ExternalLink className="w-3.5 h-3.5" /></a>
             <a href="https://github.com/unspecifiedcoder/z-canary/blob/main/docs/THREAT-MODEL.md" target="_blank" rel="noreferrer" className="px-3 py-2 border border-[#30394A] text-[#CBD5E1] hover:border-[#94A3B8] inline-flex items-center gap-1.5">Threat model <ExternalLink className="w-3.5 h-3.5" /></a>
@@ -136,18 +136,18 @@ export const EvidenceAndKeepersPanel: React.FC<EvidenceAndKeepersPanelProps> = (
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-3">
-          <article className="p-4 border border-[#2A3343] bg-[#0B0D11] space-y-2">
-            <div className="flex items-center justify-between gap-3"><span className="text-xs font-mono text-[#F59E0B]">INTERACTIVE / NOW</span><span className="text-[10px] font-mono text-[#64748B]">HOSTED BROWSER</span></div>
+          <article className="space-y-1.5 border-t border-[#2a2b2e] pt-4">
+            <div className="flex items-center justify-between gap-3"><span className="text-xs text-[#F59E0B]">Interactive</span><span className="text-[10px] font-mono text-[#64748B]">Hosted browser</span></div>
             <h2 className="font-semibold text-[#F8FAFC]">Real local cryptography</h2>
             <p className="text-xs leading-relaxed text-[#94A3B8]">X25519 recipient binding, AES-256-GCM, signatures, {vault.manifest.threshold}-of-5 reconstruction and exact-byte verification execute in this browser.</p>
           </article>
-          <article className="p-4 border border-[#2A3343] bg-[#0B0D11] space-y-2">
-            <div className="flex items-center justify-between gap-3"><span className="text-xs font-mono text-[#EFAD45]">SIMULATED / RESETTABLE</span><span className="text-[10px] font-mono text-[#64748B]">HOSTED BROWSER</span></div>
+          <article className="space-y-1.5 border-t border-[#2a2b2e] pt-4">
+            <div className="flex items-center justify-between gap-3"><span className="text-xs text-[#EFAD45]">Simulated, resettable</span><span className="text-[10px] font-mono text-[#64748B]">Hosted browser</span></div>
             <h2 className="font-semibold text-[#F8FAFC]">Blocks and keeper records</h2>
             <p className="text-xs leading-relaxed text-[#94A3B8]">The chain height, transactions, timing and five keeper records on this screen are synthetic. No Zcash transaction is sent here.</p>
           </article>
-          <article className="p-4 border border-[#10B981]/45 bg-[#0B0D11] space-y-2">
-            <div className="flex items-center justify-between gap-3"><span className="text-xs font-mono text-[#10B981]">RECORDED / VERIFIABLE</span><span className="text-[10px] font-mono text-[#64748B]">NATIVE TESTNET</span></div>
+          <article className="space-y-1.5 border-t border-[#2a2b2e] pt-4">
+            <div className="flex items-center justify-between gap-3"><span className="text-xs text-[#10B981]">Recorded, verifiable</span><span className="text-[10px] font-mono text-[#64748B]">Native testnet</span></div>
             <h2 className="font-semibold text-[#F8FAFC]">Shielded Zcash commands</h2>
             <p className="text-xs leading-relaxed text-[#94A3B8]">A separate native run used real testnet REGISTER, POSTPONE and CANCEL transactions, five local keeper processes and recipient recovery.</p>
           </article>
@@ -158,27 +158,27 @@ export const EvidenceAndKeepersPanel: React.FC<EvidenceAndKeepersPanelProps> = (
 
           <aside className="border border-[#10B981]/45 bg-[#0B0D11] p-5 space-y-4">
             <div className="flex items-center gap-2"><FileCheck2 className="w-5 h-5 text-[#10B981]" /><h2 className="font-semibold text-[#F8FAFC]">Exact recovery passed</h2></div>
-            <div className="grid grid-cols-2 gap-3 font-mono text-xs">
+            <div className="grid grid-cols-2 gap-3 text-xs">
               <div><span className="block text-[#64748B]">Native fixture</span><strong className="text-[#F8FAFC]">136 bytes</strong></div>
               <div><span className="block text-[#64748B]">Threshold</span><strong className="text-[#F8FAFC]">3 of 5</strong></div>
               <div><span className="block text-[#64748B]">Expired path</span><strong className="text-[#10B981]">5 shares</strong></div>
               <div><span className="block text-[#64748B]">Cancelled path</span><strong className="text-[#10B981]">0 shares</strong></div>
             </div>
-            <div className="space-y-1"><span className="text-[10px] font-mono text-[#64748B]">RECOVERED SHA-256</span><code className="block text-[10px] leading-relaxed text-[#AEB8C8] break-all">{NATIVE_FIXTURE_SHA256}</code></div>
+            <div className="space-y-1"><span className="text-[10px] font-mono text-[#64748B]">Recovered SHA-256</span><code className="block text-[10px] leading-relaxed text-[#AEB8C8] break-all">{NATIVE_FIXTURE_SHA256}</code></div>
             <p className="text-[11px] leading-relaxed text-[#94A3B8]">All five native keeper processes shared one operator, one viewing-only scanner and one lightwallet endpoint. This proves the implemented path—not independent decentralization or production security.</p>
           </aside>
         </div>
 
         <RealRunReplay />
 
-        <div className="grid grid-cols-1 gap-3 lg:grid-cols-2">
-          <article className="p-4 border-l-2 border-[#F59E0B] bg-[#0B0D11] space-y-2 text-xs leading-relaxed text-[#AEB8C8]">
+        <div className="grid grid-cols-1 items-start gap-3 lg:grid-cols-2">
+          <article className="space-y-2 border-t border-[#2a2b2e] pt-4 text-[13px] leading-relaxed text-[#A6A6A1]">
             <h2 className="text-sm font-semibold text-[#F8FAFC]">Why Zcash, and why no smart contract</h2>
             <p>The file stays off-chain. Zcash carries only the owner’s signed REGISTER, POSTPONE and CANCEL commands, as 512-byte shielded memos in a confirmed order. A viewing-only scanner reads them for the keepers without any spending authority.</p>
             <p>Shielded memos hide who is checking in and for whom. A transparent chain would expose a pattern of life, and a plain server would be one party that can be pressured or switched off. Zcash has no general smart contracts, and none are needed: the memo format and the keeper state machine do that job.</p>
             <p>This page publishes testnet receipts only because it is a demonstration. Real users would never publish their memos or viewing keys.</p>
           </article>
-          <article className="p-4 border-l-2 border-[#64748B] bg-[#0B0D11] space-y-2 text-xs leading-relaxed text-[#AEB8C8]">
+          <article className="space-y-2 border-t border-[#2a2b2e] pt-4 text-[13px] leading-relaxed text-[#A6A6A1]">
             <h2 className="text-sm font-semibold text-[#F8FAFC]">What this does not prove</h2>
             <ul className="list-disc space-y-1 pl-4">
               <li>The five keepers are local processes sharing one operator, one scanner and one lightwallet endpoint. They are not independent.</li>
@@ -194,12 +194,10 @@ export const EvidenceAndKeepersPanel: React.FC<EvidenceAndKeepersPanelProps> = (
       <section className="border border-[#222938] bg-[#141820] p-6 lg:p-8 space-y-6">
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 border-b border-[#222938] pb-5">
           <div className="space-y-1">
-            <div className="text-xs font-mono text-[#F59E0B]">
-              3-OF-5 THRESHOLD CUSTODY · 5 SIMULATED KEEPER RECORDS
-            </div>
-            <h1 className="text-2xl font-bold text-[#F8FAFC]">
+            
+            <h2 className="text-2xl font-bold text-[#F8FAFC]">
               Five stations. One deliberate threshold.
-            </h1>
+            </h2>
             <p className="text-sm text-[#94A3B8]">
               These five records run in one browser. Toggle availability and scanner health to explore the release policy. Native testnet has separate local processes and is accessed in the native workspace.
             </p>
@@ -208,14 +206,14 @@ export const EvidenceAndKeepersPanel: React.FC<EvidenceAndKeepersPanelProps> = (
           <div className="flex flex-wrap items-center gap-2 shrink-0">
             <button
               onClick={() => onSimulateReorg('shallow')}
-              className="px-3.5 py-2 bg-[#0B0D11] hover:bg-[#1E2430] border border-[#222938] text-xs font-mono text-[#E2E8F0] rounded flex items-center gap-1.5 cursor-pointer transition-colors"
+              className="px-3.5 py-2 bg-[#0B0D11] hover:bg-[#1E2430] border border-[#222938] text-xs text-[#E2E8F0] rounded flex items-center gap-1.5 cursor-pointer transition-colors"
             >
               <RotateCcw className="w-3.5 h-3.5 text-[#F59E0B]" />
               <span>2-Block Reorg</span>
             </button>
             <button
               onClick={() => onSimulateReorg('deep')}
-              className="px-3.5 py-2 bg-[#0B0D11] hover:bg-[#1E2430] border border-[#EF4444]/50 text-xs font-mono text-[#EF4444] rounded flex items-center gap-1.5 cursor-pointer transition-colors"
+              className="px-3.5 py-2 bg-[#0B0D11] hover:bg-[#1E2430] border border-[#EF4444]/50 text-xs text-[#EF4444] rounded flex items-center gap-1.5 cursor-pointer transition-colors"
             >
               <AlertTriangle className="w-3.5 h-3.5" />
               <span>Deep Reorg Incident</span>
@@ -245,7 +243,7 @@ export const EvidenceAndKeepersPanel: React.FC<EvidenceAndKeepersPanelProps> = (
                   ? `Quorum Healthy: ${onlineHealthyCount} of 5 Keepers Active & Synchronized`
                   : `Quorum Degraded: Only ${onlineHealthyCount} of 5 Keepers Healthy (Minimum 3 Required)`}
               </div>
-              <div className="text-xs text-[#94A3B8] font-mono">
+              <div className="text-xs text-[#94A3B8]">
                 {thresholdMet
                   ? 'System can tolerate up to 2 simultaneous node failures without blocking release.'
                   : 'Release threshold is currently blocked until at least 3 nodes are online and healthy.'}
@@ -278,7 +276,7 @@ export const EvidenceAndKeepersPanel: React.FC<EvidenceAndKeepersPanelProps> = (
           <div className="flex flex-wrap items-center gap-1.5 p-1 bg-[#0B0D11] border border-[#222938] rounded">
             <button
               onClick={() => setSelectedKeeperTab('ALL')}
-              className={`px-3 py-1.5 text-xs font-mono rounded transition-colors cursor-pointer ${
+              className={`px-3 py-1.5 text-xs rounded transition-colors cursor-pointer ${
                 selectedKeeperTab === 'ALL'
                   ? 'bg-[#F59E0B] text-[#0B0D11] font-semibold'
                   : 'text-[#94A3B8] hover:text-[#F8FAFC]'
@@ -290,7 +288,7 @@ export const EvidenceAndKeepersPanel: React.FC<EvidenceAndKeepersPanelProps> = (
               <button
                 key={k.index}
                 onClick={() => setSelectedKeeperTab(k.index as 1 | 2 | 3 | 4 | 5)}
-                className={`px-3 py-1.5 text-xs font-mono rounded transition-colors cursor-pointer ${
+                className={`px-3 py-1.5 text-xs rounded transition-colors cursor-pointer ${
                   selectedKeeperTab === k.index
                     ? 'bg-[#F59E0B] text-[#0B0D11] font-semibold'
                     : 'text-[#94A3B8] hover:text-[#F8FAFC]'
@@ -330,7 +328,7 @@ export const EvidenceAndKeepersPanel: React.FC<EvidenceAndKeepersPanelProps> = (
               return (
                 <div
                   key={k.id}
-                  className={`p-4 border flex flex-col justify-between space-y-4 font-mono text-xs ${stateAnimationClass}`}
+                  className={`p-4 border flex flex-col justify-between space-y-4 text-xs ${stateAnimationClass}`}
                 >
                   {/* Top Row: Keeper ID & Status Indicator with Low-Frequency CSS Heartbeat Glow */}
                   <div className="space-y-3">
@@ -457,7 +455,7 @@ export const EvidenceAndKeepersPanel: React.FC<EvidenceAndKeepersPanelProps> = (
 
         {/* Individual Keeper Deep-Dive View */}
         {activeKeeper && (
-          <div className="border border-[#222938] bg-[#0B0D11] p-6 space-y-6 font-mono text-xs">
+          <div className="border border-[#222938] bg-[#0B0D11] p-6 space-y-6 text-xs">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#1E2430] pb-4">
               <div className="space-y-1">
                 <div className="text-sm font-bold text-[#F8FAFC]">
@@ -541,9 +539,7 @@ export const EvidenceAndKeepersPanel: React.FC<EvidenceAndKeepersPanelProps> = (
       <section className="border border-[#222938] bg-[#141820] p-6 lg:p-8 space-y-6">
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 border-b border-[#222938] pb-5">
           <div className="space-y-1">
-            <div className="text-xs font-mono text-[#F59E0B]">
-              LOCAL MEMO CODEC · BROWSER SIMULATION
-            </div>
+            
             <h2 className="text-xl font-bold text-[#F8FAFC]">
               Shielded Memo Binary Inspector & Tamper Verifier
             </h2>
@@ -560,7 +556,7 @@ export const EvidenceAndKeepersPanel: React.FC<EvidenceAndKeepersPanelProps> = (
                 setSelectedTxid(e.target.value);
                 setTamperMode('NONE');
               }}
-              className="w-full min-w-0 max-w-full sm:w-auto px-3 py-2 bg-[#0B0D11] border border-[#222938] rounded font-mono text-xs text-[#F8FAFC]"
+              className="w-full min-w-0 max-w-full sm:w-auto px-3 py-2 bg-[#0B0D11] border border-[#222938] rounded text-xs text-[#F8FAFC]"
             >
               {transactions.map((tx) => (
                 <option key={tx.txid} value={tx.txid}>
@@ -573,7 +569,7 @@ export const EvidenceAndKeepersPanel: React.FC<EvidenceAndKeepersPanelProps> = (
 
         {memoInspection && (
           <div className="space-y-6">
-            <div className="flex flex-wrap items-center justify-between gap-4 p-4 bg-[#0B0D11] border border-[#222938] font-mono text-xs">
+            <div className="flex flex-wrap items-center justify-between gap-4 p-4 bg-[#0B0D11] border border-[#222938] text-xs">
               <div className="flex flex-wrap items-center gap-2">
                 <span className="text-[#94A3B8]">Codec Fault Injection:</span>
                 <button
@@ -621,7 +617,7 @@ export const EvidenceAndKeepersPanel: React.FC<EvidenceAndKeepersPanelProps> = (
               <div>
                 {memoInspection.result.valid ? (
                   <span className="text-[#10B981] font-semibold">
-                    VALID 512B ZIP-302 COMMAND · ED25519 VERIFIED
+                    Valid 512-byte ZIP-302 command · Ed25519 verified
                   </span>
                 ) : (
                   <span className="text-[#EF4444] font-semibold">
@@ -632,13 +628,13 @@ export const EvidenceAndKeepersPanel: React.FC<EvidenceAndKeepersPanelProps> = (
             </div>
 
             {!memoInspection.result.valid && (
-              <div className="p-4 bg-[#0B0D11] border border-[#EF4444] font-mono text-xs text-[#EF4444]">
+              <div className="p-4 bg-[#0B0D11] border border-[#EF4444] text-xs text-[#EF4444]">
                 Decoder Rejection Reason: {memoInspection.result.errorMessage} (
                 {memoInspection.result.errorCode})
               </div>
             )}
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 font-mono text-xs">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 text-xs">
               <div className="p-3 bg-[#0B0D11] border border-[#222938]">
                 <div className="text-[#64748B]">[0] ZIP-302 Prefix (1B)</div>
                 <div className="text-[#F59E0B] font-semibold mt-1">
@@ -663,9 +659,9 @@ export const EvidenceAndKeepersPanel: React.FC<EvidenceAndKeepersPanelProps> = (
               </div>
             </div>
 
-            <div className="p-4 bg-[#0B0D11] border border-[#222938] font-mono text-[11px] space-y-2">
+            <div className="p-4 bg-[#0B0D11] border border-[#222938] text-[11px] space-y-2">
               <div className="flex items-center justify-between text-[#64748B]">
-                <span>RAW 512-BYTE HEXADECIMAL PAYLOAD (1,024 HEX CHARS)</span>
+                <span>Raw 512-byte payload (1,024 hex characters)</span>
                 <span>Total Length: {memoInspection.rawBytes.length} Bytes</span>
               </div>
               <div className="text-[#94A3B8] break-all leading-relaxed max-h-36 overflow-y-auto">
@@ -682,9 +678,7 @@ export const EvidenceAndKeepersPanel: React.FC<EvidenceAndKeepersPanelProps> = (
       <section className="border border-[#222938] bg-[#141820] p-6 lg:p-8 space-y-6">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#222938] pb-5">
           <div className="space-y-1">
-            <div className="text-xs font-mono text-[#10B981]">
-              BROWSER SIMULATION CHECKS · NATIVE TESTNET ACCEPTANCE RECORDED
-            </div>
+            
             <h2 className="text-xl font-bold text-[#F8FAFC]">
               Browser Simulation Checks ({testResults.filter((r) => r.passed).length}/
               {testResults.length} Passing)
@@ -700,7 +694,7 @@ export const EvidenceAndKeepersPanel: React.FC<EvidenceAndKeepersPanelProps> = (
           </button>
         </div>
 
-        <div className="divide-y divide-[#1E2430] font-mono text-xs">
+        <div className="divide-y divide-[#1E2430] text-xs">
           {testResults.map((test) => (
             <div
               key={test.id}

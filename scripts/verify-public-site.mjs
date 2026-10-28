@@ -76,7 +76,7 @@ try {
   if (!/type=["']module["']/.test(app) || !/id=["']root["']/.test(app)) fail('app/index.html is not the built React entry.');
   const assetNames = await readdir(resolve(root, 'app/assets'));
   const appJavaScript = (await Promise.all(assetNames.filter(name => name.endsWith('.js')).map(name => readFile(resolve(root, 'app/assets', name), 'utf8')))).join('\n');
-  for (const requiredCopy of ['Create an Encrypted Safety Handoff', 'NATIVE TESTNET ACCEPTANCE RECORDED', 'Sign Local Memo & Simulate Registration']) {
+  for (const requiredCopy of ['Create an Encrypted Safety Handoff', 'Replay the real testnet run', 'Sign Local Memo & Simulate Registration']) {
     if (!appJavaScript.includes(requiredCopy)) fail(`Built application is missing release copy: ${requiredCopy}`);
   }
   for (const staleCopy of ['LIVE ACCEPTANCE PENDING', 'LIVE SEND/SCAN GATE PENDING', 'Broadcast Registration']) {

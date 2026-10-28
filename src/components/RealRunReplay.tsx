@@ -76,13 +76,13 @@ export const RealRunReplay: React.FC = () => {
     <section className="border border-[#222938] bg-[#0B0D11]" aria-labelledby="replay-title">
       <div className="flex flex-wrap items-center justify-between gap-2 border-b border-[#222938] px-4 py-4">
         <h2 id="replay-title" className="text-sm font-semibold text-[#F8FAFC]">Replay the real testnet run</h2>
-        <span className="border border-[#F59E0B]/50 px-2 py-0.5 text-[10px] font-mono tracking-wider text-[#F59E0B]">
-          RECORDED REAL RUN · NOT LIVE
+        <span className="border border-[#3a3b3e] rounded px-2 py-0.5 text-xs text-[#a3a39e]">
+          Recorded real run · not live
         </span>
       </div>
 
       <div className="space-y-3 px-4 py-4" aria-live="polite">
-        <div className="text-[11px] font-mono text-[#64748B]">STEP {index + 1} OF {STEPS.length}</div>
+        <div className="text-xs text-[#a3a39e]">Step {index + 1} of {STEPS.length}</div>
         <h3 className="text-base font-semibold text-[#F8FAFC]">{step.title}</h3>
         <p className="max-w-2xl text-xs leading-relaxed text-[#AEB8C8]">{step.body}</p>
         {step.tx && (
