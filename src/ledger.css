@@ -296,3 +296,88 @@ body, .canary-app { font-family: var(--font-sans); font-size: 15px; line-height:
   .canary-app .scene-keeper-strip>span { min-width: 0; font-size: 10px; gap: 3px 5px; }
   .canary-app .scene-keeper-strip span span { font-size: 9px; letter-spacing: 0; overflow: hidden; text-overflow: ellipsis; }
 }
+
+/* ── Landing: one dark system, proof on the first screen ─────────────── */
+.canary-app .canary-opening { background: var(--ground); min-height: 0; color: var(--ink); }
+.canary-app .canary-opening-art::after { background: linear-gradient(90deg, var(--ground) 0%, #0e0f10f2 30%, #0e0f1099 48%, #0e0f1020 70%, transparent 100%); }
+.canary-app .canary-opening-art img { filter: grayscale(1) contrast(1.05) brightness(.85); }
+.canary-app .canary-opening-inner { min-height: 540px; padding-block: 72px 56px; }
+.canary-app .canary-eyebrow { font: 500 14px var(--font-sans); letter-spacing: 0; color: var(--muted); text-transform: none; }
+.canary-app .canary-eyebrow>span { background: var(--data); width: 8px; height: 8px; border-radius: 50%; }
+.canary-app .canary-opening h1 { font-weight: 600; letter-spacing: -.035em; line-height: 1.04; }
+.canary-app .canary-opening h1 em, .canary-app .handoff-story h2 em, .canary-app .canary-observatory h2 em, .canary-app .canary-native-proof h2 em { font-style: normal; font-family: var(--font-sans); font-weight: 600; letter-spacing: -.035em; }
+.canary-app .canary-opening h1 em { color: var(--data); font-size: 1em; }
+.canary-app .handoff-story h2 em, .canary-app .canary-observatory h2 em { color: var(--muted); }
+.canary-app .canary-opening-description { color: #cfcfca; font-size: 17px; line-height: 1.65; max-width: 500px; }
+.canary-app .canary-opening-description strong { color: var(--ink); font-weight: 600; }
+.canary-app .canary-opening-note { font-size: 13px; color: var(--faint); }
+.canary-app .canary-watch-link { font-size: 15px; color: var(--ink); }
+.canary-app .canary-watch-link>span { font: 500 12px var(--font-sans); color: var(--faint); }
+.canary-app .canary-opening-baseline { max-width: 1282px; border-top: 1px solid var(--line); padding: 22px 0 24px; align-items: flex-end; }
+.canary-app .proof-strip { display: flex; gap: 56px; margin: 0; flex-wrap: wrap; }
+.canary-app .proof-strip>div { display: flex; flex-direction: column-reverse; gap: 4px; }
+.canary-app .proof-strip dd { margin: 0; font: 600 34px/1 var(--font-sans); letter-spacing: -.03em; color: var(--ink); font-variant-numeric: tabular-nums; }
+.canary-app .proof-strip dt { font: 400 13px var(--font-sans); color: var(--muted); max-width: 190px; line-height: 1.35; }
+.canary-app .canary-opening-baseline>a { font-size: 14px; color: var(--ink); text-decoration: underline; text-underline-offset: 4px; }
+
+.canary-app .handoff-story, .canary-app .canary-native-proof { background: var(--surface); color: var(--ink); border-top: 1px solid var(--line); }
+.canary-app .canary-observatory { background: var(--ground); border-top: 1px solid var(--line); }
+.canary-app .canary-paper-label, .canary-app .canary-observatory .canary-eyebrow { font: 500 14px var(--font-sans); letter-spacing: 0; color: var(--muted); text-transform: none; }
+.canary-app .handoff-story h2, .canary-app .canary-observatory h2, .canary-app .canary-native-proof h2 { font-weight: 600; letter-spacing: -.035em; color: var(--ink); }
+.canary-app .handoff-story-heading>p, .canary-app .canary-observatory-top>div>p, .canary-app .native-proof-copy p { color: var(--muted); font-size: 16px; }
+.canary-app .handoff-illustration { border-bottom: 1px solid var(--line); }
+.canary-app .handoff-person-initial { font-family: var(--font-sans); font-weight: 600; border-color: #3a3b3e; color: var(--ink); }
+.canary-app .handoff-person strong { font-weight: 600; letter-spacing: -.02em; }
+.canary-app .handoff-person div>span { font-size: 13px; color: var(--muted); }
+.canary-app .handoff-connector>span { font: 400 13px var(--font-sans); color: var(--muted); }
+.canary-app .handoff-connector i { background: #3a3b3e; }
+.canary-app .handoff-connector i::after { border-color: #6b6c70; }
+.canary-app .handoff-document { background: var(--raised); border: 1px solid #3a3b3e; color: var(--ink); transform: none; box-shadow: none; border-radius: var(--radius); }
+.canary-app .handoff-document>span { color: var(--ink); }
+.canary-app .handoff-document>svg:last-child { color: var(--data); }
+.canary-app .handoff-principles>button { color: var(--ink); }
+.canary-app .handoff-step { font: 500 14px var(--font-sans); color: var(--faint); }
+.canary-app .handoff-step>svg { color: var(--muted); }
+.canary-app .handoff-principles h3 { font-weight: 600; letter-spacing: -.02em; }
+.canary-app .handoff-principles p { color: var(--muted); font-size: 15px; }
+.canary-app .handoff-principle-link { color: var(--ink); font-size: 14px; text-decoration: underline; text-underline-offset: 4px; }
+.canary-app .handoff-principles>button:hover .handoff-principle-link { color: var(--data); }
+.canary-app .handoff-story-bottom { border-top: 1px solid var(--line); }
+.canary-app .handoff-story-bottom p { color: var(--muted); font-size: 15px; }
+.canary-app .handoff-story :focus-visible, .canary-app .canary-native-proof :focus-visible { outline-color: var(--data); }
+.canary-app .canary-observatory-scene { background: var(--surface); border-color: var(--line); border-radius: var(--radius); }
+.canary-app .canary-observatory .living-vault { background: none; }
+.canary-app .canary-observatory .overview-status { border-color: var(--line); }
+.canary-app .canary-observatory .overview-status small, .canary-app .canary-observatory .scene-topline { color: var(--muted); }
+.canary-app .canary-observatory .scene-topline span:first-child { color: var(--ink); }
+.canary-app .native-proof-numbers { border-top-color: var(--line); }
+.canary-app .native-proof-numbers strong { font-weight: 600; letter-spacing: -.04em; color: var(--ink); }
+.canary-app .native-proof-numbers strong>span { color: var(--faint); }
+.canary-app .native-proof-numbers div>span { font: 400 14px var(--font-sans); color: var(--muted); }
+.canary-app .canary-paper-link { color: var(--ink); text-decoration: underline; text-underline-offset: 4px; }
+.canary-app .canary-paper-link:hover { color: var(--data); }
+.canary-app .canary-button.ink { background: var(--ink); color: var(--ground); }
+.canary-app .canary-native-proof .threat-disclosure { border-color: var(--line); color: var(--muted); }
+@media (max-width: 620px) {
+  .canary-app .proof-strip { gap: 22px 28px; }
+  .canary-app .proof-strip dd { font-size: 28px; }
+  .canary-app .canary-opening-baseline { flex-direction: column; align-items: flex-start; }
+  .canary-app .canary-opening-art img { filter: grayscale(1) brightness(.6); }
+}
+
+/* landing refinements from cold-read */
+.canary-app .canary-opening-inner { min-height: 0; padding-block: 40px 28px; }
+.canary-app .canary-opening h1 { font-size: clamp(40px, 4.2vw, 62px); margin: 18px 0 18px; }
+.canary-app .canary-opening-description { font-size: 16px; line-height: 1.6; }
+.canary-app .canary-opening-actions { margin-top: 24px; }
+.canary-app .canary-opening-note { margin-top: 12px; }
+.canary-app .canary-opening-baseline { padding-block: 16px 18px; }
+.canary-app .handoff-principles { align-items: start; }
+.canary-app .handoff-principles>button { align-self: start; }
+.canary-app .threat-disclosure summary { color: var(--ink); font: 500 15px var(--font-sans); }
+.canary-app .threat-disclosure summary span { color: var(--muted); }
+.canary-app .threat-disclosure p { color: var(--muted); }
+.canary-app .canary-observatory .living-vault { filter: grayscale(.85) contrast(1.05); }
+.canary-app .scene-keeper-strip span span, .canary-app .scene-hotspots button, .canary-app .scene-explainer p { font-size: 12px; color: var(--muted); }
+.canary-app .canary-opening-art img { object-position: 72% 30%; }
+.canary-app .canary-opening-baseline { background: linear-gradient(180deg, #0e0f1000, #0e0f10e6 40%); position: relative; max-width: none; padding-inline: 5.5%; }

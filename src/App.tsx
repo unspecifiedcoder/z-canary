@@ -413,7 +413,7 @@ export default function App() {
       </header>
       <div className={`environment-strip ${activeTab==='native'?'environment-strip--native':''}`} role="note">
         <span>{activeTab==='native'?'Authenticated local workspace':'Browser lab'}</span>
-        <p>{activeTab==='native'?'Actual state is reported by your local agent. Testnet only.':'Real local encryption · simulated chain and keeper records · synthetic evidence · no transactions sent'}</p>
+        <p>{activeTab==='native'?'Actual state is reported by your local agent. Testnet only.':'Try it safely in your browser: real encryption, simulated chain and keepers, no transactions sent. Real testnet proof is on the Evidence tab.'}</p>
         {activeTab!=='case'&&<button onClick={()=>setActiveTab('case')}>Try Maya & Noor's example ↗</button>}
         {activeTab==='case'&&<button onClick={()=>setActiveTab('demo')}>Protocol tour ↗</button>}
       </div>
