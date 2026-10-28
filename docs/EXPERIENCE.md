@@ -27,7 +27,7 @@ The real Three.js archive responds to pointer position, opens its layers, change
 
 ## Verification
 
-43 frontend tests pass, including the complete guided protocol path, fail-closed scan state, repeated reset, configurable 2-of-5 through 5-of-5 thresholds, direct judge routes, secret-free scene projection, existing cryptographic vectors, and authenticated API contracts. TypeScript and production Vite build pass. Main application JavaScript is approximately 458kB minified; the lazy Three.js scene is approximately 545kB and retains Vite's >500kB chunk warning. No FPS benchmark or formal accessibility certification is claimed.
+49 frontend tests pass, including the complete guided protocol path, fail-closed scan state, repeated reset, configurable 2-of-5 through 5-of-5 thresholds, direct judge routes, secret-free scene projection, existing cryptographic vectors, and authenticated API contracts. TypeScript and production Vite build pass. Main application JavaScript is approximately 458kB minified; the lazy Three.js scene is approximately 545kB and retains Vite's >500kB chunk warning. No FPS benchmark or formal accessibility certification is claimed.
 
 Real in-app-browser QA used the policy-aware owned loopback preview at http://127.0.0.1:4174. Viewports 1440x1000,768x1024,390x844 were inspected. Screenshots are included in [the evidence directory](evidence/experience/) and in the local outputs/experience-qa directory. Desktop/tablet/mobile overview fits without horizontal document overflow. The mobile navigation scrollbar defect discovered during QA was fixed.
 

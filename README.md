@@ -23,6 +23,7 @@
 | Understand what is real, simulated, and recorded | [Architecture](docs/ARCHITECTURE.md) |
 | Review failure cases, collusion limits, and unfinished guarantees | [Threat model](docs/THREAT-MODEL.md) |
 | Inspect the four confirmed testnet commands and exact-file recovery | [Verification record](docs/evidence/VERIFICATION.md) |
+| Re-verify the recorded memo signatures yourself | [Evidence tab](https://unspecifiedcoder.github.io/z-canary/app/#evidence): the 3 archived transport memos re-verify in your browser; the 4 protected-document commands are confirmed on-chain, but their memo bytes were not archived |
 
 <p align="center">
   <a href="https://unspecifiedcoder.github.io/z-canary/"><img src="docs/assets/canary-vault.webp" alt="Canary’s sealed reporting dossier — concept illustration" width="100%" /></a>
@@ -32,7 +33,7 @@
   <a href="https://github.com/unspecifiedcoder/z-canary/actions/workflows/verification.yml"><img alt="Verification" src="https://github.com/unspecifiedcoder/z-canary/actions/workflows/verification.yml/badge.svg" /></a>
   <img alt="Zcash testnet" src="https://img.shields.io/badge/network-Zcash_testnet-F4B728?style=flat-square&labelColor=101613" />
   <img alt="Rust tests" src="https://img.shields.io/badge/Rust_tests-66_passed-67D7AE?style=flat-square&labelColor=101613" />
-  <img alt="Frontend tests" src="https://img.shields.io/badge/frontend_tests-43_passed-67D7AE?style=flat-square&labelColor=101613" />
+  <img alt="Frontend tests" src="https://img.shields.io/badge/frontend_tests-49_passed-67D7AE?style=flat-square&labelColor=101613" />
   <img alt="Threshold" src="https://img.shields.io/badge/recovery-3_of_5-DBA04F?style=flat-square&labelColor=101613" />
   <img alt="Status" src="https://img.shields.io/badge/status-tested_prototype-8FA79E?style=flat-square&labelColor=101613" />
 </p>
@@ -55,17 +56,17 @@ A **keeper** is a service that holds one piece of the release key and checks whe
 
 **The result is a recoverable file in the recipient workflow.** Canary does not automatically email the dossier, publish a story, or decide whether Maya is safe. It responds to the check-in record.
 
-## Watch the current narrated walkthrough
+## Watch the 90-second demo
 
-[![Watch Canary's short Maya and Noor demo](docs/assets/canary-demo-poster.jpg)](https://unspecifiedcoder.github.io/z-canary/)
+**[Watch the submission demo (90 s)](https://drive.google.com/file/d/1egWEOCd8EIoyrCp-ZxAMxmOp1cu2m5QC/view?usp=sharing)** · **[Create your own Canary](https://unspecifiedcoder.github.io/z-canary/app/#create)** · **[Verify the receipts](https://unspecifiedcoder.github.io/z-canary/app/#evidence)**
 
-**[Explore the live experience](https://unspecifiedcoder.github.io/z-canary/)** · **[Watch the walkthrough](https://unspecifiedcoder.github.io/z-canary/#watch)** · **[Create your own scenario](https://unspecifiedcoder.github.io/z-canary/app/#create)**
+The demo is a recording of the live application, not a mock-up. It shows the browser lab (real local encryption, signatures and threshold recovery; simulated blocks and keeper timing) and the real Zcash testnet transactions on a block explorer. Its tracker, captions and subtitles are added in editing.
 
-> The published 3:12 film shows the earlier Maya/Noor interface. The cryptographic actions and recovery rules are unchanged, but the live **Create your own Canary** flow is now the authoritative judge experience. A replacement film can be added without changing the protocol or product flow.
+> The landing page at https://unspecifiedcoder.github.io/z-canary/ also hosts an earlier, longer walkthrough that predates the current interface. The 90-second demo above and the live **Create your own Canary** flow are the authoritative versions.
 
-In the walkthrough, Maya protects a fictional reporting file for Noor. Noor is blocked from opening it early. Maya checks in and the deadline moves. When a later check-in is missed, grace prevents an instant release. Two keeper shares are still insufficient; three shares permit the next step, but the wrong recipient key still fails. Noor's matching key recovers the original file byte for byte.
+In the demo, Maya protects a fictional reporting file for Noor. Noor is blocked from opening it early. Maya checks in and the deadline moves. When a later check-in is missed, grace prevents an instant release. Two keeper shares are still insufficient; three shares permit the next step, but the wrong recipient key still fails. Noor's matching key recovers the original file byte for byte.
 
-The browser walkthrough uses real local encryption, signatures and decryption with simulated blocks and keeper records. The recorded native Zcash testnet proof is labeled separately; the film does not present simulated actions as on-chain transactions.
+The browser walkthrough uses real local encryption, signatures and decryption with simulated blocks and keeper records. The recorded native Zcash testnet proof is labeled separately; the demo does not present simulated actions as on-chain transactions.
 
 ## What happens in each scenario?
 
@@ -338,7 +339,7 @@ z-canary/
 | Area | Result | Evidence |
 |---|---:|---|
 | Rust workspace | **66 tests passed** | [backend test log](docs/evidence/backend-tests.txt) |
-| Frontend | **43 tests passed** | [frontend test log](docs/evidence/frontend-tests.tap) |
+| Frontend | **49 tests passed** | [frontend test log](docs/evidence/frontend-tests.tap) |
 | Submitted commit | frontend, Rust, committed + regenerated Pages verification | [GitHub verification workflow](.github/workflows/verification.yml) |
 | TypeScript + Vite | **passed** | [production build log](docs/evidence/frontend-build.txt) |
 | Five-process rehearsal | **12 checks passed** | [rehearsal record](docs/evidence/five-process-rehearsal.json) |
