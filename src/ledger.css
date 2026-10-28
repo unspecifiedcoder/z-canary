@@ -73,7 +73,7 @@ body, .canary-app { font-family: var(--font-sans); font-size: 15px; line-height:
 .canary-app .canary-main .heading-meta { font: 400 13px var(--font-sans); color: var(--muted); }
 .canary-app .canary-main .heading-meta code { font-size: 12px; color: var(--ink); }
 .canary-app .canary-main .section-label { font: 500 13px var(--font-sans); letter-spacing: 0; color: var(--muted); text-transform: none; }
-.canary-app .canary-main:not(.page-welcome):not(.page-demo) .page-reveal > div > section:first-child,
+.canary-app .canary-main:not(.page-welcome):not(.page-demo):not(.page-judge):not(.page-break) .page-reveal > div > section:first-child,
 .canary-app .page-native header { border-color: var(--line); padding: 4px 0 24px; }
 
 /* ── Controls ──────────────────────────────────────────────────────── */

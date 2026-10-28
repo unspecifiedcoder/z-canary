@@ -7,7 +7,7 @@ const LivingVault = lazy(() => import('./LivingVault'));
 interface WelcomeScreenProps {
   activeVault: ContinuityVault;
   currentBlockHeight: number;
-  onNavigate: (tab: 'welcome' | 'sentinel' | 'create' | 'recipient' | 'support' | 'evidence' | 'native' | 'demo' | 'case') => void;
+  onNavigate: (tab: 'welcome' | 'sentinel' | 'create' | 'recipient' | 'support' | 'evidence' | 'native' | 'demo' | 'case' | 'break' | 'judge') => void;
   onQuickDemoStep: (step: 'inspect' | 'checkin' | 'grace' | 'expire' | 'support' | 'tests') => void;
   onToggleKeeperOnline: (keeperIndex: number) => void;
 }
@@ -24,7 +24,7 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ activeVault, curre
           <p className="canary-opening-description"><strong>Put a file in a locked box. Press “I’m okay” to keep it locked.</strong> If you stop checking in, several keepers can provide pieces of the key—but only the person you chose can open it. Check-ins travel as Zcash shielded memos, so the public chain shows only encrypted memos.</p>
           <div className="canary-opening-actions">
             <button className="canary-button primary" onClick={() => onNavigate('create')}>Create your own Canary <ArrowUpRight size={19}/></button>
-            <a className="canary-watch-link" href="#maya-noor" onClick={(event) => { event.preventDefault(); onNavigate('case'); }}><Play size={14}/> Try Maya &amp; Noor <span>guided</span></a>
+            <a className="canary-watch-link" href="#break-vault" onClick={(event) => { event.preventDefault(); onNavigate('break'); }}><Play size={14}/> Try to break the vault <span>interactive</span></a>
           </div>
           <p className="canary-opening-note">Browser lab: real local encryption · simulated blocks and keepers · no wallet needed</p>
         </div>
@@ -35,7 +35,7 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ activeVault, curre
           <div><dt>Memos you can re-verify in your browser</dt><dd>3</dd></div>
           <div><dt>Recovered byte for byte</dt><dd>136 B</dd></div>
         </dl>
-        <a href="#evidence" onClick={(event) => { event.preventDefault(); onNavigate('evidence'); }}>Inspect the evidence <ArrowRight size={14}/></a>
+        <a href="#judge" onClick={(event) => { event.preventDefault(); onNavigate('judge'); }}>Open Judge Proof <ArrowRight size={14}/></a>
       </div>
     </section>
 

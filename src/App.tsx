@@ -34,12 +34,14 @@ import { RecipientInboxScreen } from './components/RecipientInboxScreen';
 import { SupportScreen } from './components/SupportScreen';
 import { EvidenceAndKeepersPanel } from './components/EvidenceAndKeepersPanel';
 import { JudgeJourney } from './components/JudgeJourney';
+import { JudgeProof } from './components/JudgeProof';
 import NativeVaultWorkspace from './components/NativeVaultWorkspace';
 import { tabForDirectHash, tabForHash, type PublicAppTab } from './experience/routes';
 import type { ExternalWalletSubmission } from './zcash/zip321';
 
 const GuidedExperience = lazy(() => import('./components/GuidedExperience'));
 const CaseStudyDemo = lazy(() => import('./components/CaseStudyDemo'));
+const BreakVault = lazy(() => import('./components/BreakVault'));
 
 type ActiveTab = PublicAppTab;
 
@@ -410,22 +412,22 @@ export default function App() {
       <header className="canary-header">
         <button className="canary-wordmark" onClick={() => setActiveTab('welcome')} aria-label="Canary overview"><svg viewBox="0 0 34 34" aria-hidden="true"><path d="M5 25V9l12 8L29 9v16L17 17Z"/><path d="M17 5v24"/></svg><span>canary<span className="wordmark-dot">.</span></span></button>
         <nav className="canary-navigation" aria-label="Main navigation">
-          {([['welcome','Overview'],['sentinel','Vault Sentinel'],['recipient','Recipient Inbox'],['support','Shielded Support'],['evidence','Evidence & Keepers']] as const).map(([tab,label])=><button key={tab} onClick={()=>setActiveTab(tab)} aria-current={activeTab===tab?'page':undefined}>{label}</button>)}
+          {([['welcome','Overview'],['break','Break the vault'],['sentinel','Vault'],['recipient','Inbox'],['support','Support'],['evidence','Keepers'],['judge','Judge Proof']] as const).map(([tab,label])=><button key={tab} onClick={()=>setActiveTab(tab)} aria-current={activeTab===tab?'page':undefined}>{label}</button>)}
         </nav>
         <button className={`native-nav ${activeTab==='native'?'is-active':''}`} onClick={()=>setActiveTab('native')}><span className="signal-dot"/>Native testnet <span aria-hidden="true">↗</span></button>
       </header>
       <div className={`environment-strip ${activeTab==='native'?'environment-strip--native':''}`} role="note">
-        <span>{activeTab==='native'?'Authenticated local workspace':'Browser lab'}</span>
-        <p>{activeTab==='native'?'Actual state is reported by your local agent. Testnet only.':'Try it safely in your browser: real encryption, simulated chain and keepers, no transactions sent. Real testnet proof is on the Evidence tab.'}</p>
+        <span>{activeTab==='native'?'Authenticated local workspace':activeTab==='judge'?'Recorded testnet proof':'Browser lab'}</span>
+        <p>{activeTab==='native'?'Actual state is reported by your local agent. Testnet only.':activeTab==='judge'?'Inspect recorded transactions and verify archived signatures. This page does not report live keeper status.':'Try it safely in your browser: real encryption, simulated chain and keepers, no transactions sent. Open Judge Proof for the recorded testnet run.'}</p>
         {activeTab!=='case'&&<button onClick={()=>setActiveTab('case')}>Try Maya & Noor's example ↗</button>}
         {activeTab==='case'&&<button onClick={()=>setActiveTab('demo')}>Protocol tour ↗</button>}
       </div>
-      {!['native','welcome','demo','case'].includes(activeTab)&&<details className="simulation-tools">
+      {!['native','welcome','demo','case','judge','break'].includes(activeTab)&&<details className="simulation-tools">
         <summary><span>Simulation controls</span><span>#{currentBlockHeight.toLocaleString()} · {walletBalanceZatoshi.toLocaleString()} zat</span><span>Expand +</span></summary>
         <div><button onClick={()=>handleAdvanceBlocks(1)}><Pickaxe size={14}/>Mine +1 block</button><button onClick={()=>handleAdvanceBlocks(6)}>Mine +6 blocks</button><button onClick={handleJumpToGrace}>Enter grace</button><button onClick={handleJumpPastGraceToExpire}><FastForward size={14}/>Evaluate expiry</button><button onClick={handleResetDemo}><RotateCcw size={14}/>Reset harness</button><button onClick={()=>setActiveTab('create')}>New demo vault ↗</button></div>
       </details>}
 
-      <JudgeJourney
+      {!['judge','break'].includes(activeTab) && <JudgeJourney
         vault={vault}
         isCustomVault={vault.id !== initialData.vault.id && ['create','sentinel','recipient','evidence'].includes(activeTab)}
         activePage={activeTab as 'create' | 'sentinel' | 'recipient' | 'evidence'}
@@ -436,7 +438,7 @@ export default function App() {
         onReleaseBelowThreshold={handleReleaseBelowThreshold}
         onRestoreThreshold={handleRestoreThreshold}
         onReset={() => { handleResetDemo(); setActiveTab('create'); }}
-      />
+      />}
 
       {/* Toast Feedback Banner */}
       {toastMessage && (
@@ -593,6 +595,8 @@ export default function App() {
         )}
 
         {activeTab === 'native' && <NativeVaultWorkspace />}
+        {activeTab === 'judge' && <JudgeProof />}
+        {activeTab === 'break' && <Suspense fallback={<div className="scene-loading">Preparing the vault challenge…</div>}><BreakVault /></Suspense>}
         {activeTab === 'case' && <Suspense fallback={<div className="scene-loading">Preparing Maya and Noor's example…</div>}><CaseStudyDemo /></Suspense>}
         {activeTab === 'demo' && <Suspense fallback={<div className="scene-loading">Preparing the guided experience…</div>}><GuidedExperience onNative={() => setActiveTab('native')} /></Suspense>}
       </div></main>

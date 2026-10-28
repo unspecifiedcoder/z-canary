@@ -1,7 +1,8 @@
-export type PublicAppTab = 'demo' | 'case' | 'welcome' | 'sentinel' | 'create' | 'recipient' | 'support' | 'evidence' | 'native';
+export type PublicAppTab = 'demo' | 'case' | 'welcome' | 'sentinel' | 'create' | 'recipient' | 'support' | 'evidence' | 'native' | 'judge' | 'break';
 
 const directRoutes: Record<string, PublicAppTab> = {
-  '#maya-noor': 'case', '#create': 'create', '#recipient': 'recipient', '#evidence': 'evidence', '#native': 'native',
+  '#maya-noor': 'case', '#create': 'create', '#recipient': 'recipient', '#evidence': 'evidence', '#native': 'native', '#judge': 'judge',
+  '#break-vault': 'break', '#break': 'break',
 };
 
 /** Returns a page only for hashes Canary explicitly owns. Ordinary in-page anchors are ignored. */

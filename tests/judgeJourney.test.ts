@@ -8,6 +8,8 @@ test('public judge links open the intended self-service and proof surfaces', () 
   assert.equal(tabForHash('#recipient'), 'recipient');
   assert.equal(tabForHash('#evidence'), 'evidence');
   assert.equal(tabForHash('#native'), 'native');
+  assert.equal(tabForHash('#judge'), 'judge');
+  assert.equal(tabForHash('#break-vault'), 'break');
 });
 
 test('unknown or empty hashes fail safely to the product overview', () => {
