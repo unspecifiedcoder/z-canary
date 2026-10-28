@@ -21,7 +21,7 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ activeVault, curre
         <div className="canary-opening-copy">
           <p className="canary-eyebrow"><span/>A SAFETY HANDOFF FOR WHISTLEBLOWERS &amp; JOURNALISTS</p>
           <h1 id="opening-title">Evidence should not leak.<br/><em>Or disappear with you.</em></h1>
-          <p className="canary-opening-description"><strong>Put a file in a locked box. Press “I’m okay” to keep it locked.</strong> If you stop checking in, several keepers can provide pieces of the key—but only the person you chose can open it. Check-ins travel as Zcash shielded memos, so the public chain reveals nothing about who is checking in.</p>
+          <p className="canary-opening-description"><strong>Put a file in a locked box. Press “I’m okay” to keep it locked.</strong> If you stop checking in, several keepers can provide pieces of the key—but only the person you chose can open it. Check-ins travel as Zcash shielded memos, so the public chain shows only encrypted memos.</p>
           <div className="canary-opening-actions">
             <button className="canary-button primary" onClick={() => onNavigate('create')}>Create your own Canary <ArrowUpRight size={19}/></button>
             <a className="canary-watch-link" href="#maya-noor" onClick={(event) => { event.preventDefault(); onNavigate('case'); }}><Play size={14}/> Try Maya &amp; Noor <span>guided</span></a>

@@ -290,3 +290,9 @@ body, .canary-app { font-family: var(--font-sans); font-size: 15px; line-height:
 @media (max-width: 900px) {
   .canary-app .canary-navigation { -webkit-mask-image: linear-gradient(to right, #000 88%, transparent); mask-image: linear-gradient(to right, #000 88%, transparent); padding-right: 24px; }
 }
+
+@media (max-width: 620px) {
+  .canary-app .scene-keeper-strip { gap: 4px; padding-inline: 8px; }
+  .canary-app .scene-keeper-strip>span { min-width: 0; font-size: 10px; gap: 3px 5px; }
+  .canary-app .scene-keeper-strip span span { font-size: 9px; letter-spacing: 0; overflow: hidden; text-overflow: ellipsis; }
+}
