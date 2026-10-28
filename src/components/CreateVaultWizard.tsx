@@ -521,6 +521,11 @@ export const CreateVaultWizard: React.FC<CreateVaultWizardProps> = ({
             </span>
           </label>
 
+          {!fingerprintVerified && (
+            <p id="recipient-step-hint" className="text-xs text-[#EFAD45]">
+              Tick the fingerprint box above to continue. In this demo the recipient key was generated in your browser, so you can confirm it yourself.
+            </p>
+          )}
           <div className="flex justify-between pt-2">
             <button
               onClick={() => setStep(1)}
@@ -530,6 +535,7 @@ export const CreateVaultWizard: React.FC<CreateVaultWizardProps> = ({
             </button>
             <button
               disabled={!fingerprintVerified || displayedFingerprint.startsWith('INVALID')}
+              aria-describedby={!fingerprintVerified ? 'recipient-step-hint' : undefined}
               onClick={() => setStep(3)}
               className="px-5 py-2.5 bg-[#F59E0B] disabled:opacity-40 hover:bg-[#D97706] text-[#0B0D11] font-semibold text-sm rounded transition-colors flex items-center gap-2 cursor-pointer"
             >
