@@ -36,7 +36,7 @@ import { EvidenceAndKeepersPanel } from './components/EvidenceAndKeepersPanel';
 import { JudgeJourney } from './components/JudgeJourney';
 import { JudgeProof } from './components/JudgeProof';
 import NativeVaultWorkspace from './components/NativeVaultWorkspace';
-import { tabForDirectHash, tabForHash, type PublicAppTab } from './experience/routes';
+import { hashForTab, tabForDirectHash, tabForHash, type PublicAppTab } from './experience/routes';
 import type { ExternalWalletSubmission } from './zcash/zip321';
 
 const GuidedExperience = lazy(() => import('./components/GuidedExperience'));
@@ -54,6 +54,9 @@ export default function App() {
   const mainRef = useRef<HTMLElement>(null);
   const didNavigate = useRef(false);
   useEffect(() => {
+    if (tabForDirectHash(window.location.hash) !== activeTab) {
+      window.history.replaceState(null, '', hashForTab(activeTab));
+    }
     if (didNavigate.current) { mainRef.current?.focus({ preventScroll: true }); window.scrollTo({ top: 0, behavior: 'instant' }); }
     didNavigate.current = true;
   }, [activeTab]);

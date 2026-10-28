@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { tabForDirectHash, tabForHash } from '../src/experience/routes';
+import { hashForTab, tabForDirectHash, tabForHash, type PublicAppTab } from '../src/experience/routes';
 
 test('public judge links open the intended self-service and proof surfaces', () => {
   assert.equal(tabForHash('#create'), 'create');
@@ -10,6 +10,9 @@ test('public judge links open the intended self-service and proof surfaces', () 
   assert.equal(tabForHash('#native'), 'native');
   assert.equal(tabForHash('#judge'), 'judge');
   assert.equal(tabForHash('#break-vault'), 'break');
+  for (const tab of ['welcome','sentinel','support','demo','case','create','recipient','evidence','native','judge','break'] as PublicAppTab[]) {
+    assert.equal(tabForHash(hashForTab(tab)), tab, `shared URL must reopen ${tab}`);
+  }
 });
 
 test('unknown or empty hashes fail safely to the product overview', () => {

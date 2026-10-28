@@ -1,4 +1,4 @@
-import{P as e,_ as t,b as n,d as r,f as i,g as a,h as o,l as s,m as c,p as l,s as u,u as d,v as f,x as p,y as m}from"./index-BIeXmedo.js";var h=e(`x`,[[`path`,{d:`M18 6 6 18`,key:`1bl5f8`}],[`path`,{d:`m6 6 12 12`,key:`d8bk6v`}]]),g=`RIVERGATE REPORTING NOTES — FICTIONAL DEMO
+import{P as e,_ as t,b as n,d as r,f as i,g as a,h as o,l as s,m as c,p as l,s as u,u as d,v as f,x as p,y as m}from"./index-bXcymB0l.js";var h=e(`x`,[[`path`,{d:`M18 6 6 18`,key:`1bl5f8`}],[`path`,{d:`m6 6 12 12`,key:`d8bk6v`}]]),g=`RIVERGATE REPORTING NOTES — FICTIONAL DEMO
 Owner: Maya, reporter
 Designated recipient: Noor, editor
 
