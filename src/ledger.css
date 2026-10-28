@@ -1,0 +1,292 @@
+/* Canary — "achromatic ledger" layer.
+   Direction (Taste Skill, app sheet "Achromatic ledger", adapted to dark; Impeccable Operate mode):
+   - The chrome holds no colour. One hue, canary yellow, marks the main data element: the check-in deadline.
+   - Green/red appear only as state signals (valid / invalid).
+   - Two faces: IBM Plex Sans for the interface, IBM Plex Mono only for data (hashes, txids, block numbers).
+   - Flat surfaces, 1px rules, 6–8px radii, no gradients, no glow, no eyebrow labels, nothing under 12px. */
+
+:root {
+  --font-display: 'IBM Plex Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-sans: 'IBM Plex Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, 'Cascadia Mono', Consolas, monospace;
+  --ground: #0e0f10;
+  --surface: #141516;
+  --raised: #1a1b1d;
+  --line: #2a2b2e;
+  --rule: #1f2022;
+  --ink: #ececea;
+  --muted: #a3a39e;
+  --faint: #8c8c87;
+  --data: #f4b728;           /* the one hue: the deadline / the main data element */
+  --ok: #62c48e;             /* state signal only */
+  --bad: #f07a6e;            /* state signal only */
+  --cyan: #ececea;           /* legacy accent variable → neutral ink so chrome carries no colour */
+  --amber: #f4b728;
+  --radius: 8px;
+  --radius-control: 6px;
+}
+
+html, body, .canary-app { background: var(--ground); color: var(--ink); }
+body, .canary-app { font-family: var(--font-sans); font-size: 15px; line-height: 1.55; font-feature-settings: 'tnum' 1; }
+.canary-app ::selection { background: #f4b72833; color: var(--ink); }
+.canary-app :focus-visible { outline: 2px solid var(--data); outline-offset: 2px; }
+.canary-app { scrollbar-color: #3a3b3e var(--ground); }
+.canary-app code, .canary-app kbd, .canary-app .font-mono { font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
+
+/* ── Shell ─────────────────────────────────────────────────────────── */
+.canary-app .canary-header { min-height: 64px; background: var(--ground); border-bottom: 1px solid var(--line); gap: 24px; }
+.canary-app .canary-wordmark span { font-family: var(--font-sans); font-size: 22px; font-weight: 600; letter-spacing: -.02em; color: var(--ink); }
+.canary-app .canary-wordmark .wordmark-dot { color: var(--data); }
+.canary-app .canary-wordmark svg { stroke: var(--ink); width: 26px; height: 26px; }
+.canary-app .canary-navigation { gap: 4px; }
+.canary-app .canary-navigation button { font: 500 14px var(--font-sans); color: var(--muted); padding: 0 12px; min-height: 64px; letter-spacing: 0; }
+.canary-app .canary-navigation button:hover { color: var(--ink); }
+.canary-app .canary-navigation button[aria-current] { color: var(--ink); }
+.canary-app .canary-navigation button:after { height: 2px; background: var(--ink); }
+.canary-app .native-nav { font: 500 13px var(--font-sans); letter-spacing: 0; color: var(--ink); border: 1px solid #3a3b3e; border-radius: var(--radius-control); padding: 8px 14px; }
+.canary-app .native-nav:hover, .canary-app .native-nav.is-active { background: var(--raised); border-color: #55565a; }
+.canary-app .signal-dot { background: var(--ok); }
+
+.canary-app .environment-strip { background: var(--surface); border-bottom: 1px solid var(--line); color: var(--muted); font: 400 13px/1.5 var(--font-sans); letter-spacing: 0; min-height: 40px; gap: 14px; }
+.canary-app .environment-strip > span { font: 600 13px var(--font-sans); letter-spacing: 0; color: var(--ink); text-transform: none; }
+.canary-app .environment-strip--native > span { color: var(--ink); }
+.canary-app .environment-strip button { font: 500 13px var(--font-sans); color: var(--ink); text-decoration: underline; text-underline-offset: 3px; text-decoration-color: #55565a; }
+
+.canary-app .simulation-tools { font: 400 13px var(--font-sans); border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface); }
+.canary-app .simulation-tools summary { color: var(--muted); font: 500 13px var(--font-sans); letter-spacing: 0; }
+.canary-app .simulation-tools button { font: 500 13px var(--font-sans); border-radius: var(--radius-control); }
+
+.canary-app .canary-main { padding-top: 32px; }
+.canary-app .canary-footer { border-top: 1px solid var(--line); }
+.canary-app .footer-wordmark { font: 600 28px var(--font-sans); letter-spacing: -.02em; color: var(--ink); }
+
+/* ── Type scale (app screens: 28 / 20 / 15 / 13) ───────────────────── */
+.canary-app .canary-main:not(.page-welcome):not(.page-demo) h1 { font: 600 28px/1.2 var(--font-sans); letter-spacing: -.02em; text-wrap: balance; }
+.canary-app .canary-main:not(.page-welcome):not(.page-demo) h2 { font: 600 18px/1.3 var(--font-sans); letter-spacing: -.01em; }
+.canary-app .canary-main h3 { font: 600 15px/1.4 var(--font-sans); }
+.canary-app .canary-main p { text-wrap: pretty; }
+.canary-app .canary-main :where([class*="text-[9px]"], [class*="text-[10px]"], [class*="text-[11px]"]) { font-size: 12px !important; }
+.canary-app .canary-main .text-xs { font-size: 13px; line-height: 1.55; }
+.canary-app .canary-main .text-sm { font-size: 14px; }
+.canary-app .canary-main .product-heading { margin-bottom: 24px; align-items: flex-end; }
+.canary-app .canary-main .product-heading p { font-size: 14px; color: var(--muted); margin-top: 6px; }
+.canary-app .canary-main .heading-meta { font: 400 13px var(--font-sans); color: var(--muted); }
+.canary-app .canary-main .heading-meta code { font-size: 12px; color: var(--ink); }
+.canary-app .canary-main .section-label { font: 500 13px var(--font-sans); letter-spacing: 0; color: var(--muted); text-transform: none; }
+.canary-app .canary-main:not(.page-welcome):not(.page-demo) .page-reveal > div > section:first-child,
+.canary-app .page-native header { border-color: var(--line); padding: 4px 0 24px; }
+
+/* ── Controls ──────────────────────────────────────────────────────── */
+.canary-app .canary-button { font: 500 14px var(--font-sans); letter-spacing: 0; min-height: 40px; padding: 9px 16px; border-radius: var(--radius-control); gap: 10px; justify-content: center; }
+.canary-app .canary-button.primary { background: var(--ink); color: #0e0f10; }
+.canary-app .canary-button.primary:hover:not(:disabled) { background: #fff; }
+.canary-app .canary-button.primary:disabled { background: #2a2b2e; color: var(--faint); }
+.canary-app .canary-button.outline { border: 1px solid #3a3b3e; color: var(--ink); }
+.canary-app .canary-button.outline:hover { background: var(--raised); border-color: #55565a; }
+.canary-app .canary-main :where(button, input, select, textarea) { border-radius: var(--radius-control); }
+.canary-app .canary-main :where(input, select, textarea) { background: #101112; border: 1px solid #36373a; color: var(--ink); font: 400 14px var(--font-sans); }
+.canary-app .canary-main input[type=checkbox] { accent-color: var(--ink); width: 16px; height: 16px; }
+
+/* ── Tailwind palette remap: neutral, flat ─────────────────────────── */
+.canary-app .canary-main :where([class*="bg-[#141820]"], [class*="bg-[#111923]"]) { background-color: var(--surface); }
+.canary-app .canary-main :where([class*="bg-[#0B0D11]"]) { background-color: #101112; }
+.canary-app .canary-main :where([class*="border-[#222938]"], [class*="border-[#293548]"], [class*="border-[#263244]"], [class*="border-[#2A3343]"], [class*="border-[#1E2430]"]) { border-color: var(--line); }
+.canary-app .canary-main :where([class*="text-[#64748B]"], [class*="text-[#718096]"]) { color: var(--faint); }
+.canary-app .canary-main :where([class*="text-[#94A3B8]"], [class*="text-[#AAB6C7]"], [class*="text-[#AEB8C8]"]) { color: var(--muted); }
+.canary-app .canary-main :where([class*="text-[#E2E8F0]"], [class*="text-[#F8FAFC]"], [class*="text-[#CBD5E1]"]) { color: var(--ink); }
+.canary-app .canary-main :where([class*="text-[#F59E0B]"], [class*="text-amber-400"], [class*="text-[#EFAD45]"]) { color: #e4e4e0; }
+.canary-app .canary-main :where([class*="bg-[#F59E0B]"], [class*="bg-amber-500"], [class*="bg-sky-300"]) { background-color: var(--ink); color: #0e0f10; }
+.canary-app .canary-main :where([class*="text-[#10B981]"], [class*="text-sky-300"], [class*="text-[#38BDF8]"]) { color: var(--ok); }
+.canary-app .canary-main :where([class*="rounded"]) { border-radius: var(--radius); }
+
+/* ── Deadline ruler (the one element only Canary has) ──────────────── */
+.canary-app .sentinel-instrument { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: 56px; align-items: start; padding: 28px 0 32px; border-block: 1px solid var(--line); }
+.canary-app .deadline-figure { margin: 0 0 22px; display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap; }
+.canary-app .deadline-figure strong { font: 600 64px/1 var(--font-sans); letter-spacing: -.03em; color: var(--data); font-variant-numeric: tabular-nums; }
+.canary-app .deadline-figure span { font-size: 15px; color: var(--ink); }
+.canary-app .deadline-figure small { display: block; width: 100%; font-size: 13px; color: var(--muted); }
+.canary-app .ruler-track { position: relative; height: 12px; border-radius: 3px; background: #1d1e20; overflow: hidden; border: 1px solid var(--line); }
+.canary-app .ruler-elapsed { position: absolute; inset: 0 auto 0 0; background: #4a4b4f; }
+.canary-app .ruler-grace { position: absolute; top: 0; bottom: 0; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8'%3E%3Cpath d='M-1 1l2-2M0 8l8-8M7 9l2-2' stroke='%237d7d79' stroke-width='1'/%3E%3C/svg%3E"); border-left: 1px solid #55565a; }
+.canary-app .ruler-now { position: absolute; top: -3px; bottom: -3px; width: 3px; background: var(--data); transform: translateX(-1px); border-radius: 1px; }
+.canary-app .ruler-wrap { position: relative; padding-top: 4px; }
+.canary-app .ruler-ticks { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; margin: 14px 0 0; padding: 0; }
+.canary-app .ruler-ticks div { border-top: 1px solid var(--line); padding-top: 8px; }
+.canary-app .ruler-ticks dt { font-size: 12px; color: var(--muted); }
+.canary-app .ruler-ticks dd { margin: 2px 0 0; font: 500 14px var(--font-mono); font-variant-numeric: tabular-nums; color: var(--ink); }
+.canary-app .ruler-ticks .is-now dd { color: var(--data); }
+.canary-app .sentinel-status h2 { font: 600 22px/1.25 var(--font-sans); margin: 0 0 8px; letter-spacing: -.01em; }
+.canary-app .sentinel-status p { font-size: 14px; line-height: 1.6; color: var(--muted); max-width: 52ch; }
+.canary-app .sentinel-status .fine-print { font-size: 12px; color: var(--faint); margin-top: 10px; }
+.canary-app .sentinel-meta { display: flex; gap: 28px; margin: 18px 0 20px; padding: 0; }
+.canary-app .sentinel-meta div { display: block; }
+.canary-app .sentinel-meta dt { font-size: 12px; color: var(--muted); }
+.canary-app .sentinel-meta dd { margin: 2px 0 0; font: 500 14px var(--font-mono); font-variant-numeric: tabular-nums; }
+.canary-app .sentinel-custom { font-size: 13px; color: var(--muted); }
+
+@media (max-width: 900px) {
+  .canary-app .sentinel-instrument { grid-template-columns: 1fr; gap: 28px; }
+  .canary-app .deadline-figure strong { font-size: 48px; }
+  .canary-app .ruler-ticks { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+/* ── Pass 2: guided walkthrough, recipient, evidence summary ───────── */
+.canary-app .simulation-tools summary span:first-child { color: var(--ink); font-family: var(--font-sans); font-weight: 600; letter-spacing: 0; text-transform: none; }
+.canary-app .simulation-tools summary span:last-child { color: var(--muted); }
+.canary-app .sentinel-meta, .canary-app .sentinel-meta * { letter-spacing: 0; text-transform: none; }
+.canary-app .sentinel-meta dt { font-family: var(--font-sans); }
+.canary-app .uppercase { text-transform: none; }
+.canary-app :where([class*="tracking-"]) { letter-spacing: 0; }
+
+.canary-app .judge-journey { max-width: none; margin: 16px 4.2% 0; padding: 16px 20px; border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface); box-shadow: none; }
+.canary-app .judge-journey::before, .canary-app .judge-journey::after { display: none; }
+.canary-app .judge-journey__intro strong { font: 600 16px/1.35 var(--font-sans); letter-spacing: 0; color: var(--ink); }
+.canary-app .judge-journey__intro small { font: 400 13px var(--font-sans); letter-spacing: 0; color: var(--muted); text-transform: none; }
+.canary-app .judge-journey__steps li { font: 500 13px var(--font-sans); letter-spacing: 0; text-transform: none; color: var(--faint); border-top: 2px solid var(--line); padding-top: 10px; }
+.canary-app .judge-journey__steps li.done { color: var(--muted); border-top-color: #55565a; }
+.canary-app .judge-journey__steps li.current { color: var(--ink); border-top-color: var(--data); }
+.canary-app .judge-journey__steps li svg { color: currentColor; }
+.canary-app .judge-journey__action p { font: 400 14px/1.55 var(--font-sans); color: var(--muted); }
+.canary-app .judge-journey__action button { font: 500 14px var(--font-sans); letter-spacing: 0; text-transform: none; min-height: 40px; padding: 9px 16px; border-radius: var(--radius-control); background: var(--ink); color: #0e0f10; border: 1px solid transparent; }
+.canary-app .judge-journey__action button:hover { background: #fff; }
+.canary-app .judge-journey__action button.quiet, .canary-app .judge-journey__action button:not(:first-of-type) { background: transparent; color: var(--ink); border-color: #3a3b3e; }
+.canary-app .judge-journey__action button.quiet:hover { background: var(--raised); }
+
+.canary-app .recipient-state { display: inline-flex; align-items: center; gap: 8px; font: 500 13px var(--font-sans); letter-spacing: 0; text-transform: none; color: var(--ink); background: var(--surface); border: 1px solid var(--line); border-radius: 999px; padding: 6px 12px; }
+.canary-app .recovery-layout { gap: 40px; }
+.canary-app .recovery-artifact { background: var(--surface); border: 1px solid var(--line); border-top: 1px solid var(--line); border-radius: var(--radius); padding: 28px; text-align: left; }
+.canary-app .recovery-artifact .artifact-symbol { margin: 0 0 18px; color: var(--muted); }
+.canary-app .recovery-artifact .section-label { font: 500 13px var(--font-sans); letter-spacing: 0; color: var(--muted); }
+.canary-app .recovery-artifact h2 { font: 600 20px/1.3 var(--font-sans); margin: 4px 0 10px; }
+.canary-app .recovery-artifact p { font-size: 14px; line-height: 1.6; color: var(--muted); max-width: 46ch; margin: 0; }
+.canary-app .recovery-artifact .artifact-fingerprint { border-top: 1px solid var(--line); margin-top: 22px; padding-top: 14px; }
+.canary-app .recovery-artifact .artifact-fingerprint span { font: 500 12px var(--font-sans); letter-spacing: 0; text-transform: none; color: var(--muted); }
+.canary-app .recovery-artifact .artifact-fingerprint code { font: 400 13px var(--font-mono); color: var(--ink); }
+.canary-app .recovery-count strong { font: 600 56px/1 var(--font-sans); letter-spacing: -.03em; color: var(--ink); }
+.canary-app .recovery-count strong span { color: var(--faint); font-weight: 400; }
+.canary-app .recovery-count div { font: 500 14px var(--font-sans); letter-spacing: 0; color: var(--ink); text-transform: none; }
+.canary-app .recovery-count div span { font: 400 13px var(--font-sans); color: var(--muted); letter-spacing: 0; }
+.canary-app .share-stations li { border-color: var(--line); }
+.canary-app .share-stations li > span { font: 400 13px var(--font-mono); color: var(--faint); }
+.canary-app .share-stations li strong { font: 500 15px var(--font-sans); letter-spacing: 0; }
+.canary-app .share-stations li small { font: 400 13px var(--font-sans); letter-spacing: 0; color: var(--muted); }
+.canary-app .share-stations li.is-received svg { color: var(--ok); }
+.canary-app .recipient-key-label { font: 500 13px var(--font-sans); letter-spacing: 0; color: var(--ink); }
+.canary-app .recovered-file { border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface); }
+.canary-app .recovered-file h2 { font: 600 20px var(--font-sans); }
+.canary-app .recovered-file code { font: 400 13px var(--font-mono); color: var(--muted); }
+.canary-app .canary-footer p, .canary-app .canary-footer p span { font: 400 13px var(--font-sans); letter-spacing: 0; color: var(--muted); }
+
+/* ── Pass 3: neutral selection state, file input, tabs, small fixes ── */
+.canary-app .canary-main :where([class*="border-[#F59E0B]"], [class*="border-amber-"], [class*="border-[#10B981]"]) { border-color: #34353a; }
+.canary-app .canary-main :where([class*="focus:border-[#F59E0B]"]):focus { border-color: var(--ink); }
+.canary-app .canary-main :where(button, label, summary, legend) { letter-spacing: 0; }
+.canary-app input[type=file]::file-selector-button { font: 500 13px var(--font-sans); color: var(--ink); background: var(--raised); border: 1px solid #3a3b3e; border-radius: var(--radius-control); padding: 7px 12px; margin-right: 12px; cursor: pointer; }
+.canary-app input[type=file] { min-height: auto; border: 0; background: transparent; color: var(--muted); font: 400 13px var(--font-sans); }
+.canary-app .canary-main label[class*="border-dashed"], .canary-app .canary-main label.border-dashed { border-color: #3a3b3e; border-radius: var(--radius); background: var(--surface); }
+.canary-app .canary-main button[class*="whitespace"], .canary-app .canary-main .product-heading button { white-space: nowrap; }
+.canary-app .canary-main [aria-label="Creation progress"] > * { font: 500 14px var(--font-sans); letter-spacing: 0; }
+.canary-app .share-stations li:not(.is-received) strong { color: var(--muted); }
+.canary-app .share-stations li.is-received strong { color: var(--ink); }
+.canary-app .recovery-layout, .canary-app .recipient-workspace section { border-top: 0; }
+.canary-app .artifact-symbol { color: var(--muted); }
+.canary-app .artifact-symbol::before, .canary-app .artifact-symbol::after { border-color: var(--line); background: var(--raised); box-shadow: none; }
+.canary-app .artifact-symbol span { background: var(--raised); border: 1px solid var(--line); color: var(--ink); }
+.canary-app .canary-footer a, .canary-app .canary-footer button { color: var(--ink); text-decoration: underline; text-underline-offset: 3px; text-decoration-color: #55565a; font: 500 13px var(--font-sans); }
+.canary-app .canary-main a { text-underline-offset: 3px; }
+.canary-app .canary-main :where(h1, h2, h3, h4, strong) { font-family: var(--font-sans); }
+@media (max-width: 900px) {
+  .canary-app .canary-header { min-height: 56px; }
+  .canary-app .canary-navigation button { min-height: 44px; }
+  .canary-app .canary-main { padding: 20px 16px 0; }
+  .canary-app .judge-journey { margin: 12px 16px 0; }
+  .canary-app .judge-journey__steps { grid-template-columns: repeat(4, 1fr); row-gap: 8px; }
+}
+
+/* ── Pass 4: nothing under 12px (auto-derived from index.css) ── */
+.canary-app .artifact-fingerprint code,
+.canary-app .artifact-fingerprint span,
+.canary-app .backup-actions p,
+.canary-app .canary-eyebrow,
+.canary-app .canary-footer button,
+.canary-app .canary-footer p,
+.canary-app .canary-footer p span,
+.canary-app .canary-main pre,
+.canary-app .canary-navigation button,
+.canary-app .canary-object-caption small,
+.canary-app .canary-object-caption>span,
+.canary-app .canary-observatory .overview-status .section-label,
+.canary-app .canary-observatory .overview-status small,
+.canary-app .canary-opening-baseline,
+.canary-app .canary-opening-baseline>a,
+.canary-app .canary-opening-baseline>span,
+.canary-app .canary-opening-note,
+.canary-app .canary-paper-label,
+.canary-app .canary-watch-link,
+.canary-app .canary-watch-link>span,
+.canary-app .chapter-number span,
+.canary-app .chapter-progress>div,
+.canary-app .chapter-progress>div>span,
+.canary-app .deadline-dial span,
+.canary-app .demo-readouts small,
+.canary-app .demo-readouts span,
+.canary-app .demo-transport p,
+.canary-app .environment-strip,
+.canary-app .environment-strip button,
+.canary-app .environment-strip p,
+.canary-app .environment-strip>span,
+.canary-app .fallback-layers>div,
+.canary-app .handoff-connector>span,
+.canary-app .handoff-document>span,
+.canary-app .handoff-person div>span,
+.canary-app .handoff-step,
+.canary-app .identity-backup label,
+.canary-app .keeper-switches small,
+.canary-app .keeper-switches>button,
+.canary-app .native-command-cost p,
+.canary-app .native-nav,
+.canary-app .native-payment>code,
+.canary-app .native-proof-numbers div>span,
+.canary-app .observatory-caption .text-link,
+.canary-app .observatory-caption p,
+.canary-app .observatory-heading>span:last-child,
+.canary-app .opening-caption,
+.canary-app .opening-caption span,
+.canary-app .opening-kicker,
+.canary-app .overview-status small,
+.canary-app .page-eyebrow,
+.canary-app .protocol-rows p,
+.canary-app .protocol-rows>button>span,
+.canary-app .receipt-row,
+.canary-app .recipient-key-label,
+.canary-app .recipient-state,
+.canary-app .recovered-file code,
+.canary-app .recovery-count>div,
+.canary-app .recovery-count>div span,
+.canary-app .recovery-error,
+.canary-app .recovery-success,
+.canary-app .recovery-test-controls,
+.canary-app .recovery-test-controls .canary-button,
+.canary-app .scene-controls button,
+.canary-app .scene-coordinate,
+.canary-app .scene-explainer p,
+.canary-app .scene-fallback span,
+.canary-app .scene-hotspots button,
+.canary-app .scene-hotspots button span,
+.canary-app .scene-keeper-strip span span,
+.canary-app .scene-keeper-strip>span,
+.canary-app .scene-topline,
+.canary-app .section-label,
+.canary-app .sentinel-custom .canary-button,
+.canary-app .sentinel-custom label,
+.canary-app .sentinel-meta,
+.canary-app .share-stations li>span,
+.canary-app .share-stations small,
+.canary-app .simulation-tools,
+.canary-app .simulation-tools summary { font-size: 12px !important; letter-spacing: 0 !important; }
+.canary-app svg text { font-size: max(11px, 1em); }
+.canary-app .recovery-layout { align-items: start; }
+.canary-app .canary-button:disabled, .canary-app .canary-main button:disabled { color: #9a9a95; }
+@media (max-width: 900px) {
+  .canary-app .canary-navigation { -webkit-mask-image: linear-gradient(to right, #000 88%, transparent); mask-image: linear-gradient(to right, #000 88%, transparent); padding-right: 24px; }
+}

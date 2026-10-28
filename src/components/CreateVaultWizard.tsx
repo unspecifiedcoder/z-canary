@@ -351,7 +351,7 @@ export const CreateVaultWizard: React.FC<CreateVaultWizardProps> = ({
       </div>
 
       {/* Stepper Header */}
-      <div aria-label="Creation progress" className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs font-mono">
+      <div aria-label="Creation progress" className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs">
         {[
           { num: 1, label: '01. Choose File' },
           { num: 2, label: '02. Choose Recipient' },
@@ -378,7 +378,7 @@ export const CreateVaultWizard: React.FC<CreateVaultWizardProps> = ({
       {step === 1 && (
         <div className="border border-[#222938] bg-[#141820] p-6 lg:p-8 space-y-6">
           <div className="space-y-2">
-            <label htmlFor="vault-reference" className="block text-xs font-mono text-[#94A3B8]">
+            <label htmlFor="vault-reference" className="block text-xs text-[#94A3B8]">
               Vault Reference Label (Local Only — Never Included in Manifest or Chain Memo)
             </label>
             <input
@@ -391,7 +391,7 @@ export const CreateVaultWizard: React.FC<CreateVaultWizardProps> = ({
           </div>
 
           <div className="space-y-2">
-            <label id="dossier-document-label" className="block text-xs font-mono text-[#94A3B8]">
+            <label id="dossier-document-label" className="block text-xs text-[#94A3B8]">
               Dossier Document (Max 10 MiB · Encrypted Locally Before Any Network Activity)
             </label>
             <label onDragOver={e => e.preventDefault()} onDrop={e => { e.preventDefault(); void loadFile(e.dataTransfer.files[0]); }} className="flex flex-col items-center justify-center border border-dashed border-[#2E3748] hover:border-[#F59E0B] bg-[#0B0D11] p-8 rounded cursor-pointer transition-colors">
@@ -399,18 +399,18 @@ export const CreateVaultWizard: React.FC<CreateVaultWizardProps> = ({
               <span className="text-sm font-medium text-[#F8FAFC]">
                 Drop dossier file here or click to select
               </span>
-              <span className="text-xs text-[#64748B] font-mono mt-1">
+              <span className="text-xs text-[#64748B] mt-1">
                 Active selection: {fileName} ({uploadedBytes?.length ?? new TextEncoder().encode(fileContent).length} bytes)
               </span>
               <input type="file" onChange={handleFileUpload} aria-labelledby="dossier-document-label" aria-describedby={fileError ? 'dossier-file-error' : undefined} accept="*/*" className="mt-3 text-xs max-w-full" />
             </label>
             {fileError && (
-              <p id="dossier-file-error" role="alert" className="text-xs text-[#EF4444] font-mono pt-1">{fileError}</p>
+              <p id="dossier-file-error" role="alert" className="text-xs text-[#EF4444] pt-1">{fileError}</p>
             )}
           </div>
 
           <div className="space-y-2">
-            <div className="flex items-center justify-between text-xs font-mono text-[#94A3B8]">
+            <div className="flex items-center justify-between text-xs text-[#94A3B8]">
               <span>Synthetic Dossier Preview (Plaintext SHA-256: {sha256Hex(uploadedBytes ?? fileContent).slice(0, 20)}…)</span>
               <button
                 type="button"
@@ -464,7 +464,7 @@ export const CreateVaultWizard: React.FC<CreateVaultWizardProps> = ({
           <div className="p-4 bg-[#071611] border border-[#10B981]/40 space-y-3">
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
               <div>
-                <div className="text-xs font-mono text-[#10B981]">FRESH DEMO RECIPIENT GENERATED LOCALLY</div>
+                <div className="text-xs text-[#10B981]">Demo recipient generated locally</div>
                 <p className="text-xs text-[#94A3B8] mt-1">The private key stays in this browser session and is used later to prove recipient-only recovery.</p>
               </div>
               <button
@@ -483,7 +483,7 @@ export const CreateVaultWizard: React.FC<CreateVaultWizardProps> = ({
           </div>
 
           <div className="space-y-2">
-            <label htmlFor="recipient-public-key" className="block text-xs font-mono text-[#94A3B8]">
+            <label htmlFor="recipient-public-key" className="block text-xs text-[#94A3B8]">
               Recipient Public Key (32-Byte Hex)
             </label>
             <input
@@ -500,10 +500,10 @@ export const CreateVaultWizard: React.FC<CreateVaultWizardProps> = ({
           </div>
 
           <div className="p-4 bg-[#0B0D11] border border-[#222938] space-y-2">
-            <div className="text-xs font-mono text-[#64748B]">
-              COMPUTED SHA-256 KEY FINGERPRINT
+            <div className="text-xs text-[#64748B]">
+              SHA-256 key fingerprint
             </div>
-            <div id="recipient-key-fingerprint" role="status" aria-live="polite" className="text-sm font-mono font-semibold text-[#F59E0B] tracking-wider">
+            <div id="recipient-key-fingerprint" role="status" aria-live="polite" className="text-sm font-mono font-semibold text-[#F59E0B]">
               {displayedFingerprint}
             </div>
             <div className="text-xs text-[#94A3B8]">
@@ -572,7 +572,7 @@ export const CreateVaultWizard: React.FC<CreateVaultWizardProps> = ({
                   : 'border-[#222938] bg-[#0B0D11]/50 hover:border-[#2E3748]'
               }`}
             >
-              <div className="text-xs font-mono text-[#F59E0B]">TESTNET DEMONSTRATION PROFILE</div>
+              <div className="text-xs text-[#F59E0B]">Testnet demonstration profile</div>
               <div className="text-base font-semibold text-[#F8FAFC]">
                 24 Blocks Interval · 6 Blocks Grace
               </div>
@@ -591,7 +591,7 @@ export const CreateVaultWizard: React.FC<CreateVaultWizardProps> = ({
                   : 'border-[#222938] bg-[#0B0D11]/50 hover:border-[#2E3748]'
               }`}
             >
-              <div className="text-xs font-mono text-[#94A3B8]">STANDARD INTERVAL SIMULATION</div>
+              <div className="text-xs text-[#94A3B8]">Standard interval simulation</div>
               <div className="text-base font-semibold text-[#F8FAFC]">
                 8,064 Blocks Interval · 12 Blocks Grace
               </div>
@@ -601,7 +601,7 @@ export const CreateVaultWizard: React.FC<CreateVaultWizardProps> = ({
             </button>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-2 font-mono text-xs">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-2 text-xs">
             <div className="p-3.5 bg-[#0B0D11] border border-[#222938] space-y-1">
               <span className="text-[#64748B]">Initial Expiry Height</span>
               <div className="text-sm font-semibold text-[#F8FAFC] tabular-nums">
@@ -627,10 +627,10 @@ export const CreateVaultWizard: React.FC<CreateVaultWizardProps> = ({
           </div>
 
           {policyValidationError && (
-            <p role="alert" className="text-xs text-[#EF4444] font-mono">{policyValidationError}</p>
+            <p role="alert" className="text-xs text-[#EF4444]">{policyValidationError}</p>
           )}
           {provisioningError && (
-            <p role="alert" className="text-xs text-[#EF4444] font-mono">{provisioningError}</p>
+            <p role="alert" className="text-xs text-[#EF4444]">{provisioningError}</p>
           )}
 
           <div className="flex justify-between pt-2">
@@ -656,7 +656,7 @@ export const CreateVaultWizard: React.FC<CreateVaultWizardProps> = ({
       {step === 4 && encryptedPkg && (
         <div className="border border-[#222938] bg-[#141820] p-6 lg:p-8 space-y-6">
           <div className="space-y-1">
-            <div className="text-xs font-mono text-[#10B981]">
+            <div className="text-xs text-[#10B981]">
               LOCAL DUAL-LAYER ENCRYPTION · 5 KEEPER RECORDS · {threshold}-OF-5 RECOVERY
             </div>
             <h2 className="text-lg font-semibold text-[#F8FAFC]">
@@ -668,7 +668,7 @@ export const CreateVaultWizard: React.FC<CreateVaultWizardProps> = ({
           </div>
 
           {/* Individual Keeper Acknowledgements Table */}
-          <div className="border border-[#222938] bg-[#0B0D11] divide-y divide-[#1E2430] font-mono text-xs">
+          <div className="border border-[#222938] bg-[#0B0D11] divide-y divide-[#1E2430] text-xs">
             {generatedShares.map((s) => (
               <div key={s.index} className="p-3 flex items-center justify-between gap-4">
                 <div className="flex items-center gap-3">
@@ -679,13 +679,13 @@ export const CreateVaultWizard: React.FC<CreateVaultWizardProps> = ({
                     Commitment: {s.commitmentHex.slice(0, 20)}…
                   </span>
                 </div>
-                <span className="text-[#10B981] shrink-0">SIMULATED ACK</span>
+                <span className="text-[#10B981] shrink-0">Simulated ack</span>
               </div>
             ))}
           </div>
 
           {/* Fee Estimate & Source Recovery Instructions */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 font-mono text-xs">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
             <div className="p-4 bg-[#0B0D11] border border-[#222938] space-y-1.5">
               <div className="text-[#64748B]">Browser simulation fee assumption</div>
               <div className="text-sm font-semibold text-[#F8FAFC] tabular-nums">

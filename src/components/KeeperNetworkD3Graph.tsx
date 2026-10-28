@@ -18,7 +18,7 @@ export const KeeperNetworkD3Graph: React.FC<KeeperNetworkD3GraphProps> = ({ vaul
   });
   const shares = vault.deliveredSharesToRecipient.length;
   return <div className="keeper-observatory">
-    <div className="observatory-heading"><span className="section-label">RELEASE PATH / SIMULATED RECORDS</span><span>CONFIRMED CURSOR #{Math.max(0,currentBlockHeight-vault.manifest.confirmationTarget+1).toLocaleString()}</span></div>
+    <div className="observatory-heading"><span className="section-label">Release path · simulated records</span><span>CONFIRMED CURSOR #{Math.max(0,currentBlockHeight-vault.manifest.confirmationTarget+1).toLocaleString()}</span></div>
     <svg viewBox="0 0 800 385" role="img" aria-label={`Five keeper records; ${shares} shares delivered, three required`}>
       <ellipse cx="400" cy="194" rx="240" ry="145" fill="none" stroke="#2d4438" strokeWidth="1" strokeDasharray="2 8"/>
       {nodes.map(node=><g key={node.index} opacity={node.online?1:.42}>

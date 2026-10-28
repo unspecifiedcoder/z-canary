@@ -33,7 +33,7 @@ export function JudgeJourney({ vault, isCustomVault, activePage, onNavigate, onC
 
   return <section className="judge-journey" aria-label="Create your own Canary walkthrough">
     <div className="judge-journey__intro">
-      <span>YOUR CANARY / LIVE BROWSER WALKTHROUGH</span>
+      
       <strong>{complete ? 'Recovery verified. You completed the handoff.' : 'Keep going—every button below executes the next protocol state.'}</strong>
       <small>Real local cryptography · simulated blocks and keeper records · no transaction sent</small>
     </div>
