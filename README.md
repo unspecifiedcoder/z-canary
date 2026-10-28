@@ -6,7 +6,9 @@
 
 > **The simple version:** put a file in a locked box. Press “I’m okay” to keep it locked. If you stop, three helpers provide pieces of the key—but only your chosen recipient can open the box.
 
-**[Try to break the vault](https://z-canary.vercel.app/#break-vault)** · **[Judge Proof: transactions, keepers and recovery](https://z-canary.vercel.app/#judge)** · **[Create your own Canary](https://z-canary.vercel.app/#create)**
+**[Try the 60-second challenge](https://z-canary.vercel.app/#break-vault)** · **[Judge Proof: transactions, keepers and recovery](https://z-canary.vercel.app/#judge)** · **[Try your own harmless file](https://z-canary.vercel.app/#create)**
+
+**Why Zcash?** Canary carries signed check-ins in shielded transactions without publishing the command contents on the public chain. The evidence file stays off-chain. Keepers read those commands through a viewing-only scanner and apply the recovery rules; Zcash does not itself release the file or enforce the keeper threshold.
 
 ### Judge it by trying to break it
 
@@ -29,7 +31,7 @@ The **Judge Proof** page puts four recorded Zcash testnet transactions, five kee
 | Understand what is real, simulated, and recorded | [Architecture](docs/ARCHITECTURE.md) |
 | Review failure cases, collusion limits, and unfinished guarantees | [Threat model](docs/THREAT-MODEL.md) |
 | Inspect the four confirmed testnet commands and exact-file recovery | [Verification record](docs/evidence/VERIFICATION.md) |
-| Re-verify the recorded memo signatures yourself | [Evidence tab](https://unspecifiedcoder.github.io/z-canary/app/#evidence): the 3 archived transport memos re-verify in your browser; the 4 protected-document commands are confirmed on-chain, but their memo bytes were not archived |
+| Re-verify all seven recorded memo signatures yourself | [Judge Proof](https://z-canary.vercel.app/#judge): four protected-document commands recovered by a fresh viewing-only scan, plus three earlier transport memos. [Exact bytes and scan provenance](docs/evidence/native-live-memos.json) |
 
 <p align="center">
   <a href="https://unspecifiedcoder.github.io/z-canary/"><img src="docs/assets/canary-vault.webp" alt="Canary’s sealed reporting dossier — concept illustration" width="100%" /></a>
@@ -39,7 +41,7 @@ The **Judge Proof** page puts four recorded Zcash testnet transactions, five kee
   <a href="https://github.com/unspecifiedcoder/z-canary/actions/workflows/verification.yml"><img alt="Verification" src="https://github.com/unspecifiedcoder/z-canary/actions/workflows/verification.yml/badge.svg" /></a>
   <img alt="Zcash testnet" src="https://img.shields.io/badge/network-Zcash_testnet-F4B728?style=flat-square&labelColor=101613" />
   <img alt="Rust tests" src="https://img.shields.io/badge/Rust_tests-73_passed-67D7AE?style=flat-square&labelColor=101613" />
-  <img alt="Frontend and relay tests" src="https://img.shields.io/badge/frontend_and_relay_tests-60_passed-67D7AE?style=flat-square&labelColor=101613" />
+  <img alt="Frontend and relay tests" src="https://img.shields.io/badge/frontend_and_relay_tests-62_passed-67D7AE?style=flat-square&labelColor=101613" />
   <img alt="Threshold" src="https://img.shields.io/badge/recovery-3_of_5-DBA04F?style=flat-square&labelColor=101613" />
   <img alt="Status" src="https://img.shields.io/badge/status-tested_prototype-8FA79E?style=flat-square&labelColor=101613" />
 </p>
@@ -348,7 +350,7 @@ z-canary/
 | Area | Result | Evidence |
 |---|---:|---|
 | Rust workspace | **73 tests passed** | [security regression coverage](docs/SECURITY-REVIEW.md) |
-| Frontend and relay | **60 tests passed** | `npm test` (includes wallet requests, browser challenges and actual HTTP relay checks) |
+| Frontend and relay | **62 tests passed** | `npm test` (includes wallet requests, browser challenges, scanned-memo evidence and actual HTTP relay checks) |
 | Submitted commit | frontend, Rust, committed + regenerated Pages verification | [GitHub verification workflow](.github/workflows/verification.yml) |
 | TypeScript + Vite | **passed** | [production build log](docs/evidence/frontend-build.txt) |
 | Five-process rehearsal | **12 checks passed** | [rehearsal record](docs/evidence/five-process-rehearsal.json) |

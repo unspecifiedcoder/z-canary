@@ -1,5 +1,5 @@
 import React, { lazy, Suspense } from 'react';
-import { ArrowRight, ArrowUpRight, Fingerprint, Radio, ShieldCheck, Play, FileText, LockKeyhole } from 'lucide-react';
+import { ArrowRight, ArrowUpRight, Fingerprint, Radio, ShieldCheck, FileText, LockKeyhole } from 'lucide-react';
 import { ContinuityVault } from '../engine/protocolStore';
 import { phaseLabels, projectVault } from '../experience/model';
 const LivingVault = lazy(() => import('./LivingVault'));
@@ -21,10 +21,10 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ activeVault, curre
         <div className="canary-opening-copy">
           <p className="canary-eyebrow"><span/>A safety handoff for whistleblowers &amp; journalists</p>
           <h1 id="opening-title">Evidence should not leak.<br/><em>Or disappear with you.</em></h1>
-          <p className="canary-opening-description"><strong>Put a file in a locked box. Press “I’m okay” to keep it locked.</strong> If you stop checking in, several keepers can provide pieces of the key—but only the person you chose can open it. Check-ins travel as Zcash shielded memos, so the public chain shows only encrypted memos.</p>
+          <p className="canary-opening-description"><strong>Put a file in a locked box. Press “I’m okay” to keep it locked.</strong> If you stop checking in, several keepers can provide pieces of the key—but only the person you chose can open it. Zcash shielded transactions carry the native signed check-ins without publishing their contents. The file stays off-chain.</p>
           <div className="canary-opening-actions">
-            <button className="canary-button primary" onClick={() => onNavigate('create')}>Create your own Canary <ArrowUpRight size={19}/></button>
-            <a className="canary-watch-link" href="#break-vault" onClick={(event) => { event.preventDefault(); onNavigate('break'); }}><Play size={14}/> Try to break the vault <span>interactive</span></a>
+            <button className="canary-button primary" onClick={() => onNavigate('break')}>Try the 60-second challenge <ArrowUpRight size={19}/></button>
+            <a className="canary-watch-link" href="#create" onClick={(event) => { event.preventDefault(); onNavigate('create'); }}>Try your own file <ArrowUpRight size={14}/></a>
           </div>
           <p className="canary-opening-note">Browser lab: real local encryption · simulated blocks and keepers · no wallet needed</p>
         </div>
@@ -32,7 +32,7 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ activeVault, curre
       <div className="canary-opening-baseline" aria-label="Recorded Zcash testnet proof">
         <dl className="proof-strip">
           <div><dt>Real Zcash testnet transactions</dt><dd>7</dd></div>
-          <div><dt>Memos you can re-verify in your browser</dt><dd>3</dd></div>
+          <div><dt>Memos you can re-verify in your browser</dt><dd>7</dd></div>
           <div><dt>Recovered byte for byte</dt><dd>136 B</dd></div>
         </dl>
         <a href="#judge" onClick={(event) => { event.preventDefault(); onNavigate('judge'); }}>Open Judge Proof <ArrowRight size={14}/></a>
@@ -72,9 +72,9 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ activeVault, curre
 
     <section className="canary-native-proof" aria-labelledby="native-proof-title">
       <div className="canary-section-shell">
-        <div className="native-proof-copy"><span className="canary-paper-label">What is real and what is simulated</span><h2 id="native-proof-title">The testnet record<br/>is open to inspection.</h2><p>The browser lab uses real local encryption with simulated blocks and keepers, so anyone can test the lifecycle safely. Separately, the native path completed shielded commands and exact-file recovery on Zcash testnet.</p></div>
+        <div className="native-proof-copy"><span className="canary-paper-label">Why Zcash belongs here</span><h2 id="native-proof-title">Private check-ins.<br/>Verifiable recovery.</h2><p>Canary’s native testnet path carries signed check-ins in Zcash shielded transactions, keeping their contents off the public chain. The evidence file stays off-chain. Inspect the recorded registration, check-in, cancellation and exact-file recovery below.</p></div>
         <div className="native-proof-numbers"><div><strong>4</strong><span>Commands in the protected-document run (3 more memos in an earlier run: 7 in total)</span></div><div><strong>136<span>B</span></strong><span>Recovered, byte for byte</span></div><div><strong>3<span>/5</span></strong><span>Recovery threshold</span></div></div>
-        <div className="native-proof-actions"><button className="canary-button ink" onClick={() => onNavigate('evidence')}>Inspect the evidence <ArrowUpRight size={18}/></button><button className="canary-paper-link" onClick={() => onNavigate('native')}>Connect a local native agent <ArrowRight size={17}/></button></div>
+        <div className="native-proof-actions"><button className="canary-button ink" onClick={() => onNavigate('judge')}>Open Judge Proof <ArrowUpRight size={18}/></button><button className="canary-paper-link" onClick={() => onNavigate('native')}>Connect a local native agent <ArrowRight size={17}/></button></div>
         <details className="threat-disclosure" open><summary>What this does not protect against <span>+</span></summary><p>Five native keeper processes currently share one operator and scanner. Three colluding keepers can release early to the designated recipient. Cancellation cannot recall delivered shares. Network observers and lightwallet operators can learn metadata. No smart contract is deployed.</p><p>The browser uses X25519 and AES-GCM in a demonstration format; native encryption uses age and XChaCha20-Poly1305. This is a tested prototype, not an audited tool for sensitive reporting. Use public fictional files.</p></details>
       </div>
     </section>

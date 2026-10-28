@@ -76,7 +76,7 @@ try {
   if (!/type=["']module["']/.test(app) || !/id=["']root["']/.test(app)) fail('app/index.html is not the built React entry.');
   const assetNames = await readdir(resolve(root, 'app/assets'));
   const appJavaScript = (await Promise.all(assetNames.filter(name => name.endsWith('.js')).map(name => readFile(resolve(root, 'app/assets', name), 'utf8')))).join('\n');
-  for (const requiredCopy of ['Create an Encrypted Safety Handoff', 'Replay the real testnet run', 'Start Browser Lifecycle', 'Prepare External Wallet Request']) {
+  for (const requiredCopy of ['Your file. Your trusted recipient.', 'Replay the real testnet run', 'Start my walkthrough', 'Prepare External Wallet Request', 'Try the 60-second challenge']) {
     if (!appJavaScript.includes(requiredCopy)) fail(`Built application is missing release copy: ${requiredCopy}`);
   }
   for (const staleCopy of ['LIVE ACCEPTANCE PENDING', 'LIVE SEND/SCAN GATE PENDING', 'Broadcast Registration']) {
