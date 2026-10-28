@@ -73,6 +73,12 @@ export const EvidenceAndKeepersPanel: React.FC<EvidenceAndKeepersPanelProps> = (
     setTestResults(runAllAcceptanceTests());
   }, []);
 
+  useEffect(() => {
+    if (!selectedTxidForMemo) return;
+    const t = window.setTimeout(() => document.getElementById('memo-paste')?.scrollIntoView({ block: 'center', behavior: 'auto' }), 350);
+    return () => window.clearTimeout(t);
+  }, [selectedTxidForMemo]);
+
   const selectedTx =
     transactions.find((t) => t.txid === selectedTxid) || transactions[transactions.length - 1];
 
@@ -148,7 +154,7 @@ export const EvidenceAndKeepersPanel: React.FC<EvidenceAndKeepersPanelProps> = (
         </div>
 
         <div className="grid grid-cols-1 xl:grid-cols-[1.35fr_.65fr] gap-5">
-          <ReceiptVerifier />
+          <ReceiptVerifier labMemoHex={selectedTxidForMemo ? selectedTx?.memoHex : undefined} />
 
           <aside className="border border-[#10B981]/45 bg-[#0B0D11] p-5 space-y-4">
             <div className="flex items-center gap-2"><FileCheck2 className="w-5 h-5 text-[#10B981]" /><h2 className="font-semibold text-[#F8FAFC]">Exact recovery passed</h2></div>

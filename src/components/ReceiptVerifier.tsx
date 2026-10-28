@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { CheckCircle2, ExternalLink, XCircle } from 'lucide-react';
 import { NATIVE_RUN_TRANSACTIONS, TRANSPORT_RECEIPTS } from '../evidence/recordedRun';
 import { ReceiptVerification, verifyReceiptHex } from '../evidence/verifyReceipt';
@@ -31,12 +31,13 @@ const VerificationLine: React.FC<{ result: ReceiptVerification }> = ({ result })
     </span>
   );
 
-export const ReceiptVerifier: React.FC = () => {
+export const ReceiptVerifier: React.FC<{ labMemoHex?: string }> = ({ labMemoHex }) => {
   const verified = useMemo(
     () => TRANSPORT_RECEIPTS.map(receipt => ({ receipt, result: verifyReceiptHex(receipt.memoHex) })),
     [],
   );
-  const [pasted, setPasted] = useState('');
+  const [pasted, setPasted] = useState(labMemoHex ?? '');
+  useEffect(() => { if (labMemoHex) setPasted(labMemoHex); }, [labMemoHex]);
   const pastedResult = pasted.trim() ? verifyReceiptHex(pasted) : null;
 
   return (
@@ -102,6 +103,11 @@ export const ReceiptVerifier: React.FC = () => {
         />
         <div aria-live="polite" className="min-h-[1.25rem] text-xs">
           {pastedResult && <VerificationLine result={pastedResult} />}
+          {pastedResult?.valid && labMemoHex && pasted === labMemoHex && (
+            <p className="mt-2 text-xs leading-relaxed text-[#94A3B8]">
+              This is the memo from your browser lab run. Its signing key was generated in your browser and it was never sent to a chain, but it verifies with the same code that verified the real transactions above.
+            </p>
+          )}
           {pastedResult?.valid && (
             <span className="ml-3 font-mono text-[#94A3B8]">
               {pastedResult.operation} · seq {pastedResult.sequence} · switch {shortHex(pastedResult.switchIdHex!)}
