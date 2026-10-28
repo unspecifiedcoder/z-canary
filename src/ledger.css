@@ -381,3 +381,11 @@ body, .canary-app { font-family: var(--font-sans); font-size: 15px; line-height:
 .canary-app .scene-keeper-strip span span, .canary-app .scene-hotspots button, .canary-app .scene-explainer p { font-size: 12px; color: var(--muted); }
 .canary-app .canary-opening-art img { object-position: 72% 30%; }
 .canary-app .canary-opening-baseline { background: linear-gradient(180deg, #0e0f1000, #0e0f10e6 40%); position: relative; max-width: none; padding-inline: 5.5%; }
+
+/* contrast pass */
+:root { --muted: #b8b8b3; --faint: #a0a09b; }
+.canary-app .canary-opening-note, .canary-app .environment-strip, .canary-app .environment-strip p, .canary-app .proof-strip dt { font-size: 13px; color: var(--muted); }
+.canary-app .canary-navigation button { color: #c4c4bf; }
+.canary-app .native-proof-numbers strong>span { color: var(--muted); }
+.canary-app .overview-status .muted { color: var(--muted); }
+.canary-app .handoff-story h2 em, .canary-app .canary-observatory h2 em { color: #c4c4bf; }
