@@ -1,0 +1,36 @@
+/* Landing-only additions on top of the app's press system (compiled into press.css by scripts/build-landing-css.mjs). */
+@font-face { font-family: 'Sofia Sans Extra Condensed'; font-weight: 800; font-display: swap; src: url(fonts/sofia-sans-extra-condensed-latin-800-normal.woff2) format('woff2'); }
+@font-face { font-family: 'Geist'; font-weight: 400; font-display: swap; src: url(fonts/geist-latin-400-normal.woff2) format('woff2'); }
+@font-face { font-family: 'Geist'; font-weight: 500; font-display: swap; src: url(fonts/geist-latin-500-normal.woff2) format('woff2'); }
+@font-face { font-family: 'Geist'; font-weight: 600; font-display: swap; src: url(fonts/geist-latin-600-normal.woff2) format('woff2'); }
+@font-face { font-family: 'Geist Mono'; font-weight: 400; font-display: swap; src: url(fonts/geist-mono-latin-400-normal.woff2) format('woff2'); }
+@font-face { font-family: 'Geist Mono'; font-weight: 500; font-display: swap; src: url(fonts/geist-mono-latin-500-normal.woff2) format('woff2'); }
+html { scroll-behavior: smooth; scroll-padding-top: 24px; }
+.landing { display: grid; gap: 20px; }
+.nav a { display: inline-flex; align-items: center; min-height: 38px; padding: 0 16px; border-radius: 999px; text-decoration: none; font: 500 14px var(--font-sans); color: var(--muted); }
+.nav a:hover { color: var(--ink); background: var(--card); }
+.landing-top .btn-orb { font-size: 16px; }
+a.bento-step { text-decoration: none; color: inherit; }
+.watch { padding: clamp(26px, 3.4vw, 44px); display: grid; gap: 24px; scroll-margin-top: 20px; }
+.player-layout { display: grid; grid-template-columns: minmax(0, 1fr) 300px; gap: 20px; align-items: start; }
+.film { margin: 0; display: grid; gap: 12px; }
+.film video { width: 100%; border-radius: 22px; background: var(--ink); aspect-ratio: 16 / 9; }
+.film figcaption { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px; font: 500 12px var(--font-mono); color: var(--faint); }
+.film-mode { padding: 4px 10px; border-radius: 999px; background: var(--sunken); color: var(--ink-2); }
+.film-mode.simulation { background: var(--yellow); color: var(--ink); }
+.player-message:empty { display: none; }
+.player-message { color: var(--bad); font-size: 14px; }
+.downloads { display: flex; flex-wrap: wrap; gap: 8px; }
+.downloads a { display: inline-flex; align-items: center; min-height: 36px; padding: 0 14px; border-radius: 999px; border: 1px solid var(--line); background: var(--card); font-size: 13px; text-decoration: none; color: var(--ink); }
+.chapter-panel { padding: 16px; border-radius: 22px; background: var(--sunken); display: grid; gap: 10px; }
+.chapters { display: grid; gap: 4px; }
+.chapter { display: grid; grid-template-columns: 44px 1fr; gap: 8px; align-items: center; min-height: 44px; padding: 0 12px; border: 0; border-radius: 12px; background: transparent; text-align: left; font: 500 14px var(--font-sans); color: var(--ink-2); }
+.chapter time { font: 500 12px var(--font-mono); color: var(--faint); }
+.chapter:hover { background: var(--card); }
+.chapter[aria-current="true"] { background: var(--yellow); color: var(--ink); }
+.chapter[aria-current="true"] time { color: var(--ink); }
+.noscript { font-size: 13px; color: var(--muted); }
+#proof { scroll-margin-top: 20px; }
+.closing .kicker { margin-top: 4px; }
+@media (max-width: 1080px) { .landing-top { grid-template-columns: 1fr auto; } .landing-top .nav { display: none; } }
+@media (max-width: 860px) { .player-layout { grid-template-columns: 1fr; } }
