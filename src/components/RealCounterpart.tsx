@@ -16,13 +16,13 @@ export const RealCounterpart: React.FC<{ operation: MemoOperation | null }> = ({
   const receipt = TRANSPORT_RECEIPTS.find(r => r.operation === name);
   if (!receipt) return null;
   return (
-    <p className="pt-1 text-xs leading-relaxed text-[#94A3B8]">
+    <p className="pt-1 text-xs leading-relaxed text-[var(--muted)]">
       Real counterpart: on Zcash testnet the same command, a signed 512-byte shielded memo ({name}), is transaction{' '}
       <a
         href={`https://testnet.cipherscan.app/tx/${receipt.txid}`}
         target="_blank"
         rel="noreferrer"
-        className="inline-flex items-center gap-1 font-mono text-[#F59E0B] hover:underline"
+        className="inline-flex items-center gap-1 font-mono text-[var(--accent-ink)] hover:underline"
       >
         {receipt.txid.slice(0, 10)}…{receipt.txid.slice(-6)} <ExternalLink className="h-3 w-3" aria-hidden="true" />
       </a>{' '}

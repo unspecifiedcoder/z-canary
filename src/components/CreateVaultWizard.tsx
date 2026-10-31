@@ -425,19 +425,19 @@ export const CreateVaultWizard: React.FC<CreateVaultWizardProps> = ({
 
   return (
     <div className="max-w-4xl mx-auto space-y-8 pb-16">
-      <div className="flex items-center justify-between border-b border-[#222938] pb-5">
+      <div className="flex items-center justify-between border-b border-[var(--line)] pb-5">
         <div>
-          <h1 className="text-2xl font-bold text-[#F8FAFC]">Your file. Your trusted recipient.</h1>
-          <p className="text-sm text-[#CBD5E1]">
+          <h1 className="text-2xl font-bold text-[var(--ink)]">Your file. Your trusted recipient.</h1>
+          <p className="text-sm text-[var(--muted)]">
             Try Maya’s reporting notes or bring a harmless file, up to 10 MiB. Encrypt it for one person, then test what happens when you check in—or go silent.
           </p>
-          <p className="text-sm text-[#94A3B8]">
+          <p className="text-sm text-[var(--muted)]">
             Real encryption happens in your browser. The walkthrough simulates time and keepers; an optional external wallet request can carry your signed registration on Zcash testnet.
           </p>
         </div>
         <button
           onClick={onCancel}
-          className="px-4 py-2 text-xs font-medium text-[#94A3B8] hover:text-[#F8FAFC] border border-[#222938] rounded cursor-pointer"
+          className="px-4 py-2 text-xs font-medium text-[var(--muted)] hover:text-[var(--ink)] border border-[var(--line)] rounded cursor-pointer"
         >
           Back to vault
         </button>
@@ -456,10 +456,10 @@ export const CreateVaultWizard: React.FC<CreateVaultWizardProps> = ({
             aria-current={step === s.num ? 'step' : undefined}
             className={`p-3 border ${
               step === s.num
-                ? 'border-[#F59E0B] bg-[#141820] text-[#F8FAFC]'
+                ? 'border-[var(--yellow-2)] bg-[var(--card)] rounded-[22px] shadow-[var(--shadow)] text-[var(--ink)]'
                 : step > s.num
-                ? 'border-[#10B981]/40 bg-[#141820]/60 text-[#10B981]'
-                : 'border-[#222938] bg-[#0B0D11] text-[#64748B]'
+                ? 'border-[var(--ok)]/40 bg-[var(--card)]/60 rounded-[22px] shadow-[var(--shadow)] text-[var(--ok)]'
+                : 'border-[var(--line)] bg-[var(--sunken)] text-[var(--faint)]'
             }`}
           >
             {s.label}
@@ -469,9 +469,9 @@ export const CreateVaultWizard: React.FC<CreateVaultWizardProps> = ({
 
       {/* Step 1: File Selection */}
       {step === 1 && (
-        <div className="border border-[#222938] bg-[#141820] p-6 lg:p-8 space-y-6">
+        <div className="border border-[var(--line)] bg-[var(--card)] rounded-[22px] shadow-[var(--shadow)] p-6 lg:p-8 space-y-6">
           <div className="space-y-2">
-            <label htmlFor="vault-reference" className="block text-xs text-[#94A3B8]">
+            <label htmlFor="vault-reference" className="block text-xs text-[var(--muted)]">
               Name this handoff — stays in this browser
             </label>
             <input
@@ -479,31 +479,31 @@ export const CreateVaultWizard: React.FC<CreateVaultWizardProps> = ({
               type="text"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              className="w-full px-3.5 py-2.5 bg-[#0B0D11] border border-[#222938] rounded text-sm text-[#F8FAFC] focus:outline-none focus:border-[#F59E0B]"
+              className="w-full px-3.5 py-2.5 bg-[var(--sunken)] border border-[var(--line)] rounded text-sm text-[var(--ink)] focus:outline-none focus:border-[var(--yellow-2)]"
             />
           </div>
 
           <div className="space-y-2">
-            <label id="dossier-document-label" className="block text-xs text-[#94A3B8]">
+            <label id="dossier-document-label" className="block text-xs text-[var(--muted)]">
               Choose a harmless file — any type, up to 10 MiB
             </label>
-            <label onDragOver={e => e.preventDefault()} onDrop={e => { e.preventDefault(); void loadFile(e.dataTransfer.files[0]); }} className="flex flex-col items-center justify-center border border-dashed border-[#2E3748] hover:border-[#F59E0B] bg-[#0B0D11] p-8 rounded cursor-pointer transition-colors">
-              <Upload className="w-6 h-6 text-[#F59E0B] mb-2" />
-              <span className="text-sm font-medium text-[#F8FAFC]">
+            <label onDragOver={e => e.preventDefault()} onDrop={e => { e.preventDefault(); void loadFile(e.dataTransfer.files[0]); }} className="flex flex-col items-center justify-center border border-dashed border-[var(--line)] hover:border-[var(--yellow-2)] bg-[var(--sunken)] p-8 rounded cursor-pointer transition-colors">
+              <Upload className="w-6 h-6 text-[var(--accent-ink)] mb-2" />
+              <span className="text-sm font-medium text-[var(--ink)]">
                 Drop your file here or choose one below
               </span>
-              <span className="text-xs text-[#64748B] mt-1">
+              <span className="text-xs text-[var(--faint)] mt-1">
                 Active selection: {fileName} ({uploadedBytes?.length ?? new TextEncoder().encode(fileContent).length} bytes)
               </span>
               <input type="file" onChange={handleFileUpload} aria-labelledby="dossier-document-label" aria-describedby={fileError ? 'dossier-file-error' : undefined} accept="*/*" className="mt-3 text-xs max-w-full" />
             </label>
             {fileError && (
-              <p id="dossier-file-error" role="alert" className="text-xs text-[#EF4444] pt-1">{fileError}</p>
+              <p id="dossier-file-error" role="alert" className="text-xs text-[var(--bad)] pt-1">{fileError}</p>
             )}
           </div>
 
           <div className="space-y-2">
-            <div className="flex items-center justify-between text-xs text-[#94A3B8]">
+            <div className="flex items-center justify-between text-xs text-[var(--muted)]">
               <span>{uploadedBytes ? 'Your selected file' : 'Or edit these fictional reporting notes'}</span>
               <button
                 type="button"
@@ -513,7 +513,7 @@ export const CreateVaultWizard: React.FC<CreateVaultWizardProps> = ({
                   setFileName('Maya-Reporting-Notes.txt');
                   setFileContent(MAYA_REPORTING_NOTES);
                 }}
-                className="text-[#F59E0B] hover:underline cursor-pointer"
+                className="text-[var(--accent-ink)] hover:underline cursor-pointer"
               >
                 Use Maya’s sample
               </button>
@@ -524,9 +524,9 @@ export const CreateVaultWizard: React.FC<CreateVaultWizardProps> = ({
               disabled={uploadedBytes !== null}
               value={uploadedBytes ? 'Binary file selected. Exact bytes will be encrypted and downloaded.' : fileContent}
               onChange={(e) => setFileContent(e.target.value)}
-              className="w-full p-3 bg-[#0B0D11] border border-[#222938] rounded font-mono text-xs text-[#CBD5E1] focus:outline-none focus:border-[#F59E0B]"
+              className="w-full p-3 bg-[var(--sunken)] border border-[var(--line)] rounded font-mono text-xs text-[var(--muted)] focus:outline-none focus:border-[var(--yellow-2)]"
             />
-            <details className="text-xs text-[#94A3B8]">
+            <details className="text-xs text-[var(--muted)]">
               <summary className="cursor-pointer">File integrity details</summary>
               <p className="mt-2 break-all">SHA-256: {sha256Hex(uploadedBytes ?? fileContent)}</p>
             </details>
@@ -536,7 +536,7 @@ export const CreateVaultWizard: React.FC<CreateVaultWizardProps> = ({
             <button
               disabled={fileLoading || Boolean(fileError)}
               onClick={() => setStep(2)}
-              className="px-5 py-2.5 bg-[#F59E0B] hover:bg-[#D97706] text-[#0B0D11] font-semibold text-sm rounded transition-colors flex items-center gap-2 cursor-pointer"
+              className="px-5 py-2.5 bg-[var(--yellow)] hover:bg-[var(--yellow-2)] text-[var(--ink)] font-semibold text-sm rounded transition-colors flex items-center gap-2 cursor-pointer"
             >
               <span>Choose who can recover it</span>
               <ArrowRight className="w-4 h-4" />
@@ -547,22 +547,22 @@ export const CreateVaultWizard: React.FC<CreateVaultWizardProps> = ({
 
       {/* Step 2: Recipient Verification */}
       {step === 2 && (
-        <div className="border border-[#222938] bg-[#141820] p-6 lg:p-8 space-y-6">
+        <div className="border border-[var(--line)] bg-[var(--card)] rounded-[22px] shadow-[var(--shadow)] p-6 lg:p-8 space-y-6">
           <div className="space-y-2">
-            <h2 className="text-lg font-semibold text-[#F8FAFC]">
+            <h2 className="text-lg font-semibold text-[var(--ink)]">
               Who should be able to open it?
             </h2>
-            <p className="text-sm text-[#94A3B8]">
+            <p className="text-sm text-[var(--muted)]">
               Noor is Maya’s editor in this example. We created a fresh demo key for Noor here,
               so you can play both roles and test recovery without installing anything.
             </p>
           </div>
 
-          <div className="p-4 bg-[#071611] border border-[#10B981]/40 space-y-3">
+          <div className="p-4 bg-[var(--sunken)] border border-[var(--ok)]/40 space-y-3">
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
               <div>
-                <div className="text-xs text-[#10B981]">{recipientPubKey === generatedRecipient.publicKeyHex ? 'Noor — ready for the walkthrough' : 'Using another recipient’s public key'}</div>
-                <p className="text-xs text-[#94A3B8] mt-1">{recipientPubKey === generatedRecipient.publicKeyHex ? 'Noor’s demo private key stays in this browser session. Later you will use it to open the file.' : 'That recipient will need their matching private key. Canary cannot generate or recover it for them.'}</p>
+                <div className="text-xs text-[var(--ok)]">{recipientPubKey === generatedRecipient.publicKeyHex ? 'Noor — ready for the walkthrough' : 'Using another recipient’s public key'}</div>
+                <p className="text-xs text-[var(--muted)] mt-1">{recipientPubKey === generatedRecipient.publicKeyHex ? 'Noor’s demo private key stays in this browser session. Later you will use it to open the file.' : 'That recipient will need their matching private key. Canary cannot generate or recover it for them.'}</p>
               </div>
               <button
                 type="button"
@@ -572,18 +572,18 @@ export const CreateVaultWizard: React.FC<CreateVaultWizardProps> = ({
                   setRecipientPubKey(next.publicKeyHex);
                   setFingerprintVerified(false);
                 }}
-                className="px-3 py-2 text-xs font-semibold text-[#10B981] border border-[#10B981]/50 hover:bg-[#10B981]/10 cursor-pointer"
+                className="px-3 py-2 text-xs font-semibold text-[var(--ok)] border border-[var(--ok)]/50 hover:bg-[var(--ok)]/10 cursor-pointer"
               >
                 Create a fresh demo key
               </button>
             </div>
           </div>
 
-          <details className="space-y-3 text-sm text-[#94A3B8]">
+          <details className="space-y-3 text-sm text-[var(--muted)]">
             <summary className="cursor-pointer">Use another recipient or inspect the key</summary>
             <p className="text-xs">For another person, paste their X25519 public key and compare its fingerprint through a trusted channel. Never paste their private key here.</p>
           <div className="space-y-2">
-            <label htmlFor="recipient-public-key" className="block text-xs text-[#94A3B8]">
+            <label htmlFor="recipient-public-key" className="block text-xs text-[var(--muted)]">
               Recipient Public Key (32-Byte Hex)
             </label>
             <input
@@ -595,29 +595,29 @@ export const CreateVaultWizard: React.FC<CreateVaultWizardProps> = ({
               aria-describedby="recipient-key-fingerprint"
               value={recipientPubKey}
               onChange={(e) => { setRecipientPubKey(e.target.value); setFingerprintVerified(false); }}
-              className="w-full px-3.5 py-2.5 bg-[#0B0D11] border border-[#222938] rounded font-mono text-xs text-[#F8FAFC] focus:outline-none focus:border-[#F59E0B]"
+              className="w-full px-3.5 py-2.5 bg-[var(--sunken)] border border-[var(--line)] rounded font-mono text-xs text-[var(--ink)] focus:outline-none focus:border-[var(--yellow-2)]"
             />
           </div>
 
-          <div className="p-4 bg-[#0B0D11] border border-[#222938] space-y-2">
-            <div className="text-xs text-[#64748B]">
+          <div className="p-4 bg-[var(--sunken)] border border-[var(--line)] space-y-2">
+            <div className="text-xs text-[var(--faint)]">
               SHA-256 key fingerprint
             </div>
-            <div id="recipient-key-fingerprint" role="status" aria-live="polite" className="text-sm font-mono font-semibold text-[#F59E0B]">
+            <div id="recipient-key-fingerprint" role="status" aria-live="polite" className="text-sm font-mono font-semibold text-[var(--accent-ink)]">
               {displayedFingerprint}
             </div>
-            <div className="text-xs text-[#94A3B8]">
+            <div className="text-xs text-[var(--muted)]">
               Recipient: {recipientPubKey === generatedRecipient.publicKeyHex ? generatedRecipient.label : 'Your chosen recipient'}
             </div>
           </div>
           </details>
 
-          <label className="flex items-center gap-3 text-sm text-[#E2E8F0] cursor-pointer">
+          <label className="flex items-center gap-3 text-sm text-[var(--ink)] cursor-pointer">
             <input
               type="checkbox"
               checked={fingerprintVerified}
               onChange={(e) => setFingerprintVerified(e.target.checked)}
-              className="w-4 h-4 accent-[#F59E0B]"
+              className="w-4 h-4 accent-[var(--ink)]"
             />
             <span>
               {recipientPubKey === generatedRecipient.publicKeyHex
@@ -627,14 +627,14 @@ export const CreateVaultWizard: React.FC<CreateVaultWizardProps> = ({
           </label>
 
           {!fingerprintVerified && (
-            <p id="recipient-step-hint" className="text-xs text-[#EFAD45]">
+            <p id="recipient-step-hint" className="text-xs text-[var(--accent-ink)]">
               {recipientPubKey === generatedRecipient.publicKeyHex ? 'Confirm the demo recipient above to continue.' : 'Confirm your recipient’s fingerprint above before continuing.'}
             </p>
           )}
           <div className="flex justify-between pt-2">
             <button
               onClick={() => setStep(1)}
-              className="px-4 py-2 text-xs font-medium text-[#94A3B8] hover:text-[#F8FAFC] border border-[#222938] rounded cursor-pointer"
+              className="px-4 py-2 text-xs font-medium text-[var(--muted)] hover:text-[var(--ink)] border border-[var(--line)] rounded cursor-pointer"
             >
               Back
             </button>
@@ -642,7 +642,7 @@ export const CreateVaultWizard: React.FC<CreateVaultWizardProps> = ({
               disabled={!fingerprintVerified || displayedFingerprint.startsWith('INVALID')}
               aria-describedby={!fingerprintVerified ? 'recipient-step-hint' : undefined}
               onClick={() => setStep(3)}
-              className="px-5 py-2.5 bg-[#F59E0B] disabled:opacity-40 hover:bg-[#D97706] text-[#0B0D11] font-semibold text-sm rounded transition-colors flex items-center gap-2 cursor-pointer"
+              className="px-5 py-2.5 bg-[var(--yellow)] disabled:opacity-40 hover:bg-[var(--yellow-2)] text-[var(--ink)] font-semibold text-sm rounded transition-colors flex items-center gap-2 cursor-pointer"
             >
               <span>Choose recovery rules</span>
               <ArrowRight className="w-4 h-4" />
@@ -653,12 +653,12 @@ export const CreateVaultWizard: React.FC<CreateVaultWizardProps> = ({
 
       {/* Step 3: Release Deadline & Cadence */}
       {step === 3 && (
-        <div className="border border-[#222938] bg-[#141820] p-6 lg:p-8 space-y-6">
+        <div className="border border-[var(--line)] bg-[var(--card)] rounded-[22px] shadow-[var(--shadow)] p-6 lg:p-8 space-y-6">
           <div className="space-y-2">
-            <h2 className="text-lg font-semibold text-[#F8FAFC]">
+            <h2 className="text-lg font-semibold text-[var(--ink)]">
               Give yourself time to check in.
             </h2>
-            <p className="text-sm text-[#94A3B8]">
+            <p className="text-sm text-[var(--muted)]">
               A missed check-in starts a safety window before recovery can begin. Use the quick
               walkthrough to advance time with buttons, or explore a longer interval.
             </p>
@@ -670,15 +670,15 @@ export const CreateVaultWizard: React.FC<CreateVaultWizardProps> = ({
               onClick={() => handleSelectProfile('TESTNET_DEMO')}
               className={`p-4 border text-left space-y-2 cursor-pointer transition-colors ${
                 profileMode === 'TESTNET_DEMO'
-                  ? 'border-[#F59E0B] bg-[#0B0D11]'
-                  : 'border-[#222938] bg-[#0B0D11]/50 hover:border-[#2E3748]'
+                  ? 'border-[var(--yellow-2)] bg-[var(--sunken)]'
+                  : 'border-[var(--line)] bg-[var(--sunken)]/50 hover:border-[var(--line)]'
               }`}
             >
-              <div className="text-xs text-[#F59E0B]">Quick walkthrough · recommended</div>
-              <div className="text-base font-semibold text-[#F8FAFC]">
+              <div className="text-xs text-[var(--accent-ink)]">Quick walkthrough · recommended</div>
+              <div className="text-base font-semibold text-[var(--ink)]">
                 Short interval + safety window
               </div>
-              <p className="text-xs text-[#94A3B8]">
+              <p className="text-xs text-[var(--muted)]">
                 24 blocks between check-ins, then 6 blocks of grace. In the browser lab, advance them instantly with buttons.
               </p>
             </button>
@@ -688,67 +688,67 @@ export const CreateVaultWizard: React.FC<CreateVaultWizardProps> = ({
               onClick={() => handleSelectProfile('STANDARD_PRODUCTION')}
               className={`p-4 border text-left space-y-2 cursor-pointer transition-colors ${
                 profileMode === 'STANDARD_PRODUCTION'
-                  ? 'border-[#F59E0B] bg-[#0B0D11]'
-                  : 'border-[#222938] bg-[#0B0D11]/50 hover:border-[#2E3748]'
+                  ? 'border-[var(--yellow-2)] bg-[var(--sunken)]'
+                  : 'border-[var(--line)] bg-[var(--sunken)]/50 hover:border-[var(--line)]'
               }`}
             >
-              <div className="text-xs text-[#94A3B8]">Longer interval · simulation</div>
-              <div className="text-base font-semibold text-[#F8FAFC]">
+              <div className="text-xs text-[var(--muted)]">Longer interval · simulation</div>
+              <div className="text-base font-semibold text-[var(--ink)]">
                 About a week between check-ins
               </div>
-              <p className="text-xs text-[#94A3B8]">
+              <p className="text-xs text-[var(--muted)]">
                 8,064 blocks, then 12 blocks of grace. About seven days at 75 seconds per block; actual block times vary.
               </p>
             </button>
           </div>
 
-          <details className="text-sm text-[#94A3B8]">
+          <details className="text-sm text-[var(--muted)]">
             <summary className="cursor-pointer">Exact block deadlines and confirmation rules</summary>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-3 text-xs">
-            <div className="p-3.5 bg-[#0B0D11] border border-[#222938] space-y-1">
-              <span className="text-[#64748B]">Initial Expiry Height</span>
-              <div className="text-sm font-semibold text-[#F8FAFC] tabular-nums">
+            <div className="p-3.5 bg-[var(--sunken)] border border-[var(--line)] space-y-1">
+              <span className="text-[var(--faint)]">Initial Expiry Height</span>
+              <div className="text-sm font-semibold text-[var(--ink)] tabular-nums">
                 #{(currentBlockHeight + intervalBlocks).toLocaleString()} (+{intervalBlocks} blocks)
               </div>
             </div>
-            <div className="p-3.5 bg-[#0B0D11] border border-[#222938] space-y-1">
-              <span className="text-[#64748B]">Grace Release Boundary</span>
-              <div className="text-sm font-semibold text-[#F59E0B] tabular-nums">
+            <div className="p-3.5 bg-[var(--sunken)] border border-[var(--line)] space-y-1">
+              <span className="text-[var(--faint)]">Grace Release Boundary</span>
+              <div className="text-sm font-semibold text-[var(--accent-ink)] tabular-nums">
                 #{(currentBlockHeight + intervalBlocks + graceBlocks).toLocaleString()} (+{graceBlocks} grace)
               </div>
             </div>
           </div>
           <p className="text-xs mt-3">Commands require {confirmationTarget} confirmations. This browser lab simulates those blocks; deadlines use confirmed height, not a wall-clock timer.</p>
           </details>
-            <div className="p-4 bg-[#0B0D11] border border-[#222938] space-y-2">
-              <label htmlFor="keeper-threshold" className="text-sm text-[#F8FAFC]">How many keepers must participate?</label>
-              <label className="block text-sm font-semibold text-[#10B981] tabular-nums" htmlFor="keeper-threshold">
+            <div className="p-4 bg-[var(--sunken)] border border-[var(--line)] space-y-2">
+              <label htmlFor="keeper-threshold" className="text-sm text-[var(--ink)]">How many keepers must participate?</label>
+              <label className="block text-sm font-semibold text-[var(--ok)] tabular-nums" htmlFor="keeper-threshold">
                 <span className="sr-only">Keeper threshold</span>
-                <select id="keeper-threshold" value={threshold} onChange={event => setThreshold(Number(event.target.value))} className="w-full bg-transparent text-[#10B981] border-0 p-0 focus:outline-none cursor-pointer">
-                  {[2,3,4,5].map(value => <option key={value} value={value} className="bg-[#0B0D11]">{value} of 5 keepers{value === 3 ? ' · recommended' : ''}</option>)}
+                <select id="keeper-threshold" value={threshold} onChange={event => setThreshold(Number(event.target.value))} className="w-full bg-transparent text-[var(--ok)] border-0 p-0 focus:outline-none cursor-pointer">
+                  {[2,3,4,5].map(value => <option key={value} value={value} className="bg-[var(--sunken)]">{value} of 5 keepers{value === 3 ? ' · recommended' : ''}</option>)}
                 </select>
               </label>
-              <p className="text-xs text-[#94A3B8]">Each keeper holds one piece of the release key. Recovery needs {threshold} different pieces and the recipient’s private key.</p>
+              <p className="text-xs text-[var(--muted)]">Each keeper holds one piece of the release key. Recovery needs {threshold} different pieces and the recipient’s private key.</p>
             </div>
 
           {policyValidationError && (
-            <p role="alert" className="text-xs text-[#EF4444]">{policyValidationError}</p>
+            <p role="alert" className="text-xs text-[var(--bad)]">{policyValidationError}</p>
           )}
           {provisioningError && (
-            <p role="alert" className="text-xs text-[#EF4444]">{provisioningError}</p>
+            <p role="alert" className="text-xs text-[var(--bad)]">{provisioningError}</p>
           )}
 
           <div className="flex justify-between pt-2">
             <button
               onClick={() => setStep(2)}
-              className="px-4 py-2 text-xs font-medium text-[#94A3B8] hover:text-[#F8FAFC] border border-[#222938] rounded cursor-pointer"
+              className="px-4 py-2 text-xs font-medium text-[var(--muted)] hover:text-[var(--ink)] border border-[var(--line)] rounded cursor-pointer"
             >
               Back
             </button>
             <button
               disabled={Boolean(policyValidationError)}
               onClick={initiateEncryptionAndProvisioning}
-              className="px-5 py-2.5 bg-[#F59E0B] disabled:opacity-40 hover:bg-[#D97706] text-[#0B0D11] font-semibold text-sm rounded transition-colors flex items-center gap-2 cursor-pointer"
+              className="px-5 py-2.5 bg-[var(--yellow)] disabled:opacity-40 hover:bg-[var(--yellow-2)] text-[var(--ink)] font-semibold text-sm rounded transition-colors flex items-center gap-2 cursor-pointer"
             >
               <span>Encrypt my file</span>
               <ArrowRight className="w-4 h-4" />
@@ -759,90 +759,90 @@ export const CreateVaultWizard: React.FC<CreateVaultWizardProps> = ({
 
       {/* Step 4: simulated keeper acknowledgements and local registration */}
       {step === 4 && encryptedPkg && (
-        <div className="border border-[#222938] bg-[#141820] p-6 lg:p-8 space-y-6">
+        <div className="border border-[var(--line)] bg-[var(--card)] rounded-[22px] shadow-[var(--shadow)] p-6 lg:p-8 space-y-6">
           <div className="space-y-1">
-            <div className="text-xs text-[#10B981]">
+            <div className="text-xs text-[var(--ok)]">
               FILE ENCRYPTED HERE · {threshold} OF 5 KEEPERS REQUIRED
             </div>
-            <h2 className="text-lg font-semibold text-[#F8FAFC]">
+            <h2 className="text-lg font-semibold text-[var(--ink)]">
               Your file is encrypted. Try the handoff.
             </h2>
-            <p className="text-xs text-[#94A3B8]">
+            <p className="text-xs text-[var(--muted)]">
               Test a check-in, miss a deadline, and recover as the recipient. Five simulated keeper records are ready; your file and private keys stay in this session.
             </p>
           </div>
 
           {/* Individual Keeper Acknowledgements Table */}
-          <details className="text-sm text-[#94A3B8]">
+          <details className="text-sm text-[var(--muted)]">
             <summary className="cursor-pointer">Inspect the five simulated keepers</summary>
-          <div className="border border-[#222938] bg-[#0B0D11] divide-y divide-[#1E2430] text-xs mt-3">
+          <div className="border border-[var(--line)] bg-[var(--sunken)] divide-y divide-[var(--line)] text-xs mt-3">
             {generatedShares.map((s) => (
               <div key={s.index} className="p-3 flex items-center justify-between gap-4">
                 <div className="flex items-center gap-3">
-                  <Check className="w-4 h-4 text-[#10B981] shrink-0" />
-                  <span className="text-[#F8FAFC] font-medium">Keeper 0{s.index}</span>
-                  <span className="text-[#64748B]">·</span>
-                  <span className="text-[#94A3B8]">
+                  <Check className="w-4 h-4 text-[var(--ok)] shrink-0" />
+                  <span className="text-[var(--ink)] font-medium">Keeper 0{s.index}</span>
+                  <span className="text-[var(--faint)]">·</span>
+                  <span className="text-[var(--muted)]">
                     Commitment: {s.commitmentHex.slice(0, 20)}…
                   </span>
                 </div>
-                <span className="text-[#10B981] shrink-0">Simulated ack</span>
+                <span className="text-[var(--ok)] shrink-0">Simulated ack</span>
               </div>
             ))}
           </div>
           </details>
 
           <div className="space-y-3">
-            <div className="text-sm text-[#F8FAFC]">Choose your next step</div>
+            <div className="text-sm text-[var(--ink)]">Choose your next step</div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3" role="radiogroup" aria-label="Registration transport">
               <button
                 type="button"
                 role="radio"
                 aria-checked={registrationMode === 'simulation'}
                 onClick={() => setRegistrationMode('simulation')}
-                className={`p-4 border text-left space-y-2 transition-colors ${registrationMode === 'simulation' ? 'border-[#F59E0B] bg-[#0B0D11]' : 'border-[#222938] bg-[#0B0D11]/50 hover:border-[#2E3748]'}`}
+                className={`p-4 border text-left space-y-2 transition-colors ${registrationMode === 'simulation' ? 'border-[var(--yellow-2)] bg-[var(--sunken)]' : 'border-[var(--line)] bg-[var(--sunken)]/50 hover:border-[var(--line)]'}`}
               >
-                <div className="flex items-center gap-2 text-sm font-semibold text-[#F8FAFC]"><Server className="w-4 h-4 text-[#F59E0B]"/>Try the full walkthrough</div>
-                <p className="text-xs text-[#94A3B8]">Recommended. Real encryption and recovery, simulated time and keepers. No wallet or funds needed.</p>
+                <div className="flex items-center gap-2 text-sm font-semibold text-[var(--ink)]"><Server className="w-4 h-4 text-[var(--accent-ink)]"/>Try the full walkthrough</div>
+                <p className="text-xs text-[var(--muted)]">Recommended. Real encryption and recovery, simulated time and keepers. No wallet or funds needed.</p>
               </button>
               <button
                 type="button"
                 role="radio"
                 aria-checked={registrationMode === 'external'}
                 onClick={() => setRegistrationMode('external')}
-                className={`p-4 border text-left space-y-2 transition-colors ${registrationMode === 'external' ? 'border-[#10B981] bg-[#071611]' : 'border-[#222938] bg-[#0B0D11]/50 hover:border-[#2E3748]'}`}
+                className={`p-4 border text-left space-y-2 transition-colors ${registrationMode === 'external' ? 'border-[var(--ok)] bg-[var(--sunken)]' : 'border-[var(--line)] bg-[var(--sunken)]/50 hover:border-[var(--line)]'}`}
               >
-                <div className="flex items-center gap-2 text-sm font-semibold text-[#F8FAFC]"><WalletCards className="w-4 h-4 text-[#10B981]"/>External testnet wallet</div>
-                <p className="text-xs text-[#94A3B8]">Creates a real ZIP-321 payment request carrying this signed memo. You send it with a compatible Zcash testnet wallet.</p>
+                <div className="flex items-center gap-2 text-sm font-semibold text-[var(--ink)]"><WalletCards className="w-4 h-4 text-[var(--ok)]"/>External testnet wallet</div>
+                <p className="text-xs text-[var(--muted)]">Creates a real ZIP-321 payment request carrying this signed memo. You send it with a compatible Zcash testnet wallet.</p>
               </button>
             </div>
           </div>
 
-          <details className="text-sm text-[#94A3B8]" open={registrationMode === 'external' || undefined}>
+          <details className="text-sm text-[var(--muted)]" open={registrationMode === 'external' || undefined}>
             <summary className="cursor-pointer">{registrationMode === 'external' ? 'Testnet amount and signing details' : 'Simulated fee and signing details'}</summary>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs mt-3">
-            <div className="p-4 bg-[#0B0D11] border border-[#222938] space-y-1.5">
-              <div className="text-[#64748B]">{registrationMode === 'external' ? 'Requested testnet amount' : 'Browser simulation fee assumption'}</div>
-              <div className="text-sm font-semibold text-[#F8FAFC] tabular-nums">10,000 zatoshi (0.00010000 TAZ)</div>
-              <div className="text-[#94A3B8] tabular-nums">
+            <div className="p-4 bg-[var(--sunken)] border border-[var(--line)] space-y-1.5">
+              <div className="text-[var(--faint)]">{registrationMode === 'external' ? 'Requested testnet amount' : 'Browser simulation fee assumption'}</div>
+              <div className="text-sm font-semibold text-[var(--ink)] tabular-nums">10,000 zatoshi (0.00010000 TAZ)</div>
+              <div className="text-[var(--muted)] tabular-nums">
                 {registrationMode === 'external' ? 'Paid by your external wallet; Canary never requests a seed phrase.' : `Available Source Balance: ${walletBalanceZatoshi.toLocaleString()} zatoshi`}
               </div>
             </div>
 
-            <div className="p-4 bg-[#0B0D11] border border-[#222938] space-y-1.5">
-              <div className="text-[#64748B]">Browser-only signing-key reference (redacted)</div>
-              <div className="text-xs text-[#F59E0B] truncate tabular-nums">{sha256Hex(sourceSecretHex).slice(0, 16)}…</div>
-              <div className="text-[#94A3B8]">The full demo key remains in browser memory and is never rendered or sent to the wallet.</div>
+            <div className="p-4 bg-[var(--sunken)] border border-[var(--line)] space-y-1.5">
+              <div className="text-[var(--faint)]">Browser-only signing-key reference (redacted)</div>
+              <div className="text-xs text-[var(--accent-ink)] truncate tabular-nums">{sha256Hex(sourceSecretHex).slice(0, 16)}…</div>
+              <div className="text-[var(--muted)]">The full demo key remains in browser memory and is never rendered or sent to the wallet.</div>
             </div>
           </div>
           </details>
 
-          <label className="flex items-center gap-3 text-sm text-[#E2E8F0] cursor-pointer">
+          <label className="flex items-center gap-3 text-sm text-[var(--ink)] cursor-pointer">
             <input
               type="checkbox"
               checked={backupConfirmed}
               onChange={(e) => setBackupConfirmed(e.target.checked)}
-              className="w-4 h-4 accent-[#F59E0B]"
+              className="w-4 h-4 accent-[var(--ink)]"
             />
             <span>
               I understand this is a temporary walkthrough. Refreshing or closing the page loses the demo keys and progress. I am using a harmless file.
@@ -850,53 +850,53 @@ export const CreateVaultWizard: React.FC<CreateVaultWizardProps> = ({
           </label>
 
           {registrationMode === 'external' && externalRequest && (
-            <section className="border border-[#10B981]/40 bg-[#071611] p-4 sm:p-5 space-y-4" aria-label="External wallet request">
+            <section className="border border-[var(--ok)]/40 bg-[var(--sunken)] p-4 sm:p-5 space-y-4" aria-label="External wallet request">
               <div className="flex items-start justify-between gap-4">
                 <div>
-                  <div className="text-xs text-[#10B981]">ZIP-321 REQUEST READY · MEMO SIGNATURE VALID</div>
-                  <h3 className="text-base font-semibold text-[#F8FAFC] mt-1">Send the registration from your wallet</h3>
+                  <div className="text-xs text-[var(--ok)]">ZIP-321 REQUEST READY · MEMO SIGNATURE VALID</div>
+                  <h3 className="text-base font-semibold text-[var(--ink)] mt-1">Send the registration from your wallet</h3>
                 </div>
-                <Check className="w-5 h-5 text-[#10B981] shrink-0" aria-hidden="true" />
+                <Check className="w-5 h-5 text-[var(--ok)] shrink-0" aria-hidden="true" />
               </div>
               <ol className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
-                <li className="border border-[#10B981]/20 p-3"><strong className="block text-[#F8FAFC] mb-1">1 · Open request</strong><span className="text-[#94A3B8]">Your wallet reviews the testnet address, amount, and memo.</span></li>
-                <li className="border border-[#10B981]/20 p-3"><strong className="block text-[#F8FAFC] mb-1">2 · Send</strong><span className="text-[#94A3B8]">Approve it in the wallet. Canary never sees wallet keys.</span></li>
-                <li className="border border-[#10B981]/20 p-3"><strong className="block text-[#F8FAFC] mb-1">3 · Paste txid</strong><span className="text-[#94A3B8]">Open the public transaction record in the testnet explorer.</span></li>
+                <li className="border border-[var(--ok)]/20 p-3"><strong className="block text-[var(--ink)] mb-1">1 · Open request</strong><span className="text-[var(--muted)]">Your wallet reviews the testnet address, amount, and memo.</span></li>
+                <li className="border border-[var(--ok)]/20 p-3"><strong className="block text-[var(--ink)] mb-1">2 · Send</strong><span className="text-[var(--muted)]">Approve it in the wallet. Canary never sees wallet keys.</span></li>
+                <li className="border border-[var(--ok)]/20 p-3"><strong className="block text-[var(--ink)] mb-1">3 · Paste txid</strong><span className="text-[var(--muted)]">Open the public transaction record in the testnet explorer.</span></li>
               </ol>
               <div className="flex flex-wrap gap-2">
-                <a href={externalRequest.uri} className="px-4 py-2.5 bg-[#10B981] text-[#071611] text-xs font-semibold rounded inline-flex items-center gap-2"><WalletCards className="w-4 h-4"/>Send with Zcash wallet</a>
-                <button type="button" onClick={() => void copyWalletValue(externalRequest.uri, 'ZIP-321 request')} className="px-4 py-2.5 border border-[#10B981]/40 text-[#10B981] text-xs font-semibold rounded inline-flex items-center gap-2"><Copy className="w-4 h-4"/>Copy request</button>
-                <button type="button" onClick={() => void copyWalletValue(externalRequest.memoHex, 'Signed memo')} className="px-4 py-2.5 border border-[#2E3748] text-[#CBD5E1] text-xs font-semibold rounded inline-flex items-center gap-2"><Copy className="w-4 h-4"/>Copy memo</button>
+                <a href={externalRequest.uri} className="px-4 py-2.5 bg-[var(--ok)] text-[var(--ink)] text-xs font-semibold rounded inline-flex items-center gap-2"><WalletCards className="w-4 h-4"/>Send with Zcash wallet</a>
+                <button type="button" onClick={() => void copyWalletValue(externalRequest.uri, 'ZIP-321 request')} className="px-4 py-2.5 border border-[var(--ok)]/40 text-[var(--ok)] text-xs font-semibold rounded inline-flex items-center gap-2"><Copy className="w-4 h-4"/>Copy request</button>
+                <button type="button" onClick={() => void copyWalletValue(externalRequest.memoHex, 'Signed memo')} className="px-4 py-2.5 border border-[var(--line)] text-[var(--muted)] text-xs font-semibold rounded inline-flex items-center gap-2"><Copy className="w-4 h-4"/>Copy memo</button>
               </div>
               <div className="space-y-2">
-                <label htmlFor="external-wallet-txid" className="block text-xs text-[#94A3B8]">Transaction ID returned by the wallet</label>
-                <input id="external-wallet-txid" value={externalTxid} onChange={event => { setExternalTxid(event.target.value); setWalletError(null); }} placeholder="64 hexadecimal characters" spellCheck={false} autoComplete="off" className="w-full px-3.5 py-2.5 bg-[#0B0D11] border border-[#2E3748] rounded text-xs text-[#F8FAFC] font-mono focus:outline-none focus:border-[#10B981]" />
-                <p className="text-[11px] text-[#94A3B8]">A supplied txid is not treated as confirmation. The explorer is the source for inclusion and block status.</p>
-                {normalizedExternalTxid && <a href={testnetExplorerUrl(normalizedExternalTxid)} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 text-xs text-[#10B981] hover:underline">Open transaction in Zcash testnet explorer <ExternalLink className="w-3.5 h-3.5"/></a>}
+                <label htmlFor="external-wallet-txid" className="block text-xs text-[var(--muted)]">Transaction ID returned by the wallet</label>
+                <input id="external-wallet-txid" value={externalTxid} onChange={event => { setExternalTxid(event.target.value); setWalletError(null); }} placeholder="64 hexadecimal characters" spellCheck={false} autoComplete="off" className="w-full px-3.5 py-2.5 bg-[var(--sunken)] border border-[var(--line)] rounded text-xs text-[var(--ink)] font-mono focus:outline-none focus:border-[var(--ok)]" />
+                <p className="text-[11px] text-[var(--muted)]">A supplied txid is not treated as confirmation. The explorer is the source for inclusion and block status.</p>
+                {normalizedExternalTxid && <a href={testnetExplorerUrl(normalizedExternalTxid)} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 text-xs text-[var(--ok)] hover:underline">Open transaction in Zcash testnet explorer <ExternalLink className="w-3.5 h-3.5"/></a>}
               </div>
             </section>
           )}
 
-          {walletMessage && <p role="status" className="text-xs text-[#10B981]">{walletMessage}</p>}
-          {walletError && <p role="alert" className="text-xs text-[#EF4444]">{walletError}</p>}
+          {walletMessage && <p role="status" className="text-xs text-[var(--ok)]">{walletMessage}</p>}
+          {walletError && <p role="alert" className="text-xs text-[var(--bad)]">{walletError}</p>}
 
           <div className="flex justify-between pt-2">
             <button
               onClick={() => setStep(3)}
-              className="px-4 py-2 text-xs font-medium text-[#94A3B8] hover:text-[#F8FAFC] border border-[#222938] rounded cursor-pointer"
+              className="px-4 py-2 text-xs font-medium text-[var(--muted)] hover:text-[var(--ink)] border border-[var(--line)] rounded cursor-pointer"
             >
               Back
             </button>
             {registrationMode === 'simulation' ? (
-              <button disabled={!backupConfirmed || provisionedKeepers.length < 5} onClick={handleSimulateRegistration} className="px-5 py-2.5 bg-[#F59E0B] disabled:opacity-40 hover:bg-[#D97706] text-[#0B0D11] font-semibold text-sm rounded transition-colors flex items-center gap-2 cursor-pointer">
+              <button disabled={!backupConfirmed || provisionedKeepers.length < 5} onClick={handleSimulateRegistration} className="px-5 py-2.5 bg-[var(--yellow)] disabled:opacity-40 hover:bg-[var(--yellow-2)] text-[var(--ink)] font-semibold text-sm rounded transition-colors flex items-center gap-2 cursor-pointer">
                 <Lock className="w-4 h-4"/><span>Start my walkthrough</span>
               </button>
             ) : !externalRequest ? (
-              <button disabled={!backupConfirmed || provisionedKeepers.length < 5} onClick={handlePrepareExternalRequest} className="px-5 py-2.5 bg-[#10B981] disabled:opacity-40 hover:bg-[#0EA371] text-[#071611] font-semibold text-sm rounded transition-colors flex items-center gap-2 cursor-pointer">
+              <button disabled={!backupConfirmed || provisionedKeepers.length < 5} onClick={handlePrepareExternalRequest} className="px-5 py-2.5 bg-[var(--ok)] disabled:opacity-40 hover:bg-[var(--ok)] text-[var(--ink)] font-semibold text-sm rounded transition-colors flex items-center gap-2 cursor-pointer">
                 <WalletCards className="w-4 h-4"/><span>Prepare External Wallet Request</span>
               </button>
             ) : (
-              <button disabled={!normalizedExternalTxid} onClick={handleRecordExternalSubmission} className="px-5 py-2.5 bg-[#10B981] disabled:opacity-40 hover:bg-[#0EA371] text-[#071611] font-semibold text-sm rounded transition-colors flex items-center gap-2 cursor-pointer">
+              <button disabled={!normalizedExternalTxid} onClick={handleRecordExternalSubmission} className="px-5 py-2.5 bg-[var(--ok)] disabled:opacity-40 hover:bg-[var(--ok)] text-[var(--ink)] font-semibold text-sm rounded transition-colors flex items-center gap-2 cursor-pointer">
                 <Check className="w-4 h-4"/><span>Save Txid & Continue to Lifecycle Lab</span>
               </button>
             )}

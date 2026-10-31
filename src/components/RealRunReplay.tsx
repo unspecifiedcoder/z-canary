@@ -73,62 +73,62 @@ export const RealRunReplay: React.FC = () => {
   const passedChecks = step.checks.filter(check => NATIVE_RUN_CHECKS.includes(check));
 
   return (
-    <section className="border border-[#222938] bg-[#0B0D11]" aria-labelledby="replay-title">
-      <div className="flex flex-wrap items-center justify-between gap-2 border-b border-[#222938] px-4 py-4">
-        <h2 id="replay-title" className="text-sm font-semibold text-[#F8FAFC]">Replay the real testnet run</h2>
-        <span className="border border-[#3a3b3e] rounded px-2 py-0.5 text-xs text-[#a3a39e]">
+    <section className="border border-[var(--line)] bg-[var(--sunken)]" aria-labelledby="replay-title">
+      <div className="flex flex-wrap items-center justify-between gap-2 border-b border-[var(--line)] px-4 py-4">
+        <h2 id="replay-title" className="text-sm font-semibold text-[var(--ink)]">Replay the real testnet run</h2>
+        <span className="border border-[var(--line)] rounded px-2 py-0.5 text-xs text-[var(--muted)]">
           Recorded real run · not live
         </span>
       </div>
 
       <div className="space-y-3 px-4 py-4" aria-live="polite">
-        <div className="text-xs text-[#a3a39e]">Step {index + 1} of {STEPS.length}</div>
-        <h3 className="text-base font-semibold text-[#F8FAFC]">{step.title}</h3>
-        <p className="max-w-2xl text-xs leading-relaxed text-[#AEB8C8]">{step.body}</p>
+        <div className="text-xs text-[var(--muted)]">Step {index + 1} of {STEPS.length}</div>
+        <h3 className="text-base font-semibold text-[var(--ink)]">{step.title}</h3>
+        <p className="max-w-2xl text-xs leading-relaxed text-[var(--muted)]">{step.body}</p>
         {step.tx && (
           <a
             href={`https://testnet.cipherscan.app/tx/${step.tx.txid}`}
             target="_blank"
             rel="noreferrer"
-            className="inline-flex max-w-full flex-wrap items-center gap-x-3 gap-y-1 border border-[#2A3343] px-3 py-2 text-[11px] font-mono hover:border-[#F59E0B]/60"
+            className="inline-flex max-w-full flex-wrap items-center gap-x-3 gap-y-1 border border-[var(--line)] px-3 py-2 text-[11px] font-mono hover:border-[var(--yellow-2)]/60"
           >
-            <span className="text-[#64748B]">block {step.tx.blockHeight.toLocaleString()}</span>
-            <span className="break-all text-[#F59E0B]">{step.tx.txid}</span>
-            <ExternalLink className="h-3 w-3 shrink-0 text-[#F59E0B]" aria-hidden="true" />
+            <span className="text-[var(--faint)]">block {step.tx.blockHeight.toLocaleString()}</span>
+            <span className="break-all text-[var(--accent-ink)]">{step.tx.txid}</span>
+            <ExternalLink className="h-3 w-3 shrink-0 text-[var(--accent-ink)]" aria-hidden="true" />
           </a>
         )}
-        {step.outcome && <p className="break-all font-mono text-xs text-[#10B981]">{step.outcome}</p>}
+        {step.outcome && <p className="break-all font-mono text-xs text-[var(--ok)]">{step.outcome}</p>}
         {passedChecks.length > 0 && (
-          <p className="text-[11px] leading-relaxed text-[#64748B]">
+          <p className="text-[11px] leading-relaxed text-[var(--faint)]">
             Passed in the recorded run: {passedChecks.map(check => CHECK_LABELS[check] ?? check).join(' · ')}.
           </p>
         )}
       </div>
 
-      <div className="flex items-center justify-between gap-3 border-t border-[#222938] px-4 py-3">
+      <div className="flex items-center justify-between gap-3 border-t border-[var(--line)] px-4 py-3">
         <button
           type="button"
           onClick={() => setIndex(i => Math.max(0, i - 1))}
           disabled={index === 0}
-          className="inline-flex items-center gap-1 border border-[#30394A] px-3 py-1.5 text-xs text-[#CBD5E1] disabled:opacity-40"
+          className="inline-flex items-center gap-1 border border-[var(--line)] px-3 py-1.5 text-xs text-[var(--muted)] disabled:opacity-40"
         >
           <ChevronLeft className="h-3.5 w-3.5" aria-hidden="true" /> Previous
         </button>
         <div className="hidden gap-1.5 sm:flex" aria-hidden="true">
           {STEPS.map((_, i) => (
-            <span key={i} className={`h-1.5 w-5 ${i === index ? 'bg-[#F59E0B]' : i < index ? 'bg-[#10B981]/60' : 'bg-[#2A3343]'}`} />
+            <span key={i} className={`h-1.5 w-5 ${i === index ? 'bg-[var(--yellow)]' : i < index ? 'bg-[var(--ok)]/60' : 'bg-[var(--sunken)]'}`} />
           ))}
         </div>
         <button
           type="button"
           onClick={() => setIndex(i => Math.min(STEPS.length - 1, i + 1))}
           disabled={index === STEPS.length - 1}
-          className="inline-flex items-center gap-1 border border-[#F59E0B]/60 px-3 py-1.5 text-xs text-[#F59E0B] disabled:opacity-40"
+          className="inline-flex items-center gap-1 border border-[var(--yellow-2)]/60 px-3 py-1.5 text-xs text-[var(--accent-ink)] disabled:opacity-40"
         >
           Next <ChevronRight className="h-3.5 w-3.5" aria-hidden="true" />
         </button>
       </div>
-      <p className="border-t border-[#1E2430] px-4 py-3 text-[11px] leading-relaxed text-[#64748B]">
+      <p className="border-t border-[var(--line)] px-4 py-3 text-[11px] leading-relaxed text-[var(--faint)]">
         Five keeper processes ran on one machine, so this is not independent operators. Testnet TAZ has no value.
       </p>
     </section>

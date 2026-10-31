@@ -1,7 +1,6 @@
 import React from 'react';
 import { ArrowRight, Check, Circle, FastForward, KeyRound, RotateCcw, ShieldCheck } from 'lucide-react';
 import type { ContinuityVault } from '../engine/protocolStore';
-import './JudgeJourney.css';
 
 type JourneyPage = 'create' | 'sentinel' | 'recipient' | 'evidence';
 
