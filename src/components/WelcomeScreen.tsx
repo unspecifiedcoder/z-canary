@@ -1,5 +1,5 @@
 import React, { lazy, Suspense } from 'react';
-import { ArrowRight, ArrowUpRight, Fingerprint, Radio, ShieldCheck, FileText, LockKeyhole } from 'lucide-react';
+import { ArrowRight, ArrowUpRight, FileText, LockKeyhole } from 'lucide-react';
 import { ContinuityVault } from '../engine/protocolStore';
 import { phaseLabels, projectVault } from '../experience/model';
 const LivingVault = lazy(() => import('./LivingVault'));
@@ -16,7 +16,7 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ activeVault, curre
   const visual = projectVault(activeVault, currentBlockHeight);
   return <div className="overview-experience">
     <section className="canary-opening" aria-labelledby="opening-title">
-      <div className="canary-opening-art" aria-hidden="true"><img src="./assets/canary-vault.webp" alt="" width="1672" height="941" fetchPriority="high" /></div>
+      <div className="canary-opening-art" aria-hidden="true"><img src="./assets/dossier/hero.webp" alt="" width="1536" height="1024" fetchPriority="high" /></div>
       <div className="canary-opening-inner">
         <div className="canary-opening-copy">
           <p className="canary-eyebrow"><span/>A safety handoff for whistleblowers &amp; journalists</p>
@@ -39,6 +39,8 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ activeVault, curre
       </div>
     </section>
 
+    <div className="dossier-hatch" aria-hidden="true"/>
+
     <section className="handoff-story" id="handoff-story" aria-labelledby="handoff-title">
       <div className="canary-section-shell">
         <div className="handoff-story-heading"><div><span className="canary-paper-label">The problem: Maya is investigating corruption</span><h2 id="handoff-title">Share now, risk exposure.<br/><em>Keep it alone, risk losing it.</em></h2></div><p>Canary gives Maya a third choice. Her evidence stays encrypted while she checks in. If she becomes unreachable, her editor Noor gets a controlled recovery path—not automatic access.</p></div>
@@ -50,9 +52,9 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ activeVault, curre
           <div className="handoff-person"><span className="handoff-person-initial">N</span><div><strong>Noor</strong><span>The chosen editor</span></div></div>
         </div>
         <div className="handoff-principles">
-          <button onClick={() => onNavigate('create')}><span className="handoff-step">01 <Fingerprint size={20}/></span><h3>Lock the evidence now.</h3><p>Choose who may recover it. The file is encrypted locally before the handoff begins.</p><span className="handoff-principle-link">Create your own Canary <ArrowUpRight size={17}/></span></button>
-          <button onClick={() => onNavigate('sentinel')}><span className="handoff-step">02 <Radio size={20}/></span><h3>Keep saying “I’m okay.”</h3><p>Each signed check-in moves the deadline. While check-ins continue, recovery stays blocked.</p><span className="handoff-principle-link">See the owner view <ArrowUpRight size={17}/></span></button>
-          <button onClick={() => onNavigate('recipient')}><span className="handoff-step">03 <ShieldCheck size={20}/></span><h3>If silence continues, recover.</h3><p>After the deadline and safety window, enough keepers—and the chosen person’s key—are still required.</p><span className="handoff-principle-link">See the recipient view <ArrowUpRight size={17}/></span></button>
+          <button onClick={() => onNavigate('create')}><img className="handoff-icon" src="./assets/dossier/icon-seal.webp" alt="" width="512" height="512" loading="lazy"/><span className="handoff-step">01</span><h3>Lock the evidence now.</h3><p>Choose who may recover it. The file is encrypted locally before the handoff begins.</p><span className="handoff-principle-link">Create your own Canary <ArrowUpRight size={17}/></span></button>
+          <button onClick={() => onNavigate('sentinel')}><img className="handoff-icon" src="./assets/dossier/icon-pulse.webp" alt="" width="512" height="512" loading="lazy"/><span className="handoff-step">02</span><h3>Keep saying “I’m okay.”</h3><p>Each signed check-in moves the deadline. While check-ins continue, recovery stays blocked.</p><span className="handoff-principle-link">See the owner view <ArrowUpRight size={17}/></span></button>
+          <button onClick={() => onNavigate('recipient')}><img className="handoff-icon" src="./assets/dossier/icon-recover.webp" alt="" width="512" height="512" loading="lazy"/><span className="handoff-step">03</span><h3>If silence continues, recover.</h3><p>After the deadline and safety window, enough keepers—and the chosen person’s key—are still required.</p><span className="handoff-principle-link">See the recipient view <ArrowUpRight size={17}/></span></button>
         </div>
         <div className="handoff-story-bottom"><p>Use a harmless file and run the whole lifecycle yourself—or follow Maya and Noor’s guided example.</p><button className="canary-button ink" onClick={() => onNavigate('create')}>Create your own Canary <ArrowRight size={18}/></button></div>
       </div>
@@ -71,6 +73,7 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ activeVault, curre
     </section>
 
     <section className="canary-native-proof" aria-labelledby="native-proof-title">
+      <img className="native-proof-art" src="./assets/dossier/keepers.webp" alt="" aria-hidden="true" width="1536" height="1024" loading="lazy" />
       <div className="canary-section-shell">
         <div className="native-proof-copy"><span className="canary-paper-label">Why Zcash belongs here</span><h2 id="native-proof-title">Private check-ins.<br/>Verifiable recovery.</h2><p>Canary’s native testnet path carries signed check-ins in Zcash shielded transactions, keeping their contents off the public chain. The evidence file stays off-chain. Inspect the recorded registration, check-in, cancellation and exact-file recovery below.</p></div>
         <div className="native-proof-numbers"><div><strong>4</strong><span>Commands in the protected-document run (3 more memos in an earlier run: 7 in total)</span></div><div><strong>136<span>B</span></strong><span>Recovered, byte for byte</span></div><div><strong>3<span>/5</span></strong><span>Recovery threshold</span></div></div>

@@ -6,7 +6,6 @@ import {
   Download,
   CheckCircle2,
   AlertTriangle,
-  FileText,
   ShieldAlert,
   FastForward,
 } from 'lucide-react';
@@ -100,7 +99,7 @@ export const RecipientInboxScreen: React.FC<RecipientInboxScreenProps> = ({
   return <div className="recipient-workspace">
     <div className="product-heading"><div><h1>An archive is waiting for you</h1><p>Recovery needs the permitted threshold and the designated recipient’s private key.</p></div><span className="recipient-state"><span className="signal-dot"/>{(t=>t.charAt(0).toUpperCase()+t.slice(1))(inboxState.replaceAll('_',' ').toLowerCase())}</span></div>
     <section className="recovery-layout">
-      <div className="recovery-artifact"><div className="artifact-symbol" aria-hidden="true"><FileText size={68} strokeWidth={.7}/><span>{vault.decryptedByRecipient?<CheckCircle2 size={20}/>:<Lock size={20}/>}</span></div><span className="section-label">{vault.decryptedByRecipient?'Recovered file':'Encrypted file'}</span><h2>{vault.fileName}</h2><p>{vault.decryptedByRecipient?'Authenticated decryption succeeded. The original bytes are ready to download.':deliveredCount>=threshold?'The keeper threshold is available. The recipient layer still requires your key.':'The evidence remains encrypted while the release conditions are unmet.'}</p><div className="artifact-fingerprint"><span>Recipient fingerprint</span><code>{recipientIdentity.fingerprint}</code></div></div>
+      <div className="recovery-artifact"><div className="artifact-symbol" aria-hidden="true"><img src="./assets/dossier/inbox.webp" alt="" width="512" height="512"/><span>{vault.decryptedByRecipient?<CheckCircle2 size={20}/>:<Lock size={20}/>}</span></div><span className="section-label">{vault.decryptedByRecipient?'Recovered file':'Encrypted file'}</span><h2>{vault.fileName}</h2><p>{vault.decryptedByRecipient?'Authenticated decryption succeeded. The original bytes are ready to download.':deliveredCount>=threshold?'The keeper threshold is available. The recipient layer still requires your key.':'The evidence remains encrypted while the release conditions are unmet.'}</p><div className="artifact-fingerprint"><span>Recipient fingerprint</span><code>{recipientIdentity.fingerprint}</code></div></div>
       <div className="recovery-controls"><div className="recovery-count"><strong>{deliveredCount}<span> / {threshold}</span></strong><div>Shares received<br/><span>{threshold} distinct valid shares required</span></div></div>
         <ol className="share-stations">{[1,2,3,4,5].map(index=>{const delivered=vault.deliveredSharesToRecipient.some(s=>s.index===index);return <li key={index} className={delivered?'is-received':''}><span>0{index}</span><div><strong>Keeper station {index}</strong><small>{delivered?'Share received · commitment checked on recovery':'Share withheld'}</small></div>{delivered?<CheckCircle2 size={16}/>:<Lock size={15}/>}</li>;})}</ol>
         <label className="recipient-key-label" htmlFor="demo-recipient-key">Recipient private key<input id="demo-recipient-key" type="password" autoComplete="off" spellCheck={false} placeholder="Paste the selected recipient’s 32-byte private key" value={recipientPrivInput} onChange={event=>setRecipientPrivInput(event.target.value)}/></label>

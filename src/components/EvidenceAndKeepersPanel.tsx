@@ -115,7 +115,8 @@ export const EvidenceAndKeepersPanel: React.FC<EvidenceAndKeepersPanelProps> = (
 
   return (
     <div className="space-y-10 pb-16">
-      <section className="border border-[#D6A84B]/50 bg-[#141820] p-6 lg:p-8 space-y-7" aria-labelledby="judge-proof-title">
+      <section className="evidence-hero border border-[#D6A84B]/50 bg-[#141820] p-6 lg:p-8 space-y-7" aria-labelledby="judge-proof-title">
+        <img className="evidence-hero-art" src="./assets/dossier/keepers.webp" alt="" aria-hidden="true" width="1536" height="1024" />
         <div className="flex flex-col xl:flex-row xl:items-end justify-between gap-5 border-b border-[#222938] pb-6">
           <div className="max-w-3xl space-y-2">
             

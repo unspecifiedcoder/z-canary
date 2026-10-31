@@ -1,0 +1,489 @@
+/* Canary — "sealed dossier" layer. Loaded last; it restyles, it never changes behaviour.
+   Direction: an investigative case file on obsidian. Warm ivory ink, one Zcash-gold accent,
+   paper case-file cards with a folder tab, registration marks on the hero frame, and
+   redaction bars as the one decorative motif.
+   - Faces: Schibsted Grotesk (built for newsrooms) for everything you read; Sometype Mono only
+     for data (block heights, txids, hashes) and short tab labels.
+   - Type scale: display 76 / h1 44 / h2 32 / h3 18 / body 16 / small 14; nothing under 12px.
+   - Radii: panels 18px, cards 14px, controls 10px, pills 999px.
+   - Motion: the hero's redaction bar lifts once (off under prefers-reduced-motion). */
+
+:root {
+  --font-display: 'Schibsted Grotesk', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-sans: 'Schibsted Grotesk', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-mono: 'Sometype Mono', ui-monospace, 'Cascadia Mono', Consolas, monospace;
+}
+
+:root .canary-app {
+  --ground: #0c0c0b;
+  --surface: #141412;
+  --raised: #1c1b18;
+  --line: #2c2b27;
+  --rule: #22211e;
+  --ink: #f4f0e6;
+  --muted: #b0aa9b;
+  --faint: #8f8a7c;
+  --gold: #f4b728;
+  --gold-soft: #f4b72822;
+  --paper: #f1ecdf;
+  --paper-2: #e7e0cf;
+  --paper-ink: #1b1914;
+  --paper-muted: #5f5a4d;
+  --data: var(--gold);
+  --amber: var(--gold);
+  --cyan: var(--ink);
+  --ok: #6fd19b;
+  --bad: #f2806f;
+  --radius: 14px;
+  --radius-panel: 18px;
+  --radius-control: 10px;
+  --shell: min(1320px, calc(100% - 2 * clamp(16px, 4.5vw, 64px)));
+  background: var(--ground);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  font-size: 16px;
+  font-feature-settings: normal;
+}
+:root body { background: #0c0c0b; }
+:root .canary-app ::selection { background: #f4b72855; color: var(--ink); }
+:root .canary-app :focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; border-radius: 6px; }
+:root .canary-app :where(h1, h2, h3, h4) { font-family: var(--font-display); }
+:root .canary-app, :root .canary-app :where(p, span, strong, small, button, a, dt, dd, li, h1, h2, h3) { font-feature-settings: normal; }
+:root .canary-app :where(code, kbd, .font-mono, .tabular-nums, dd) { font-variant-numeric: tabular-nums; }
+
+/* Serif accents are retired: emphasis is gold, same face, same weight. */
+:root .canary-app :where(h1, h2) em,
+:root .canary-app .break-heading h1 em {
+  font-family: var(--font-display);
+  font-style: normal;
+  font-weight: inherit;
+  letter-spacing: inherit;
+  color: var(--gold);
+}
+
+/* Skip link sits off-screen until focused (it showed mid-page in full-page captures). */
+:root .canary-app .skip-link { position: fixed; top: 0; left: 16px; transform: translateY(-120%); z-index: 200; padding: 10px 16px; border-radius: 0 0 10px 10px; background: var(--gold); color: var(--paper-ink); font: 600 14px var(--font-sans); text-decoration: none; }
+:root .canary-app .skip-link:focus { top: 0; transform: none; }
+
+/* ── Header: wordmark left, segmented nav centre, split CTA right ───────────────────── */
+:root .canary-app .canary-header {
+  position: sticky; top: 0; z-index: 50;
+  min-height: 72px; padding: 0 clamp(16px, 4.5vw, 64px);
+  background: #0c0c0bf2; border-bottom: 1px solid var(--line);
+  display: grid; grid-template-columns: auto 1fr auto; gap: 24px;
+}
+:root .canary-app .canary-wordmark { gap: 10px; padding: 0; }
+:root .canary-app .canary-wordmark span { font: 700 24px var(--font-display); letter-spacing: -.045em; color: var(--ink); }
+:root .canary-app .canary-wordmark svg { width: 28px; height: 28px; stroke: var(--gold); stroke-width: 1.8; }
+:root .canary-app .canary-navigation {
+  justify-self: center; align-self: center;
+  display: flex; gap: 2px; padding: 4px;
+  border: 1px solid var(--line); border-radius: 999px; background: var(--surface);
+}
+:root .canary-app .canary-navigation button {
+  min-height: 38px; padding: 0 15px; border-radius: 999px;
+  font: 500 14px var(--font-sans); letter-spacing: -.005em; color: var(--muted);
+  transition: color .15s, background-color .15s;
+}
+:root .canary-app .canary-navigation button:after { display: none; }
+:root .canary-app .canary-navigation button:hover { color: var(--ink); background: var(--raised); }
+:root .canary-app .canary-navigation button[aria-current] { color: var(--paper-ink); background: var(--paper); }
+:root .canary-app .native-nav {
+  display: inline-flex; align-items: center; gap: 10px; min-height: 42px;
+  padding: 0 0 0 16px; overflow: hidden;
+  font: 600 14px var(--font-sans); color: var(--ink);
+  border: 1px solid #3b3a35; border-radius: var(--radius-control); background: var(--surface);
+}
+:root .canary-app .native-nav > span[aria-hidden] {
+  display: grid; place-items: center; align-self: stretch; width: 42px; margin-left: 4px;
+  border-left: 1px solid #3b3a35; color: var(--gold); font-size: 15px;
+}
+:root .canary-app .native-nav:hover, :root .canary-app .native-nav.is-active { background: var(--raised); border-color: var(--gold); }
+:root .canary-app .signal-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--ok); box-shadow: 0 0 0 3px #6fd19b22; }
+
+/* ── Mode strip: one slim line that says what is real ───────────────────────────────── */
+:root .canary-app .environment-strip {
+  min-height: 46px; padding: 8px clamp(16px, 4.5vw, 64px); gap: 14px;
+  background: var(--ground); border-bottom: 1px solid var(--line);
+  font: 400 14px/1.5 var(--font-sans); color: var(--muted);
+}
+:root .canary-app .environment-strip > span {
+  flex: none; display: inline-flex; align-items: center; gap: 8px;
+  padding: 4px 12px 4px 10px; border: 1px solid #3b3a35; border-radius: 999px;
+  font: 500 12px var(--font-mono); letter-spacing: .06em; text-transform: uppercase; color: var(--ink);
+}
+:root .canary-app .environment-strip > span::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--gold); }
+:root .canary-app .environment-strip--native > span::before { background: var(--ok); }
+:root .canary-app .environment-strip p { margin: 0; }
+:root .canary-app .environment-strip button { flex: none; font: 600 14px var(--font-sans); color: var(--gold); text-decoration: none; }
+:root .canary-app .environment-strip button:hover { text-decoration: underline; text-underline-offset: 4px; }
+
+:root .canary-app .simulation-tools {
+  width: var(--shell); margin: 20px auto 0; border: 1px solid var(--line); border-radius: var(--radius);
+  background: var(--surface); font: 400 14px var(--font-sans);
+}
+:root .canary-app .simulation-tools summary { min-height: 48px; padding: 0 18px; align-items: center; font: 600 14px var(--font-sans); color: var(--ink); }
+:root .canary-app .simulation-tools summary span:nth-child(2) { font: 400 13px var(--font-mono); color: var(--muted); }
+:root .canary-app .simulation-tools summary span:last-child { color: var(--gold); }
+:root .canary-app .simulation-tools button { border-radius: 999px; font: 500 13px var(--font-sans); padding: 8px 14px; background: var(--raised); border: 1px solid var(--line); }
+:root .canary-app .simulation-tools button:hover { border-color: var(--gold); }
+
+/* ── Buttons: split CTA (label + arrow block), pills for secondary ─────────────────── */
+:root .canary-app .canary-button {
+  display: inline-flex; align-items: center; justify-content: center; gap: 14px;
+  min-height: 48px; padding: 0 20px; border-radius: var(--radius-control) !important;
+  font: 600 15px var(--font-sans); letter-spacing: -.01em; text-decoration: none;
+  transition: background-color .15s, border-color .15s, transform .15s;
+}
+:root .canary-app .canary-button.primary { background: var(--gold); color: var(--paper-ink); border: 0; overflow: hidden; }
+:root .canary-app .canary-button.primary:has(> svg:last-child:is(.lucide-arrow-up-right, .lucide-arrow-right)) { padding-right: 0; }
+:root .canary-app .canary-button.primary svg:is(.lucide-arrow-up-right, .lucide-arrow-right) { box-sizing: content-box; width: 18px; height: 18px; padding: 15px; margin-left: 4px; background: #0000001a; border-left: 1px solid #0000001f; }
+:root .canary-app .canary-button.primary:hover:not(:disabled) { background: #ffc83d; }
+:root .canary-app .canary-button.ink { background: var(--paper-ink); color: var(--paper); border: 0; }
+:root .canary-app .canary-button.ink:hover:not(:disabled) { background: #2d2a22; }
+:root .canary-app .canary-button.outline, :root .canary-app .canary-button.quiet { background: transparent; color: var(--ink); border: 1px solid #3b3a35; }
+:root .canary-app .canary-button.outline:hover, :root .canary-app .canary-button.quiet:hover:not(:disabled) { border-color: var(--gold); background: var(--gold-soft); }
+:root .canary-app .canary-button:active:not(:disabled) { transform: translateY(1px); }
+:root .canary-app .text-link, :root .canary-app .canary-watch-link {
+  display: inline-flex; align-items: center; gap: 8px; min-height: 44px;
+  font: 600 15px var(--font-sans); color: var(--ink); text-decoration: none;
+}
+:root .canary-app .text-link:hover, :root .canary-app .canary-watch-link:hover { color: var(--gold); }
+
+/* Shared labels: mono, uppercase, 12px, with a gold tick. */
+:root .canary-app :is(.canary-eyebrow, .canary-paper-label, .section-label, .break-eyebrow, .page-eyebrow) {
+  font: 500 12px/1.5 var(--font-mono); letter-spacing: .08em; text-transform: uppercase; color: var(--muted);
+}
+:root .canary-app .canary-eyebrow {
+  display: inline-flex; align-items: center; gap: 10px; padding: 6px 14px 6px 10px;
+  border: 1px solid #3b3a35; border-radius: 999px; background: #14141299; color: var(--ink);
+}
+:root .canary-app .canary-eyebrow > span { width: 7px; height: 7px; border-radius: 50%; background: var(--gold); }
+
+/* ── Type scale on app pages ────────────────────────────────────────────────────────── */
+:root .canary-app .canary-main:not(.page-welcome):not(.page-demo):not(.page-judge):not(.page-break) h1 { font: 700 clamp(32px, 3.4vw, 44px)/1.08 var(--font-display); letter-spacing: -.04em; }
+:root .canary-app .canary-main:not(.page-welcome):not(.page-demo):not(.page-judge):not(.page-break):not(.page-case) h2 { font: 650 clamp(20px, 1.7vw, 24px)/1.25 var(--font-display); letter-spacing: -.025em; }
+:root .canary-app .canary-main h3 { font: 600 18px/1.35 var(--font-display); letter-spacing: -.015em; }
+:root .canary-app .canary-main :where([class*="text-[9px]"], [class*="text-[10px]"], [class*="text-[11px]"]) { font-size: 12px !important; }
+:root .canary-app .canary-main .text-xs { font-size: 14px; line-height: 1.6; }
+:root .canary-app .canary-main .text-sm { font-size: 15px; }
+:root .canary-app .canary-main .product-heading { padding-bottom: 28px; margin-bottom: 32px; border-bottom: 1px solid var(--line); }
+:root .canary-app .canary-main .product-heading p { font-size: 16px; line-height: 1.6; color: var(--muted); }
+:root .canary-app .canary-main { padding-top: 40px; }
+:root .canary-app .canary-main.page-welcome { padding-top: 0; }
+
+/* Tailwind-built panels (wizard, vault console, keepers) get the same card language. */
+:root .canary-app .canary-main :where([class*="border-[#222938]"], [class*="border-[#2a2b2e]"], [class*="border-[#293548]"], [class*="border-[#263244]"]) { border-color: var(--line); }
+:root .canary-app .canary-main :where([class*="bg-[#141820]"], [class*="bg-[#111923]"]) { background-color: var(--surface); border-radius: var(--radius-panel); }
+:root .canary-app .canary-main :where([class*="bg-[#0B0D11]"]) { background-color: var(--ground); border-radius: var(--radius); }
+:root .canary-app .canary-main :where([class*="text-[#94A3B8]"], [class*="text-[#AAB6C7]"]) { color: var(--muted); }
+:root .canary-app .canary-main :where([class*="text-[#64748B]"], [class*="text-[#718096]"]) { color: var(--faint); }
+:root .canary-app .canary-main :where([class*="text-[#F8FAFC]"], [class*="text-[#E2E8F0]"]) { color: var(--ink); }
+:root .canary-app .canary-main :where([class*="text-[#F59E0B]"], [class*="text-amber-400"]) { color: var(--gold); }
+:root .canary-app .canary-main :where([class*="text-[#10B981]"]) { color: var(--ok); }
+:root .canary-app .canary-main :where([class*="bg-[#F59E0B]"], [class*="bg-amber-500"]) { background-color: var(--gold); color: var(--paper-ink); border-radius: var(--radius-control); }
+:root .canary-app .canary-main :where([class*="bg-[#F59E0B]"]):hover:not(:disabled) { background-color: #ffc83d; }
+:root .canary-app .canary-main :where(button[class*="rounded"][class*="border"]) { border-radius: var(--radius-control); }
+:root .canary-app .canary-main :where(input:not([type="checkbox"]):not([type="radio"]):not([type="file"]), textarea, select) {
+  border-radius: var(--radius-control); background-color: var(--ground); border-color: #3b3a35; color: var(--ink); font-family: var(--font-sans);
+}
+:root .canary-app .canary-main :where(input, textarea):focus { border-color: var(--gold); outline: none; box-shadow: 0 0 0 3px var(--gold-soft); }
+:root .canary-app .canary-main :where(input[type="file"])::file-selector-button { border: 1px solid #3b3a35; border-radius: 999px; background: var(--raised); color: var(--ink); padding: 8px 14px; margin-right: 12px; font: 500 14px var(--font-sans); }
+:root .canary-app .canary-main :where(code, .font-mono) { font-family: var(--font-mono); }
+
+/* ── Overview hero: framed case file with registration marks ───────────────────────── */
+:root .canary-app .canary-opening { background: var(--ground); min-height: 0; padding: clamp(18px, 3vw, 36px) clamp(16px, 4.5vw, 64px) 0; }
+:root .canary-app .canary-opening::before {
+  content: ''; position: absolute; z-index: 2; pointer-events: none;
+  inset: clamp(18px, 3vw, 36px) clamp(16px, 4.5vw, 64px) auto; height: calc(100% - clamp(18px, 3vw, 36px));
+  background:
+    linear-gradient(var(--gold), var(--gold)) 0 0 / 14px 1px, linear-gradient(var(--gold), var(--gold)) 0 0 / 1px 14px,
+    linear-gradient(var(--gold), var(--gold)) 100% 0 / 14px 1px, linear-gradient(var(--gold), var(--gold)) 100% 0 / 1px 14px;
+  background-repeat: no-repeat;
+}
+:root .canary-app .canary-opening-art {
+  inset: clamp(18px, 3vw, 36px) clamp(16px, 4.5vw, 64px) 0; height: auto;
+  border: 1px solid var(--line); border-radius: 24px; overflow: hidden;
+}
+:root .canary-app .canary-opening-art img { object-position: 85% 40%; filter: none; }
+:root .canary-app .canary-observatory .living-vault { filter: none; }
+:root .canary-app .canary-opening-art::after { background: linear-gradient(90deg, #0c0c0b 0%, #0c0c0bf0 30%, #0c0c0b8c 50%, #0c0c0b00 72%), linear-gradient(0deg, #0c0c0b 0%, transparent 40%); }
+:root .canary-app .canary-opening-inner { min-height: min(700px, 78vh); padding: clamp(48px, 7vw, 104px) clamp(24px, 5vw, 72px) 56px; max-width: none; }
+:root .canary-app .canary-opening-copy { width: min(640px, 60%); max-width: none; }
+:root .canary-app .canary-opening h1 { font: 700 clamp(44px, 5.4vw, 80px)/1 var(--font-display); letter-spacing: -.05em; margin: 28px 0 26px; text-wrap: balance; }
+:root .canary-app .canary-opening h1 em { display: inline-block; position: relative; font-size: 1em; line-height: 1.06; margin-top: 6px; color: var(--gold); letter-spacing: -.05em; }
+:root .canary-app .canary-opening h1 em::after {
+  content: ''; position: absolute; left: -.06em; right: -.06em; top: .1em; bottom: .02em;
+  background: var(--paper); transform-origin: right center; transform: scaleX(0);
+  animation: dossier-redaction 1.4s cubic-bezier(.7, 0, .2, 1) .35s both;
+}
+@keyframes dossier-redaction { 0% { transform: scaleX(1); transform-origin: right center; } 55% { transform: scaleX(1); } 100% { transform: scaleX(0); } }
+:root .canary-app .canary-opening-description { font-size: 18px; line-height: 1.65; color: #cfc9ba; max-width: 520px; }
+:root .canary-app .canary-opening-description strong { color: var(--ink); font-weight: 600; }
+:root .canary-app .canary-opening-actions { gap: 22px; margin-top: 36px; }
+:root .canary-app .canary-opening-note { font: 400 13px/1.6 var(--font-sans); color: var(--faint); margin-top: 18px; }
+:root .canary-app .canary-opening-baseline {
+  position: relative; z-index: 3; width: auto; max-width: none; margin: 0 0 1px; padding: 0;
+  display: grid; grid-template-columns: 1fr auto; align-items: stretch; gap: 0;
+  border: 1px solid var(--line); border-radius: 0 0 24px 24px; background: #141412e6;
+}
+:root .canary-app .proof-strip { display: grid; grid-template-columns: repeat(3, 1fr); margin: 0; }
+:root .canary-app .proof-strip > div { display: flex; flex-direction: column-reverse; justify-content: flex-end; gap: 6px; padding: 24px clamp(18px, 2.4vw, 32px); border-right: 1px solid var(--line); }
+:root .canary-app .proof-strip dt { font: 400 14px/1.45 var(--font-sans); color: var(--muted); max-width: 22ch; }
+:root .canary-app .proof-strip dd { margin: 0; font: 700 clamp(30px, 3vw, 40px)/1 var(--font-display); letter-spacing: -.04em; color: var(--ink); }
+:root .canary-app .canary-opening-baseline > a {
+  display: flex; align-items: center; gap: 12px; padding: 0 clamp(20px, 2.6vw, 36px);
+  font: 600 15px var(--font-sans); color: var(--gold); text-decoration: none; white-space: nowrap;
+}
+:root .canary-app .canary-opening-baseline > a:hover { background: var(--raised); border-radius: 0 0 24px 0; }
+
+/* ── Overview story: paper case file ────────────────────────────────────────────────── */
+:root .canary-app .handoff-story { background: var(--ground); color: var(--ink); padding: clamp(64px, 9vw, 120px) 0 clamp(48px, 6vw, 80px); }
+:root .canary-app .canary-section-shell { width: var(--shell); max-width: none; padding-inline: 0; margin-inline: auto; }
+:root .canary-app :is(.handoff-story, .canary-observatory, .canary-native-proof) h2 { font: 700 clamp(34px, 4vw, 56px)/1.04 var(--font-display); letter-spacing: -.045em; margin: 20px 0 0; }
+:root .canary-app .handoff-story-heading > p, :root .canary-app .canary-observatory-top p, :root .canary-app .native-proof-copy p { font-size: 17px; line-height: 1.65; color: var(--muted); }
+:root .canary-app .handoff-illustration {
+  position: relative; margin-top: 48px; padding: 44px clamp(20px, 3vw, 44px);
+  background: var(--paper); color: var(--paper-ink); border: 0; border-radius: 4px var(--radius-panel) var(--radius-panel) var(--radius-panel);
+}
+:root .canary-app .handoff-illustration::before {
+  content: 'CASE FILE · MAYA → NOOR'; position: absolute; left: 0; bottom: 100%;
+  padding: 9px 22px 7px; background: var(--paper); color: var(--paper-muted);
+  border-radius: 12px 12px 0 0; font: 500 12px var(--font-mono); letter-spacing: .08em;
+}
+:root .canary-app .handoff-person strong { font: 700 22px var(--font-display); letter-spacing: -.03em; color: var(--paper-ink); }
+:root .canary-app .handoff-person span:not(.handoff-person-initial) { color: var(--paper-muted); font-size: 14px; }
+:root .canary-app .handoff-person-initial { border-color: var(--paper-ink); color: var(--paper-ink); background: transparent; font: 700 20px var(--font-display); }
+:root .canary-app .handoff-connector > span { font: 500 12px var(--font-mono); letter-spacing: .06em; color: var(--paper-muted); }
+:root .canary-app .handoff-connector i { background: repeating-linear-gradient(90deg, var(--paper-ink) 0 6px, transparent 6px 11px); height: 2px; }
+:root .canary-app .handoff-document { background: var(--paper-ink); color: var(--paper); border: 0; border-radius: 12px; box-shadow: 0 18px 40px -18px #000c; }
+:root .canary-app .handoff-document svg:last-child { color: var(--gold); }
+:root .canary-app .handoff-principles { gap: 16px; border: 0; margin-top: 28px; }
+:root .canary-app .handoff-principles > button {
+  padding: 26px; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius);
+  color: var(--ink); text-align: left; transition: border-color .15s, transform .2s;
+}
+:root .canary-app .handoff-principles > button:hover { border-color: var(--gold); transform: translateY(-2px); }
+:root .canary-app .handoff-principles h3 { font: 700 21px/1.25 var(--font-display); letter-spacing: -.025em; color: var(--ink); }
+:root .canary-app .handoff-principles p { font-size: 15px; line-height: 1.6; color: var(--muted); }
+:root .canary-app .handoff-step { font: 500 12px var(--font-mono); letter-spacing: .08em; color: var(--gold); }
+:root .canary-app .handoff-principle-link { font: 600 14px var(--font-sans); color: var(--ink); }
+:root .canary-app .handoff-story-bottom { border-color: var(--line); }
+:root .canary-app .handoff-story-bottom p { color: var(--muted); font-size: 16px; }
+
+:root .canary-app .canary-observatory { background: var(--ground); border-top: 1px solid var(--line); }
+:root .canary-app .canary-observatory-scene { border-radius: var(--radius-panel); }
+:root .canary-app .overview-status { border-color: var(--line); }
+:root .canary-app .overview-status strong { font: 700 clamp(26px, 2.6vw, 34px)/1.1 var(--font-display); letter-spacing: -.035em; }
+:root .canary-app .round-action { border-radius: 50%; border-color: #3b3a35; }
+:root .canary-app .round-action:hover { border-color: var(--gold); color: var(--gold); }
+
+:root .canary-app .canary-native-proof { position: relative; isolation: isolate; overflow: hidden; background: var(--ground); color: var(--ink); border-top: 1px solid var(--line); }
+:root .canary-app .native-proof-art { position: absolute; z-index: -1; top: 0; right: 0; width: min(62%, 980px); height: 100%; object-fit: cover; object-position: 50% 38%; -webkit-mask-image: linear-gradient(90deg, transparent, #000 45%); mask-image: linear-gradient(90deg, transparent 5%, #000 65%); opacity: .5; }
+:root .canary-app .canary-native-proof .canary-paper-label { color: var(--muted); }
+:root .canary-app .native-proof-copy p { color: var(--muted); }
+:root .canary-app .native-proof-numbers { border-color: var(--line); gap: 14px; }
+:root .canary-app .native-proof-numbers > div { padding: 24px; background: #141412d9; border: 1px solid var(--line); border-radius: var(--radius); }
+:root .canary-app .native-proof-numbers strong { font: 700 clamp(44px, 5vw, 68px)/1 var(--font-display); letter-spacing: -.05em; color: var(--ink); }
+:root .canary-app .native-proof-numbers strong span { color: var(--gold); }
+:root .canary-app .native-proof-numbers div > span { font: 400 14px/1.5 var(--font-sans); color: var(--muted); }
+:root .canary-app .canary-native-proof .canary-button.ink { background: var(--gold); color: var(--paper-ink); }
+:root .canary-app .canary-paper-link { color: var(--ink); font: 600 15px var(--font-sans); }
+:root .canary-app .threat-disclosure { background: #141412e6; border: 1px solid var(--line); padding: 4px 22px; color: var(--muted); }
+:root .canary-app .threat-disclosure summary { color: var(--ink); font: 600 15px var(--font-sans); min-height: 52px; }
+:root .canary-app .threat-disclosure { border-radius: var(--radius); }
+
+/* ── Break the vault: no serif, challenge cards as file folders ─────────────────────── */
+:root .canary-app .break-vault { width: var(--shell); max-width: none; color: var(--ink); --break-gold: var(--gold); --break-line: var(--line); }
+:root .canary-app .break-heading h1 { font: 700 clamp(52px, 7vw, 96px)/.98 var(--font-display) !important; letter-spacing: -.055em !important; }
+:root .canary-app .break-heading > div > p { font-size: 18px; line-height: 1.65; color: #cfc9ba; }
+:root .canary-app .break-heading aside { border-left-color: var(--line); }
+:root .canary-app .break-heading aside strong { font: 700 24px var(--font-display); letter-spacing: -.03em; }
+:root .canary-app .break-heading aside > span { font: 500 12px var(--font-mono); letter-spacing: .06em; }
+:root .canary-app .break-toolbar { border-color: var(--line); }
+:root .canary-app .break-toolbar p, :root .canary-app .break-toolbar button { font-size: 14px; color: var(--muted); }
+:root .canary-app .break-toolbar button { color: var(--ink); }
+:root .canary-app .break-challenges { gap: 14px; }
+:root .canary-app .break-challenges button {
+  position: relative; margin-top: 14px; padding: 22px 22px 22px 20px;
+  background: var(--surface); border: 1px solid var(--line); border-radius: 0 var(--radius) var(--radius) var(--radius);
+  color: var(--ink); transition: border-color .15s, background-color .15s;
+}
+:root .canary-app .break-challenges button::before {
+  content: ''; position: absolute; left: -1px; bottom: 100%; width: 38%; height: 14px;
+  background: inherit; border: 1px solid var(--line); border-bottom: 0; border-radius: 10px 10px 0 0;
+}
+:root .canary-app .break-challenges button:hover { border-color: #4a4840; background: var(--raised); }
+:root .canary-app .break-challenges button[aria-pressed="true"], :root .canary-app .break-challenges button.is-active { background: var(--paper); color: var(--paper-ink); border-color: var(--paper); }
+:root .canary-app .break-challenges button[aria-pressed="true"] *, :root .canary-app .break-challenges button.is-active * { color: inherit; }
+:root .canary-app .break-challenges strong, :root .canary-app .break-challenges h2, :root .canary-app .break-challenges h3 { font: 700 21px/1.2 var(--font-display) !important; letter-spacing: -.03em; }
+:root .canary-app .break-challenges small, :root .canary-app .break-challenges p { font-size: 14px; }
+:root .canary-app .break-layout > :last-child { border-radius: var(--radius-panel); }
+:root .canary-app .break-primary { border-radius: var(--radius-control) !important; font: 600 15px var(--font-sans) !important; }
+
+/* ── Case study + judge + recipient: align surfaces and radii ───────────────────────── */
+:root .canary-app .case-demo { border-radius: var(--radius-panel); border-top: 0; box-shadow: inset 0 4px 0 var(--gold); font-family: var(--font-sans); }
+:root .canary-app .case-demo :is(h1, h2) { font-family: var(--font-display); letter-spacing: -.035em; }
+:root .canary-app .recovery-artifact, :root .canary-app .recipient-workspace > section { border-radius: var(--radius-panel); }
+:root .canary-app .recovery-count strong { font: 700 64px/1 var(--font-display); letter-spacing: -.05em; }
+:root .canary-app .share-stations li { border-color: var(--line); }
+:root .canary-app .judge-proof h1 { font-family: var(--font-display); font-weight: 700; letter-spacing: -.05em; }
+:root .canary-app .judge-proof h2 { font-family: var(--font-display); font-weight: 700; letter-spacing: -.04em; }
+
+/* ── Footer ─────────────────────────────────────────────────────────────────────────── */
+:root .canary-app .canary-footer { margin-top: clamp(56px, 7vw, 96px); padding: 0 clamp(16px, 4.5vw, 64px) 32px; background: var(--ground); border-top: 0; }
+:root .canary-app .canary-footer-main {
+  padding: clamp(28px, 4vw, 48px); border-radius: 24px; background: var(--paper); color: var(--paper-ink);
+  display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 32px;
+}
+:root .canary-app .footer-wordmark { font: 700 clamp(40px, 5vw, 64px)/1 var(--font-display); letter-spacing: -.06em; color: var(--paper-ink); }
+:root .canary-app .canary-footer-main p { margin: 0; font-size: 16px; line-height: 1.6; color: var(--paper-ink); }
+:root .canary-app .canary-footer-main p span { color: var(--paper-muted); font-size: 14px; }
+:root .canary-app .canary-footer-main button {
+  min-height: 48px; padding: 0 20px; border-radius: var(--radius-control);
+  background: var(--paper-ink); color: var(--paper); font: 600 15px var(--font-sans); text-decoration: none;
+}
+:root .canary-app .canary-footer-main button:hover { background: #2d2a22; }
+:root .canary-app .prototype-boundaries { border-color: var(--line); margin-top: 16px; }
+:root .canary-app .prototype-boundaries summary { font: 500 14px var(--font-sans); color: var(--muted); min-height: 48px; align-items: center; }
+:root .canary-app .prototype-boundaries summary span { font: 500 12px var(--font-mono); letter-spacing: .06em; color: var(--gold); }
+:root .canary-app .prototype-boundaries p { font-size: 14px; line-height: 1.65; color: var(--muted); }
+
+/* ── Phones ─────────────────────────────────────────────────────────────────────────── */
+@media (max-width: 1100px) {
+  :root .canary-app .canary-header { grid-template-columns: minmax(0, 1fr) auto; grid-template-rows: auto auto; gap: 0 12px; padding-top: 10px; }
+  :root .canary-app .canary-navigation {
+    grid-column: 1 / -1; grid-row: 2; justify-self: stretch; margin: 10px 0 12px;
+    overflow-x: auto; scrollbar-width: none; scroll-snap-type: x proximity;
+    -webkit-mask-image: linear-gradient(90deg, #000 88%, transparent); mask-image: linear-gradient(90deg, #000 88%, transparent);
+  }
+  :root .canary-app .canary-navigation::-webkit-scrollbar { display: none; }
+  :root .canary-app .canary-navigation button { flex: none; scroll-snap-align: start; }
+  :root .canary-app .native-nav { justify-self: end; }
+}
+@media (max-width: 760px) {
+  :root .canary-app .canary-header { position: static; }
+  :root .canary-app .canary-wordmark span { font-size: 22px; }
+  :root .canary-app .native-nav { min-height: 40px; padding-left: 12px; font-size: 13px; }
+  :root .canary-app .native-nav > span[aria-hidden] { width: 36px; }
+  :root .canary-app .environment-strip { display: grid; grid-template-columns: 1fr auto; align-items: center; row-gap: 8px; padding-block: 12px; font-size: 13px; }
+  :root .canary-app .environment-strip p { grid-column: 1 / -1; grid-row: 2; }
+
+  :root .canary-app .canary-opening { padding: 12px 12px 0; }
+  :root .canary-app .canary-opening::before { inset: 12px 12px auto; }
+  :root .canary-app .canary-opening-art { position: relative; inset: auto; height: 240px; border-radius: 20px 20px 0 0; }
+  :root .canary-app .canary-opening-art::after { background: linear-gradient(0deg, #0c0c0b 0%, #0c0c0b00 55%); }
+  :root .canary-app .canary-opening-inner { min-height: 0; padding: 4px 10px 36px; }
+  :root .canary-app .canary-opening-copy { width: 100%; }
+  :root .canary-app .canary-opening h1 { font-size: clamp(40px, 11.5vw, 52px); margin-top: 22px; }
+  :root .canary-app .canary-opening-description { font-size: 16px; }
+  :root .canary-app .canary-opening-actions { flex-direction: column; align-items: stretch; gap: 8px; }
+  :root .canary-app .canary-opening-actions .canary-button { justify-content: space-between; padding-left: 20px; }
+  :root .canary-app .canary-opening-actions .canary-watch-link { justify-content: center; }
+  :root .canary-app .canary-opening-baseline { grid-template-columns: 1fr; border-radius: 0 0 20px 20px; }
+  :root .canary-app .proof-strip { grid-template-columns: 1fr 1fr; }
+  :root .canary-app .proof-strip > div { padding: 18px; border-bottom: 1px solid var(--line); }
+  :root .canary-app .proof-strip > div:nth-child(2) { border-right: 0; }
+  :root .canary-app .proof-strip > div:nth-child(3) { grid-column: 1 / -1; border-right: 0; }
+  :root .canary-app .canary-opening-baseline > a { justify-content: space-between; min-height: 56px; padding: 0 18px; }
+
+  :root .canary-app .handoff-illustration { padding: 28px 20px; flex-direction: column; align-items: flex-start; }
+  :root .canary-app .handoff-illustration::before { padding-inline: 16px; }
+  :root .canary-app .break-challenges button::before { width: 46%; }
+  :root .canary-app .break-heading h1 { font-size: clamp(46px, 13vw, 60px) !important; }
+
+  :root .canary-app .canary-footer { padding: 0 12px 24px; }
+  :root .canary-app .canary-footer-main { grid-template-columns: 1fr; gap: 20px; padding: 28px 22px; border-radius: 20px; }
+  :root .canary-app .canary-footer-main button { width: 100%; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root .canary-app .canary-opening h1 em::after { animation: none; transform: scaleX(0); }
+  :root .canary-app .handoff-principles > button:hover { transform: none; }
+}
+
+/* ── Generated art (assets/dossier, made with the ChatGPT image tool) ───────────────── */
+:root .canary-app .dossier-hatch {
+  height: 44px; border-block: 1px solid var(--line);
+  background: repeating-linear-gradient(-45deg, #2c2b27 0 1px, transparent 1px 9px);
+  width: var(--shell); margin: clamp(48px, 6vw, 80px) auto 0; border-radius: 4px;
+}
+:root .canary-app .handoff-principles > button { display: flex; flex-direction: column; align-items: flex-start; gap: 4px; }
+:root .canary-app .handoff-icon {
+  width: 88px; height: 88px; object-fit: contain; margin: -6px 0 14px -8px;
+  filter: drop-shadow(0 14px 24px #000c) drop-shadow(0 0 18px #f4b72826);
+  transition: transform .4s cubic-bezier(.2, .8, .2, 1);
+}
+:root .canary-app .handoff-principles > button:hover .handoff-icon { transform: translateY(-4px) rotate(-3deg); }
+:root .canary-app .handoff-principle-link { margin-top: auto; padding-top: 14px; }
+
+:root .canary-app .break-heading { position: relative; isolation: isolate; padding: clamp(40px, 6vw, 88px) clamp(24px, 4vw, 56px); margin-bottom: 28px; border: 1px solid var(--line); border-radius: 24px; overflow: hidden; background: var(--ground); }
+:root .canary-app .break-art { position: absolute; inset: 0; z-index: -1; }
+:root .canary-app .break-art img { width: 100%; height: 100%; object-fit: cover; object-position: 75% 50%; }
+:root .canary-app .break-art::after { content: ''; position: absolute; inset: 0; background: linear-gradient(90deg, #0c0c0b 0%, #0c0c0be6 34%, #0c0c0b66 58%, #0c0c0b10 100%); }
+:root .canary-app .break-heading aside { background: #0c0c0bb3; border: 1px solid #3b3a35; border-radius: var(--radius); padding: 22px 24px; backdrop-filter: none; }
+:root .canary-app .break-challenges button { grid-template-columns: 64px 1fr 20px; align-items: center; }
+:root .canary-app .break-challenge-art { width: 64px; height: 64px; object-fit: contain; filter: drop-shadow(0 10px 16px #000b); }
+:root .canary-app .break-challenges button.selected { background: var(--paper); color: var(--paper-ink); border-color: var(--paper); }
+:root .canary-app .break-challenges button.selected::before { border-color: var(--paper); }
+:root .canary-app .break-challenges button.selected :is(h2, p, span, svg) { color: inherit; }
+:root .canary-app .break-challenge-kind { font: 500 12px var(--font-mono) !important; letter-spacing: .06em; color: var(--faint); }
+:root .canary-app .break-result { border-radius: var(--radius-panel); background: var(--paper); color: var(--paper-ink); border-color: var(--paper-2); }
+:root .canary-app .break-result.recovered { background: #eef0dc; }
+:root .canary-app .break-lock { width: 168px; height: 168px; background: none; border: 0; box-shadow: none; transform: none; margin-bottom: 18px; }
+:root .canary-app .break-lock img { width: 100%; height: 100%; object-fit: contain; filter: drop-shadow(0 18px 26px #0006); }
+:root .canary-app .break-empty h2, :root .canary-app .break-result > h2 { font: 700 clamp(30px, 3vw, 40px)/1.08 var(--font-display) !important; letter-spacing: -.045em; }
+:root .canary-app .break-primary { background: var(--paper-ink); color: var(--paper); }
+:root .canary-app .break-footer .break-primary { background: var(--gold); color: var(--paper-ink); }
+:root .canary-app .break-footer h2 { font: 700 clamp(28px, 3vw, 38px) var(--font-display); letter-spacing: -.04em; }
+:root .canary-app .break-scope, :root .canary-app .break-footer p { font-size: 14px; }
+
+:root .canary-app .artifact-symbol img { width: 168px; height: 168px; object-fit: contain; filter: drop-shadow(0 18px 30px #000c) drop-shadow(0 0 22px #f4b72822); }
+:root .canary-app .artifact-symbol { border: 0 !important; background: none !important; box-shadow: none !important; transform: none !important; }
+
+:root .canary-app .evidence-hero { position: relative; isolation: isolate; overflow: hidden; border-radius: 24px; border-color: var(--line) !important; background: var(--ground) !important; }
+:root .canary-app .evidence-hero-art { position: absolute; z-index: -1; top: 0; right: 0; width: 62%; height: 340px; object-fit: cover; object-position: 50% 45%; -webkit-mask-image: linear-gradient(90deg, transparent, #000 45%), linear-gradient(0deg, transparent, #000 40%); mask-image: linear-gradient(90deg, transparent, #000 45%); mask-composite: intersect; opacity: .85; }
+:root .canary-app .evidence-hero h1 { font: 700 clamp(32px, 3.6vw, 48px)/1.05 var(--font-display) !important; letter-spacing: -.045em; max-width: 14ch; padding-top: clamp(24px, 6vw, 120px); }
+:root .canary-app .evidence-hero a { border-radius: 999px; }
+
+@media (max-width: 760px) {
+  :root .canary-app .native-proof-art { width: 100%; height: 360px; opacity: .4; }
+  :root .canary-app .break-challenges { display: flex; flex-direction: column; }
+  :root .canary-app .break-challenges button { grid-template-columns: 52px 1fr; padding: 18px; }
+  :root .canary-app .break-challenge-art { width: 52px; height: 52px; }
+  :root .canary-app .break-challenges button > svg { display: none; }
+  :root .canary-app .break-challenge-kind { font-size: 12px !important; }
+  :root .canary-app .break-challenges p { font-size: 14px; }
+  :root .canary-app .break-heading { padding: 32px 20px; }
+  :root .canary-app .break-art::after { background: linear-gradient(0deg, #0c0c0b 30%, #0c0c0b99 70%, #0c0c0b55); }
+  :root .canary-app .evidence-hero-art { width: 100%; height: 220px; opacity: .6; }
+  :root .canary-app .handoff-icon { width: 72px; height: 72px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  :root .canary-app .handoff-icon { transition: none; }
+  :root .canary-app .handoff-principles > button:hover .handoff-icon { transform: none; }
+}
+
+/* ── Judge Proof: obsidian instead of olive, paper verdict ──────────────────────────── */
+:root .canary-app .canary-main.page-judge { background: var(--ground); }
+:root .canary-app .canary-main.page-judge .page-reveal .judge-proof > section.judge-proof__hero { background: var(--ground); position: relative; isolation: isolate; overflow: hidden; }
+:root .canary-app .canary-main.page-judge .judge-proof .judge-proof__hero h1 { font: 700 clamp(42px, 5.4vw, 78px)/1.02 var(--font-display); letter-spacing: -.05em; }
+:root .canary-app .canary-main.page-judge .judge-proof :is(.judge-proof__section-heading, .judge-proof__reproduce, .judge-proof__verification-intro) h2 { font-family: var(--font-display); font-weight: 700; letter-spacing: -.045em; }
+:root .canary-app .canary-main.page-judge .judge-proof .judge-proof__chain-grid h3 { font-family: var(--font-display); font-weight: 700; }
+:root .canary-app .judge-proof__eyebrow, :root .canary-app .judge-proof__section-heading span, :root .canary-app .judge-proof__reproduce > div > span { font: 500 12px/1.6 var(--font-mono); letter-spacing: .08em; color: var(--muted); }
+:root .canary-app .judge-proof__eyebrow i { background: var(--gold); border-radius: 50%; }
+:root .canary-app .judge-proof__lede { color: #cfc9ba; }
+:root .canary-app .judge-proof__verdict { position: relative; background: var(--paper); color: var(--paper-ink); border: 0; border-radius: 4px var(--radius-panel) var(--radius-panel) var(--radius-panel); padding: 32px; }
+:root .canary-app .judge-proof__verdict::before { content: 'ACCEPTANCE RECORD'; position: absolute; left: 0; bottom: 100%; padding: 8px 18px 6px; background: var(--paper); border-radius: 10px 10px 0 0; font: 500 12px var(--font-mono); letter-spacing: .08em; color: var(--paper-muted); }
+:root .canary-app .judge-proof__verdict * { color: inherit; }
+:root .canary-app .judge-proof__verdict :is(strong, h2, b) { font-family: var(--font-display); font-weight: 700; letter-spacing: -.045em; color: var(--paper-ink); }
+:root .canary-app .judge-proof__verdict a { color: #8a6200; }
+:root .canary-app .judge-proof__outcomes, :root .canary-app .judge-proof__chain, :root .canary-app .judge-proof__live-tools, :root .canary-app .judge-proof__verification-intro { background: var(--ground); }
+:root .canary-app .judge-proof__outcomes > * { border-color: var(--line) !important; }
+:root .canary-app .judge-proof__outcomes strong { font-family: var(--font-display); font-weight: 700; letter-spacing: -.05em; color: var(--gold); }
+:root .canary-app .judge-proof__transactions { background: var(--paper); color: var(--paper-ink); }
+:root .canary-app .judge-proof__keepers { background: var(--surface); border-color: var(--line); }
+:root .canary-app .judge-proof__keepers article, :root .canary-app .judge-proof__keepers li { border-color: var(--line); }
+:root .canary-app .judge-proof__reproduce { background: var(--gold); color: var(--paper-ink); border-radius: var(--radius-panel); }
+:root .canary-app .canary-main .product-heading h1 { font-weight: 700 !important; }
+:root .canary-app .recovery-count strong span { color: var(--faint); }
