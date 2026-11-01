@@ -14,3 +14,4 @@ coverage/
 /artifacts/
 /rehearsal-artifacts/
 /state/
+.vercel

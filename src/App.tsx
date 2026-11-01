@@ -426,6 +426,10 @@ export default function App() {
           {navItems.map(([tab,label]) => <button key={tab} onClick={() => go(tab)} aria-current={activeTab===tab ? 'page' : undefined}>{label}</button>)}
         </nav>
         <div className="topbar-actions">
+          <nav className="ui-switch" aria-label="Interface version">
+            <a href="./classic/">Classic UI</a>
+            <span aria-current="page">New UI</span>
+          </nav>
           <button className="native-link" onClick={() => go('native')} aria-current={activeTab==='native' ? 'page' : undefined}><span className="dot ok" aria-hidden="true"/>Native testnet</button>
           <button className="menu-toggle" aria-expanded={menuOpen} onClick={() => setMenuOpen(open => !open)}>{menuOpen ? <X size={16}/> : <Menu size={16}/>}Menu</button>
         </div>
