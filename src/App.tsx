@@ -427,7 +427,7 @@ export default function App() {
         </nav>
         <div className="topbar-actions">
           <nav className="ui-switch" aria-label="Interface version">
-            <a href="./classic/">Classic UI</a>
+            <a href="https://z-canary.vercel.app/">Classic UI</a>
             <span aria-current="page">New UI</span>
           </nav>
           <button className="native-link" onClick={() => go('native')} aria-current={activeTab==='native' ? 'page' : undefined}><span className="dot ok" aria-hidden="true"/>Native testnet</button>
