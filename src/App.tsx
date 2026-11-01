@@ -417,6 +417,7 @@ export default function App() {
         <nav className="canary-navigation" aria-label="Main navigation">
           {([['welcome','Overview'],['break','Break the vault'],['sentinel','Vault'],['recipient','Inbox'],['support','Support'],['evidence','Keepers'],['judge','Judge Proof']] as const).map(([tab,label])=><button key={tab} onClick={()=>setActiveTab(tab)} aria-current={activeTab===tab?'page':undefined}>{label}</button>)}
         </nav>
+        <nav className="interface-switch" aria-label="Interface version"><span aria-current="page">Classic UI</span><a href="https://z-canary-update.vercel.app/">New UI</a></nav>
         <button className={`native-nav ${activeTab==='native'?'is-active':''}`} onClick={()=>setActiveTab('native')}><span className="signal-dot"/>Native testnet <span aria-hidden="true">↗</span></button>
       </header>
       <div className={`environment-strip ${activeTab==='native'?'environment-strip--native':''}`} role="note">

@@ -45,6 +45,10 @@ body, .canary-app { font-family: var(--font-sans); font-size: 15px; line-height:
 .canary-app .canary-navigation button:after { height: 2px; background: var(--ink); }
 .canary-app .native-nav { font: 500 13px var(--font-sans); letter-spacing: 0; color: var(--ink); border: 1px solid #3a3b3e; border-radius: var(--radius-control); padding: 8px 14px; }
 .canary-app .native-nav:hover, .canary-app .native-nav.is-active { background: var(--raised); border-color: #55565a; }
+.canary-app .interface-switch { display:flex; align-items:center; gap:3px; padding:4px; border:1px solid #3a3b3e; border-radius:999px; background:#151716; white-space:nowrap; }
+.canary-app .interface-switch a, .canary-app .interface-switch span { display:inline-flex; align-items:center; min-height:30px; padding:0 10px; border-radius:999px; font:500 12px var(--font-sans); color:var(--muted); text-decoration:none; }
+.canary-app .interface-switch span { background:#f4b728; color:#101310; }
+.canary-app .interface-switch a:hover { background:#ffffff12; color:var(--ink); }
 .canary-app .signal-dot { background: var(--ok); }
 
 .canary-app .environment-strip { background: var(--surface); border-bottom: 1px solid var(--line); color: var(--muted); font: 400 13px/1.5 var(--font-sans); letter-spacing: 0; min-height: 40px; gap: 14px; }
