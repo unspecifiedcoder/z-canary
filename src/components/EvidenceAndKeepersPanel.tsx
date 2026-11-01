@@ -115,71 +115,71 @@ export const EvidenceAndKeepersPanel: React.FC<EvidenceAndKeepersPanelProps> = (
 
   return (
     <div className="space-y-10 pb-16">
-      <section className="border border-[#D6A84B]/50 bg-[#141820] p-6 lg:p-8 space-y-7" aria-labelledby="judge-proof-title">
-        <div className="flex flex-col xl:flex-row xl:items-end justify-between gap-5 border-b border-[#222938] pb-6">
+      <section className="border border-[var(--yellow-2)]/50 bg-[var(--card)] rounded-[22px] shadow-[var(--shadow)] p-6 lg:p-8 space-y-7" aria-labelledby="judge-proof-title">
+        <div className="flex flex-col xl:flex-row xl:items-end justify-between gap-5 border-b border-[var(--line)] pb-6">
           <div className="max-w-3xl space-y-2">
             
-            <h1 id="judge-proof-title" className="text-2xl lg:text-3xl font-bold text-[#F8FAFC]">
+            <h1 id="judge-proof-title" className="text-2xl lg:text-3xl font-bold text-[var(--ink)]">
               One lifecycle. Three different kinds of evidence.
             </h1>
-            <p className="text-sm leading-relaxed text-[#AEB8C8]">
+            <p className="text-sm leading-relaxed text-[var(--muted)]">
               The hosted lab makes the recovery rules testable without a wallet. It performs real local
               cryptography but sends no transaction. The receipts below belong to a separate recorded native
               run that used genuine shielded Zcash testnet commands and recovered a public fixture byte for byte.
             </p>
           </div>
           <div className="flex flex-wrap gap-2 text-xs">
-            <a href="https://github.com/unspecifiedcoder/z-canary/blob/main/docs/evidence/VERIFICATION.md" target="_blank" rel="noreferrer" className="px-3 py-2 border border-[#F59E0B]/60 text-[#F59E0B] hover:bg-[#2b2413] inline-flex items-center gap-1.5">Verification record <ExternalLink className="w-3.5 h-3.5" /></a>
-            <a href="https://github.com/unspecifiedcoder/z-canary/blob/main/docs/ARCHITECTURE.md" target="_blank" rel="noreferrer" className="px-3 py-2 border border-[#30394A] text-[#CBD5E1] hover:border-[#94A3B8] inline-flex items-center gap-1.5">Architecture <ExternalLink className="w-3.5 h-3.5" /></a>
-            <a href="https://github.com/unspecifiedcoder/z-canary/blob/main/docs/THREAT-MODEL.md" target="_blank" rel="noreferrer" className="px-3 py-2 border border-[#30394A] text-[#CBD5E1] hover:border-[#94A3B8] inline-flex items-center gap-1.5">Threat model <ExternalLink className="w-3.5 h-3.5" /></a>
+            <a href="https://github.com/unspecifiedcoder/z-canary/blob/main/docs/evidence/VERIFICATION.md" target="_blank" rel="noreferrer" className="px-3 py-2 border border-[var(--yellow-2)]/60 text-[var(--accent-ink)] hover:bg-[var(--yellow-soft)] inline-flex items-center gap-1.5">Verification record <ExternalLink className="w-3.5 h-3.5" /></a>
+            <a href="https://github.com/unspecifiedcoder/z-canary/blob/main/docs/ARCHITECTURE.md" target="_blank" rel="noreferrer" className="px-3 py-2 border border-[var(--line)] text-[var(--muted)] hover:border-[var(--line-strong)] inline-flex items-center gap-1.5">Architecture <ExternalLink className="w-3.5 h-3.5" /></a>
+            <a href="https://github.com/unspecifiedcoder/z-canary/blob/main/docs/THREAT-MODEL.md" target="_blank" rel="noreferrer" className="px-3 py-2 border border-[var(--line)] text-[var(--muted)] hover:border-[var(--line-strong)] inline-flex items-center gap-1.5">Threat model <ExternalLink className="w-3.5 h-3.5" /></a>
           </div>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-3">
-          <article className="space-y-1.5 border-t border-[#2a2b2e] pt-4">
-            <div className="flex items-center justify-between gap-3"><span className="text-xs text-[#F59E0B]">Interactive</span><span className="text-[10px] font-mono text-[#64748B]">Hosted browser</span></div>
-            <h2 className="font-semibold text-[#F8FAFC]">Real local cryptography</h2>
-            <p className="text-xs leading-relaxed text-[#94A3B8]">X25519 recipient binding, AES-256-GCM, signatures, {vault.manifest.threshold}-of-5 reconstruction and exact-byte verification execute in this browser.</p>
+          <article className="space-y-1.5 border-t border-[var(--line)] pt-4">
+            <div className="flex items-center justify-between gap-3"><span className="text-xs text-[var(--accent-ink)]">Interactive</span><span className="text-[10px] font-mono text-[var(--faint)]">Hosted browser</span></div>
+            <h2 className="font-semibold text-[var(--ink)]">Real local cryptography</h2>
+            <p className="text-xs leading-relaxed text-[var(--muted)]">X25519 recipient binding, AES-256-GCM, signatures, {vault.manifest.threshold}-of-5 reconstruction and exact-byte verification execute in this browser.</p>
           </article>
-          <article className="space-y-1.5 border-t border-[#2a2b2e] pt-4">
-            <div className="flex items-center justify-between gap-3"><span className="text-xs text-[#EFAD45]">Simulated, resettable</span><span className="text-[10px] font-mono text-[#64748B]">Hosted browser</span></div>
-            <h2 className="font-semibold text-[#F8FAFC]">Blocks and keeper records</h2>
-            <p className="text-xs leading-relaxed text-[#94A3B8]">The chain height, transactions, timing and five keeper records on this screen are synthetic. No Zcash transaction is sent here.</p>
+          <article className="space-y-1.5 border-t border-[var(--line)] pt-4">
+            <div className="flex items-center justify-between gap-3"><span className="text-xs text-[var(--accent-ink)]">Simulated, resettable</span><span className="text-[10px] font-mono text-[var(--faint)]">Hosted browser</span></div>
+            <h2 className="font-semibold text-[var(--ink)]">Blocks and keeper records</h2>
+            <p className="text-xs leading-relaxed text-[var(--muted)]">The chain height, transactions, timing and five keeper records on this screen are synthetic. No Zcash transaction is sent here.</p>
           </article>
-          <article className="space-y-1.5 border-t border-[#2a2b2e] pt-4">
-            <div className="flex items-center justify-between gap-3"><span className="text-xs text-[#10B981]">Recorded, verifiable</span><span className="text-[10px] font-mono text-[#64748B]">Native testnet</span></div>
-            <h2 className="font-semibold text-[#F8FAFC]">Shielded Zcash commands</h2>
-            <p className="text-xs leading-relaxed text-[#94A3B8]">A separate native run used real testnet REGISTER, POSTPONE and CANCEL transactions, five local keeper processes and recipient recovery.</p>
+          <article className="space-y-1.5 border-t border-[var(--line)] pt-4">
+            <div className="flex items-center justify-between gap-3"><span className="text-xs text-[var(--ok)]">Recorded, verifiable</span><span className="text-[10px] font-mono text-[var(--faint)]">Native testnet</span></div>
+            <h2 className="font-semibold text-[var(--ink)]">Shielded Zcash commands</h2>
+            <p className="text-xs leading-relaxed text-[var(--muted)]">A separate native run used real testnet REGISTER, POSTPONE and CANCEL transactions, five local keeper processes and recipient recovery.</p>
           </article>
         </div>
 
         <div className="grid grid-cols-1 xl:grid-cols-[1.35fr_.65fr] gap-5">
           <ReceiptVerifier labMemoHex={selectedTxidForMemo ? selectedTx?.memoHex : undefined} />
 
-          <aside className="border border-[#10B981]/45 bg-[#0B0D11] p-5 space-y-4">
-            <div className="flex items-center gap-2"><FileCheck2 className="w-5 h-5 text-[#10B981]" /><h2 className="font-semibold text-[#F8FAFC]">Exact recovery passed</h2></div>
+          <aside className="border border-[var(--ok)]/45 bg-[var(--sunken)] p-5 space-y-4">
+            <div className="flex items-center gap-2"><FileCheck2 className="w-5 h-5 text-[var(--ok)]" /><h2 className="font-semibold text-[var(--ink)]">Exact recovery passed</h2></div>
             <div className="grid grid-cols-2 gap-3 text-xs">
-              <div><span className="block text-[#64748B]">Native fixture</span><strong className="text-[#F8FAFC]">136 bytes</strong></div>
-              <div><span className="block text-[#64748B]">Threshold</span><strong className="text-[#F8FAFC]">3 of 5</strong></div>
-              <div><span className="block text-[#64748B]">Expired path</span><strong className="text-[#10B981]">5 shares</strong></div>
-              <div><span className="block text-[#64748B]">Cancelled path</span><strong className="text-[#10B981]">0 shares</strong></div>
+              <div><span className="block text-[var(--faint)]">Native fixture</span><strong className="text-[var(--ink)]">136 bytes</strong></div>
+              <div><span className="block text-[var(--faint)]">Threshold</span><strong className="text-[var(--ink)]">3 of 5</strong></div>
+              <div><span className="block text-[var(--faint)]">Expired path</span><strong className="text-[var(--ok)]">5 shares</strong></div>
+              <div><span className="block text-[var(--faint)]">Cancelled path</span><strong className="text-[var(--ok)]">0 shares</strong></div>
             </div>
-            <div className="space-y-1"><span className="text-[10px] font-mono text-[#64748B]">Recovered SHA-256</span><code className="block text-[10px] leading-relaxed text-[#AEB8C8] break-all">{NATIVE_FIXTURE_SHA256}</code></div>
-            <p className="text-[11px] leading-relaxed text-[#94A3B8]">All five native keeper processes shared one operator, one viewing-only scanner and one lightwallet endpoint. This proves the implemented path—not independent decentralization or production security.</p>
+            <div className="space-y-1"><span className="text-[10px] font-mono text-[var(--faint)]">Recovered SHA-256</span><code className="block text-[10px] leading-relaxed text-[var(--muted)] break-all">{NATIVE_FIXTURE_SHA256}</code></div>
+            <p className="text-[11px] leading-relaxed text-[var(--muted)]">All five native keeper processes shared one operator, one viewing-only scanner and one lightwallet endpoint. This proves the implemented path—not independent decentralization or production security.</p>
           </aside>
         </div>
 
         <RealRunReplay />
 
         <div className="grid grid-cols-1 items-start gap-3 lg:grid-cols-2">
-          <article className="space-y-2 border-t border-[#2a2b2e] pt-4 text-[13px] leading-relaxed text-[#A6A6A1]">
-            <h2 className="text-sm font-semibold text-[#F8FAFC]">Why Zcash, and why no smart contract</h2>
+          <article className="space-y-2 border-t border-[var(--line)] pt-4 text-[13px] leading-relaxed text-[var(--muted)]">
+            <h2 className="text-sm font-semibold text-[var(--ink)]">Why Zcash, and why no smart contract</h2>
             <p>The file stays off-chain. Zcash carries only the owner’s signed REGISTER, POSTPONE and CANCEL commands, as 512-byte shielded memos in a confirmed order. A viewing-only scanner reads them for the keepers without any spending authority.</p>
             <p>Shielded memos hide who is checking in and for whom. A transparent chain would expose a pattern of life, and a plain server would be one party that can be pressured or switched off. Zcash has no general smart contracts, and none are needed: the memo format and the keeper state machine do that job.</p>
             <p>This page publishes testnet receipts only because it is a demonstration. Real users would never publish their memos or viewing keys.</p>
           </article>
-          <article className="space-y-2 border-t border-[#2a2b2e] pt-4 text-[13px] leading-relaxed text-[#A6A6A1]">
-            <h2 className="text-sm font-semibold text-[#F8FAFC]">What this does not prove</h2>
+          <article className="space-y-2 border-t border-[var(--line)] pt-4 text-[13px] leading-relaxed text-[var(--muted)]">
+            <h2 className="text-sm font-semibold text-[var(--ink)]">What this does not prove</h2>
             <ul className="list-disc space-y-1 pl-4">
               <li>The five keepers are local processes sharing one operator, one scanner and one lightwallet endpoint. They are not independent.</li>
               <li>Three colluding keepers can deliver shares early. Cancellation cannot revoke shares already delivered.</li>
@@ -191,14 +191,14 @@ export const EvidenceAndKeepersPanel: React.FC<EvidenceAndKeepersPanelProps> = (
       </section>
 
       {/* Section 1: Refined 5-Keeper High-Assurance Infrastructure Grid + Live D3.js Topology */}
-      <section className="border border-[#222938] bg-[#141820] p-6 lg:p-8 space-y-6">
-        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 border-b border-[#222938] pb-5">
+      <section className="border border-[var(--line)] bg-[var(--card)] rounded-[22px] shadow-[var(--shadow)] p-6 lg:p-8 space-y-6">
+        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 border-b border-[var(--line)] pb-5">
           <div className="space-y-1">
             
-            <h2 className="text-2xl font-bold text-[#F8FAFC]">
+            <h2 className="text-2xl font-bold text-[var(--ink)]">
               Five stations. One deliberate threshold.
             </h2>
-            <p className="text-sm text-[#94A3B8]">
+            <p className="text-sm text-[var(--muted)]">
               These five records run in one browser. Toggle availability and scanner health to explore the release policy. Native testnet has separate local processes and is accessed in the native workspace.
             </p>
           </div>
@@ -206,14 +206,14 @@ export const EvidenceAndKeepersPanel: React.FC<EvidenceAndKeepersPanelProps> = (
           <div className="flex flex-wrap items-center gap-2 shrink-0">
             <button
               onClick={() => onSimulateReorg('shallow')}
-              className="px-3.5 py-2 bg-[#0B0D11] hover:bg-[#1E2430] border border-[#222938] text-xs text-[#E2E8F0] rounded flex items-center gap-1.5 cursor-pointer transition-colors"
+              className="px-3.5 py-2 bg-[var(--sunken)] hover:bg-[var(--sunken)] border border-[var(--line)] text-xs text-[var(--ink)] rounded flex items-center gap-1.5 cursor-pointer transition-colors"
             >
-              <RotateCcw className="w-3.5 h-3.5 text-[#F59E0B]" />
+              <RotateCcw className="w-3.5 h-3.5 text-[var(--accent-ink)]" />
               <span>2-Block Reorg</span>
             </button>
             <button
               onClick={() => onSimulateReorg('deep')}
-              className="px-3.5 py-2 bg-[#0B0D11] hover:bg-[#1E2430] border border-[#EF4444]/50 text-xs text-[#EF4444] rounded flex items-center gap-1.5 cursor-pointer transition-colors"
+              className="px-3.5 py-2 bg-[var(--sunken)] hover:bg-[var(--sunken)] border border-[var(--bad)]/50 text-xs text-[var(--bad)] rounded flex items-center gap-1.5 cursor-pointer transition-colors"
             >
               <AlertTriangle className="w-3.5 h-3.5" />
               <span>Deep Reorg Incident</span>
@@ -230,20 +230,20 @@ export const EvidenceAndKeepersPanel: React.FC<EvidenceAndKeepersPanelProps> = (
         />
 
         {/* Visual Threshold Consensus Bar */}
-        <div className="p-4 bg-[#0B0D11] border border-[#222938] flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div className="p-4 bg-[var(--sunken)] border border-[var(--line)] flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div className="flex items-center gap-3">
             {thresholdMet ? (
-              <ShieldCheck className="w-5 h-5 text-[#10B981] shrink-0" />
+              <ShieldCheck className="w-5 h-5 text-[var(--ok)] shrink-0" />
             ) : (
-              <AlertTriangle className="w-5 h-5 text-[#EF4444] shrink-0" />
+              <AlertTriangle className="w-5 h-5 text-[var(--bad)] shrink-0" />
             )}
             <div>
-              <div className="text-sm font-semibold text-[#F8FAFC]">
+              <div className="text-sm font-semibold text-[var(--ink)]">
                 {thresholdMet
                   ? `Quorum Healthy: ${onlineHealthyCount} of 5 Keepers Active & Synchronized`
                   : `Quorum Degraded: Only ${onlineHealthyCount} of 5 Keepers Healthy (Minimum 3 Required)`}
               </div>
-              <div className="text-xs text-[#94A3B8]">
+              <div className="text-xs text-[var(--muted)]">
                 {thresholdMet
                   ? 'System can tolerate up to 2 simultaneous node failures without blocking release.'
                   : 'Release threshold is currently blocked until at least 3 nodes are online and healthy.'}
@@ -260,10 +260,10 @@ export const EvidenceAndKeepersPanel: React.FC<EvidenceAndKeepersPanelProps> = (
                   title={`${k.name}: ${!k.online ? 'OFFLINE' : k.scannerHealth}`}
                   className={`w-7 h-2.5 rounded-xs transition-all duration-200 ${
                     !isOk
-                      ? 'bg-[#EF4444]/40 border border-[#EF4444]'
+                      ? 'bg-[var(--bad)]/40 border border-[var(--bad)]'
                       : k.lifecycleState === 'GRACE'
-                      ? 'bg-[#F59E0B]'
-                      : 'bg-[#10B981]'
+                      ? 'bg-[var(--yellow)]'
+                      : 'bg-[var(--ok)]'
                   }`}
                 />
               );
@@ -273,13 +273,13 @@ export const EvidenceAndKeepersPanel: React.FC<EvidenceAndKeepersPanelProps> = (
 
         {/* Navigation Tabs: All 5 Grid vs Individual Deep Dive */}
         <div className="flex flex-wrap items-center justify-between gap-4">
-          <div className="flex flex-wrap items-center gap-1.5 p-1 bg-[#0B0D11] border border-[#222938] rounded">
+          <div className="flex flex-wrap items-center gap-1.5 p-1 bg-[var(--sunken)] border border-[var(--line)] rounded">
             <button
               onClick={() => setSelectedKeeperTab('ALL')}
               className={`px-3 py-1.5 text-xs rounded transition-colors cursor-pointer ${
                 selectedKeeperTab === 'ALL'
-                  ? 'bg-[#F59E0B] text-[#0B0D11] font-semibold'
-                  : 'text-[#94A3B8] hover:text-[#F8FAFC]'
+                  ? 'bg-[var(--yellow)] text-[var(--ink)] font-semibold'
+                  : 'text-[var(--muted)] hover:text-[var(--ink)]'
               }`}
             >
               All keeper stations
@@ -290,8 +290,8 @@ export const EvidenceAndKeepersPanel: React.FC<EvidenceAndKeepersPanelProps> = (
                 onClick={() => setSelectedKeeperTab(k.index as 1 | 2 | 3 | 4 | 5)}
                 className={`px-3 py-1.5 text-xs rounded transition-colors cursor-pointer ${
                   selectedKeeperTab === k.index
-                    ? 'bg-[#F59E0B] text-[#0B0D11] font-semibold'
-                    : 'text-[#94A3B8] hover:text-[#F8FAFC]'
+                    ? 'bg-[var(--yellow)] text-[var(--ink)] font-semibold'
+                    : 'text-[var(--muted)] hover:text-[var(--ink)]'
                 }`}
               >
                 {k.id} ({!k.online ? 'OFF' : k.lifecycleState})
@@ -309,21 +309,21 @@ export const EvidenceAndKeepersPanel: React.FC<EvidenceAndKeepersPanelProps> = (
               const isReleased = isHealthyOnline && k.lifecycleState === 'RELEASED';
 
               const stateAnimationClass = !k.online
-                ? 'keeper-node-card keeper-node-offline border-[#EF4444]/40 bg-[#0B0D11]/70'
+                ? 'keeper-node-card keeper-node-offline border-[var(--bad)]/40 bg-[var(--sunken)]/70'
                 : isGrace
-                ? 'keeper-node-card keeper-node-grace keeper-scan-line keeper-scan-line-amber border-[#F59E0B]/70 bg-[#0B0D11]'
+                ? 'keeper-node-card keeper-node-grace keeper-scan-line keeper-scan-line-amber border-[var(--yellow-2)]/70 bg-[var(--sunken)]'
                 : isHealthyOnline
-                ? 'keeper-node-card keeper-node-active keeper-scan-line border-[#222938] hover:border-[#10B981]/60 bg-[#0B0D11]'
-                : 'keeper-node-card border-[#F59E0B]/60 bg-[#0B0D11]';
+                ? 'keeper-node-card keeper-node-active keeper-scan-line border-[var(--line)] hover:border-[var(--ok)]/60 bg-[var(--sunken)]'
+                : 'keeper-node-card border-[var(--yellow-2)]/60 bg-[var(--sunken)]';
 
               // Low-frequency heartbeat glow class applied strictly to online keeper status indicator boxes
               const statusIndicatorHeartbeatClass = !k.online
-                ? 'border-[#EF4444]/40 bg-[#141820]'
+                ? 'border-[var(--bad)]/40 bg-[var(--card)] rounded-[22px] shadow-[var(--shadow)]'
                 : isReleased
-                ? 'keeper-status-heartbeat-cyan border-[#38BDF8]/60 bg-[#141820]'
+                ? 'keeper-status-heartbeat-cyan border-[var(--info)]/60 bg-[var(--card)] rounded-[22px] shadow-[var(--shadow)]'
                 : isGrace || k.scannerHealth !== 'HEALTHY'
-                ? 'keeper-status-heartbeat-amber border-[#F59E0B]/60 bg-[#141820]'
-                : 'keeper-status-heartbeat-emerald border-[#10B981]/60 bg-[#141820]';
+                ? 'keeper-status-heartbeat-amber border-[var(--yellow-2)]/60 bg-[var(--card)] rounded-[22px] shadow-[var(--shadow)]'
+                : 'keeper-status-heartbeat-emerald border-[var(--ok)]/60 bg-[var(--card)] rounded-[22px] shadow-[var(--shadow)]';
 
               return (
                 <div
@@ -334,8 +334,8 @@ export const EvidenceAndKeepersPanel: React.FC<EvidenceAndKeepersPanelProps> = (
                   <div className="space-y-3">
                     <div className="flex items-start justify-between gap-2">
                       <div>
-                        <div className="text-[11px] text-[#64748B]">{k.id.toUpperCase()}</div>
-                        <div className="text-sm font-bold text-[#F8FAFC] font-sans">
+                        <div className="text-[11px] text-[var(--faint)]">{k.id.toUpperCase()}</div>
+                        <div className="text-sm font-bold text-[var(--ink)] font-sans">
                           {k.name.replace(/^Keeper 0\d\s*/, '')}
                         </div>
                       </div>
@@ -350,34 +350,34 @@ export const EvidenceAndKeepersPanel: React.FC<EvidenceAndKeepersPanelProps> = (
                         className={`p-2 border rounded shrink-0 ${statusIndicatorHeartbeatClass}`}
                       >
                         {!k.online ? (
-                          <WifiOff className="w-4 h-4 text-[#EF4444]" />
+                          <WifiOff className="w-4 h-4 text-[var(--bad)]" />
                         ) : k.scannerHealth !== 'HEALTHY' ? (
-                          <AlertTriangle className="w-4 h-4 text-[#F59E0B]" />
+                          <AlertTriangle className="w-4 h-4 text-[var(--accent-ink)]" />
                         ) : isReleased ? (
-                          <Unlock className="w-4 h-4 text-[#38BDF8]" />
+                          <Unlock className="w-4 h-4 text-[var(--info)]" />
                         ) : isGrace ? (
-                          <Clock className="w-4 h-4 text-[#F59E0B]" />
+                          <Clock className="w-4 h-4 text-[var(--accent-ink)]" />
                         ) : (
-                          <ShieldCheck className="w-4 h-4 text-[#10B981]" />
+                          <ShieldCheck className="w-4 h-4 text-[var(--ok)]" />
                         )}
                       </div>
                     </div>
 
                     {/* Lifecycle & Health Status Readout */}
-                    <div className="p-2.5 bg-[#141820] border border-[#1E2430] space-y-1.5 tabular-nums">
+                    <div className="p-2.5 bg-[var(--card)] rounded-[22px] shadow-[var(--shadow)] border border-[var(--line)] space-y-1.5 tabular-nums">
                       <div className="flex items-center justify-between">
-                        <span className="text-[#64748B]">Lifecycle</span>
+                        <span className="text-[var(--faint)]">Lifecycle</span>
                         <span
                           className={`font-semibold ${
                             !k.online
-                              ? 'text-[#EF4444]'
+                              ? 'text-[var(--bad)]'
                               : k.lifecycleState === 'ACTIVE'
-                              ? 'text-[#10B981]'
+                              ? 'text-[var(--ok)]'
                               : k.lifecycleState === 'GRACE'
-                              ? 'text-[#F59E0B]'
+                              ? 'text-[var(--accent-ink)]'
                               : k.lifecycleState === 'RELEASED'
-                              ? 'text-[#38BDF8]'
-                              : 'text-[#94A3B8]'
+                              ? 'text-[var(--info)]'
+                              : 'text-[var(--muted)]'
                           }`}
                         >
                           {!k.online ? 'OFFLINE' : k.lifecycleState}
@@ -385,21 +385,21 @@ export const EvidenceAndKeepersPanel: React.FC<EvidenceAndKeepersPanelProps> = (
                       </div>
 
                       <div className="flex items-center justify-between">
-                        <span className="text-[#64748B]">Confirmed Block</span>
-                        <span className="text-[#F8FAFC] font-semibold">
+                        <span className="text-[var(--faint)]">Confirmed Block</span>
+                        <span className="text-[var(--ink)] font-semibold">
                           #{k.scanCursorHeight.toLocaleString()}
                         </span>
                       </div>
 
                       <div className="flex items-center justify-between">
-                        <span className="text-[#64748B]">Scanner Health</span>
+                        <span className="text-[var(--faint)]">Scanner Health</span>
                         <span
                           className={
                             !k.online
-                              ? 'text-[#EF4444]'
+                              ? 'text-[var(--bad)]'
                               : k.scannerHealth === 'HEALTHY'
-                              ? 'text-[#10B981]'
-                              : 'text-[#F59E0B]'
+                              ? 'text-[var(--ok)]'
+                              : 'text-[var(--accent-ink)]'
                           }
                         >
                           {!k.online ? 'DISCONNECTED' : k.scannerHealth}
@@ -408,18 +408,18 @@ export const EvidenceAndKeepersPanel: React.FC<EvidenceAndKeepersPanelProps> = (
                     </div>
 
                     {/* Additional Telemetry: Last Sequence, Expiry, Share Custody */}
-                    <div className="space-y-1 text-[11px] text-[#94A3B8] tabular-nums pt-1">
+                    <div className="space-y-1 text-[11px] text-[var(--muted)] tabular-nums pt-1">
                       <div className="flex justify-between">
-                        <span className="text-[#64748B]">Verified Seq:</span>
+                        <span className="text-[var(--faint)]">Verified Seq:</span>
                         <span>#{k.lastSequence !== null ? k.lastSequence.toString() : '0'}</span>
                       </div>
                       <div className="flex justify-between">
-                        <span className="text-[#64748B]">Release Height:</span>
-                        <span className="text-[#F59E0B]">#{k.graceDeadlineHeight}</span>
+                        <span className="text-[var(--faint)]">Release Height:</span>
+                        <span className="text-[var(--accent-ink)]">#{k.graceDeadlineHeight}</span>
                       </div>
                       <div className="flex justify-between">
-                        <span className="text-[#64748B]">Share #0{k.index}:</span>
-                        <span className={k.outboxDelivered ? 'text-[#38BDF8]' : 'text-[#10B981]'}>
+                        <span className="text-[var(--faint)]">Share #0{k.index}:</span>
+                        <span className={k.outboxDelivered ? 'text-[var(--info)]' : 'text-[var(--ok)]'}>
                           {k.outboxDelivered ? 'Transmitted' : 'Locked in DB'}
                         </span>
                       </div>
@@ -427,13 +427,13 @@ export const EvidenceAndKeepersPanel: React.FC<EvidenceAndKeepersPanelProps> = (
                   </div>
 
                   {/* Action Controls: Online Toggle & Inspector Link */}
-                  <div className="space-y-2 pt-3 border-t border-[#1E2430]">
+                  <div className="space-y-2 pt-3 border-t border-[var(--line)]">
                     <button
                       onClick={() => onToggleKeeperOnline(k.index)}
                       className={`w-full py-2 px-3 rounded text-xs font-medium flex items-center justify-center gap-1.5 transition-colors cursor-pointer ${
                         k.online
-                          ? 'bg-[#141820] hover:bg-[#1E2430] text-[#E2E8F0] border border-[#222938]'
-                          : 'bg-[#10B981] hover:bg-[#059669] text-[#0B0D11] font-semibold'
+                          ? 'bg-[var(--card)] rounded-[22px] shadow-[var(--shadow)] hover:bg-[var(--sunken)] text-[var(--ink)] border border-[var(--line)]'
+                          : 'bg-[var(--ok)] hover:bg-[var(--ok)] text-[var(--ink)] font-semibold'
                       }`}
                     >
                       <Power className="w-3.5 h-3.5" />
@@ -442,7 +442,7 @@ export const EvidenceAndKeepersPanel: React.FC<EvidenceAndKeepersPanelProps> = (
 
                     <button
                       onClick={() => setSelectedKeeperTab(k.index as 1 | 2 | 3 | 4 | 5)}
-                      className="w-full py-1.5 px-2.5 bg-[#141820]/60 hover:bg-[#1E2430] text-[#94A3B8] hover:text-[#F8FAFC] rounded text-[11px] transition-colors cursor-pointer"
+                      className="w-full py-1.5 px-2.5 bg-[var(--card)]/60 rounded-[22px] shadow-[var(--shadow)] hover:bg-[var(--sunken)] text-[var(--muted)] hover:text-[var(--ink)] rounded text-[11px] transition-colors cursor-pointer"
                     >
                       Inspect simulation events →
                     </button>
@@ -455,13 +455,13 @@ export const EvidenceAndKeepersPanel: React.FC<EvidenceAndKeepersPanelProps> = (
 
         {/* Individual Keeper Deep-Dive View */}
         {activeKeeper && (
-          <div className="border border-[#222938] bg-[#0B0D11] p-6 space-y-6 text-xs">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#1E2430] pb-4">
+          <div className="border border-[var(--line)] bg-[var(--sunken)] p-6 space-y-6 text-xs">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[var(--line)] pb-4">
               <div className="space-y-1">
-                <div className="text-sm font-bold text-[#F8FAFC]">
+                <div className="text-sm font-bold text-[var(--ink)]">
                   {activeKeeper.name} ({activeKeeper.id}) — Isolated Process Inspector
                 </div>
-                <div className="text-[#94A3B8]">
+                <div className="text-[var(--muted)]">
                   Endpoint: {activeKeeper.endpoint} · Planned database: {activeKeeper.dbPath}
                 </div>
               </div>
@@ -475,7 +475,7 @@ export const EvidenceAndKeepersPanel: React.FC<EvidenceAndKeepersPanelProps> = (
                       e.target.value as ScannerHealthState
                     )
                   }
-                  className="px-3 py-1.5 bg-[#141820] border border-[#222938] rounded text-xs text-[#F8FAFC]"
+                  className="px-3 py-1.5 bg-[var(--card)] rounded-[22px] shadow-[var(--shadow)] border border-[var(--line)] rounded text-xs text-[var(--ink)]"
                 >
                   <option value="HEALTHY">Health: HEALTHY</option>
                   <option value="DELAYED_SCAN">Health: DELAYED_SCAN</option>
@@ -484,7 +484,7 @@ export const EvidenceAndKeepersPanel: React.FC<EvidenceAndKeepersPanelProps> = (
 
                 <button
                   onClick={() => onToggleKeeperOnline(activeKeeper.index)}
-                  className="px-3 py-1.5 bg-[#141820] hover:bg-[#1E2430] border border-[#222938] rounded text-xs text-[#F8FAFC] cursor-pointer"
+                  className="px-3 py-1.5 bg-[var(--card)] rounded-[22px] shadow-[var(--shadow)] hover:bg-[var(--sunken)] border border-[var(--line)] rounded text-xs text-[var(--ink)] cursor-pointer"
                 >
                   {activeKeeper.online ? 'Simulate Process Kill' : 'Restart Process'}
                 </button>
@@ -492,40 +492,40 @@ export const EvidenceAndKeepersPanel: React.FC<EvidenceAndKeepersPanelProps> = (
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div className="p-3.5 bg-[#141820] border border-[#222938] space-y-1">
-                <div className="text-[#64748B]">Provisioned Share Commitment</div>
-                <div className="text-[#E2E8F0] truncate">
+              <div className="p-3.5 bg-[var(--card)] rounded-[22px] shadow-[var(--shadow)] border border-[var(--line)] space-y-1">
+                <div className="text-[var(--faint)]">Provisioned Share Commitment</div>
+                <div className="text-[var(--ink)] truncate">
                   {activeKeeper.provisionedShare?.commitmentHex}
                 </div>
-                <div className="text-[#10B981]">
+                <div className="text-[var(--ok)]">
                   ACK Signature: {activeKeeper.provisionedAckSignature}
                 </div>
               </div>
 
-              <div className="p-3.5 bg-[#141820] border border-[#222938] space-y-1 tabular-nums">
-                <div className="text-[#64748B]">Confirmed Block Scan Cursor</div>
-                <div className="text-[#F8FAFC] font-semibold">
+              <div className="p-3.5 bg-[var(--card)] rounded-[22px] shadow-[var(--shadow)] border border-[var(--line)] space-y-1 tabular-nums">
+                <div className="text-[var(--faint)]">Confirmed Block Scan Cursor</div>
+                <div className="text-[var(--ink)] font-semibold">
                   Height #{activeKeeper.scanCursorHeight.toLocaleString()}
                 </div>
-                <div className="text-[#94A3B8] truncate">
+                <div className="text-[var(--muted)] truncate">
                   Hash: {activeKeeper.scanCursorBlockHash}
                 </div>
               </div>
 
-              <div className="p-3.5 bg-[#141820] border border-[#222938] space-y-1">
-                <div className="text-[#64748B]">Outbox & Idempotency Status</div>
-                <div className="text-[#F8FAFC] font-semibold">
+              <div className="p-3.5 bg-[var(--card)] rounded-[22px] shadow-[var(--shadow)] border border-[var(--line)] space-y-1">
+                <div className="text-[var(--faint)]">Outbox & Idempotency Status</div>
+                <div className="text-[var(--ink)] font-semibold">
                   {activeKeeper.outboxDelivered ? 'DISPATCHED TO RECIPIENT' : 'HELD IN CUSTODY'}
                 </div>
-                <div className="text-[#94A3B8] truncate">
+                <div className="text-[var(--muted)] truncate">
                   Idempotency Key: {activeKeeper.deliveryIdempotencyKey || 'Not yet generated'}
                 </div>
               </div>
             </div>
 
             <div className="space-y-2">
-              <div className="text-[#94A3B8]">In-memory simulation event log</div>
-              <div className="p-4 bg-[#141820] border border-[#222938] space-y-1.5 text-[11px] text-[#CBD5E1]">
+              <div className="text-[var(--muted)]">In-memory simulation event log</div>
+              <div className="p-4 bg-[var(--card)] rounded-[22px] shadow-[var(--shadow)] border border-[var(--line)] space-y-1.5 text-[11px] text-[var(--muted)]">
                 {activeKeeper.logs.map((line, i) => (
                   <div key={i}>{line}</div>
                 ))}
@@ -536,14 +536,14 @@ export const EvidenceAndKeepersPanel: React.FC<EvidenceAndKeepersPanelProps> = (
       </section>
 
       {/* Section 2: 512-Byte ZIP-302 Shielded Memo Binary Inspector */}
-      <section className="border border-[#222938] bg-[#141820] p-6 lg:p-8 space-y-6">
-        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 border-b border-[#222938] pb-5">
+      <section className="border border-[var(--line)] bg-[var(--card)] rounded-[22px] shadow-[var(--shadow)] p-6 lg:p-8 space-y-6">
+        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 border-b border-[var(--line)] pb-5">
           <div className="space-y-1">
             
-            <h2 className="text-xl font-bold text-[#F8FAFC]">
+            <h2 className="text-xl font-bold text-[var(--ink)]">
               Shielded Memo Binary Inspector & Tamper Verifier
             </h2>
-            <p className="text-xs text-[#94A3B8]">
+            <p className="text-xs text-[var(--muted)]">
               Inspect the exact 512-byte payload prepared by the browser simulation or inject faults
               to verify strict rejection rules. No network transaction is sent from this screen.
             </p>
@@ -556,7 +556,7 @@ export const EvidenceAndKeepersPanel: React.FC<EvidenceAndKeepersPanelProps> = (
                 setSelectedTxid(e.target.value);
                 setTamperMode('NONE');
               }}
-              className="w-full min-w-0 max-w-full sm:w-auto px-3 py-2 bg-[#0B0D11] border border-[#222938] rounded text-xs text-[#F8FAFC]"
+              className="w-full min-w-0 max-w-full sm:w-auto px-3 py-2 bg-[var(--sunken)] border border-[var(--line)] rounded text-xs text-[var(--ink)]"
             >
               {transactions.map((tx) => (
                 <option key={tx.txid} value={tx.txid}>
@@ -569,15 +569,15 @@ export const EvidenceAndKeepersPanel: React.FC<EvidenceAndKeepersPanelProps> = (
 
         {memoInspection && (
           <div className="space-y-6">
-            <div className="flex flex-wrap items-center justify-between gap-4 p-4 bg-[#0B0D11] border border-[#222938] text-xs">
+            <div className="flex flex-wrap items-center justify-between gap-4 p-4 bg-[var(--sunken)] border border-[var(--line)] text-xs">
               <div className="flex flex-wrap items-center gap-2">
-                <span className="text-[#94A3B8]">Codec Fault Injection:</span>
+                <span className="text-[var(--muted)]">Codec Fault Injection:</span>
                 <button
                   onClick={() => setTamperMode('NONE')}
                   className={`px-2.5 py-1 rounded cursor-pointer ${
                     tamperMode === 'NONE'
-                      ? 'bg-[#10B981] text-[#0B0D11] font-semibold'
-                      : 'bg-[#141820] text-[#94A3B8]'
+                      ? 'bg-[var(--ok)] text-[var(--ink)] font-semibold'
+                      : 'bg-[var(--card)] rounded-[22px] shadow-[var(--shadow)] text-[var(--muted)]'
                   }`}
                 >
                   Generated 512B Memo
@@ -586,8 +586,8 @@ export const EvidenceAndKeepersPanel: React.FC<EvidenceAndKeepersPanelProps> = (
                   onClick={() => setTamperMode('PADDING')}
                   className={`px-2.5 py-1 rounded cursor-pointer ${
                     tamperMode === 'PADDING'
-                      ? 'bg-[#EF4444] text-white font-semibold'
-                      : 'bg-[#141820] text-[#94A3B8]'
+                      ? 'bg-[var(--bad)] text-[var(--ink)] font-semibold'
+                      : 'bg-[var(--card)] rounded-[22px] shadow-[var(--shadow)] text-[var(--muted)]'
                   }`}
                 >
                   Corrupt Zero Padding [Byte 200]
@@ -596,8 +596,8 @@ export const EvidenceAndKeepersPanel: React.FC<EvidenceAndKeepersPanelProps> = (
                   onClick={() => setTamperMode('SIGNATURE')}
                   className={`px-2.5 py-1 rounded cursor-pointer ${
                     tamperMode === 'SIGNATURE'
-                      ? 'bg-[#EF4444] text-white font-semibold'
-                      : 'bg-[#141820] text-[#94A3B8]'
+                      ? 'bg-[var(--bad)] text-[var(--ink)] font-semibold'
+                      : 'bg-[var(--card)] rounded-[22px] shadow-[var(--shadow)] text-[var(--muted)]'
                   }`}
                 >
                   Flip Ed25519 Signature [Byte 490]
@@ -606,8 +606,8 @@ export const EvidenceAndKeepersPanel: React.FC<EvidenceAndKeepersPanelProps> = (
                   onClick={() => setTamperMode('NETWORK')}
                   className={`px-2.5 py-1 rounded cursor-pointer ${
                     tamperMode === 'NETWORK'
-                      ? 'bg-[#EF4444] text-white font-semibold'
-                      : 'bg-[#141820] text-[#94A3B8]'
+                      ? 'bg-[var(--bad)] text-[var(--ink)] font-semibold'
+                      : 'bg-[var(--card)] rounded-[22px] shadow-[var(--shadow)] text-[var(--muted)]'
                   }`}
                 >
                   Wrong Network Scanner
@@ -616,11 +616,11 @@ export const EvidenceAndKeepersPanel: React.FC<EvidenceAndKeepersPanelProps> = (
 
               <div>
                 {memoInspection.result.valid ? (
-                  <span className="text-[#10B981] font-semibold">
+                  <span className="text-[var(--ok)] font-semibold">
                     Valid 512-byte ZIP-302 command · Ed25519 verified
                   </span>
                 ) : (
-                  <span className="text-[#EF4444] font-semibold">
+                  <span className="text-[var(--bad)] font-semibold">
                     REJECTED: {memoInspection.result.errorCode}
                   </span>
                 )}
@@ -628,43 +628,43 @@ export const EvidenceAndKeepersPanel: React.FC<EvidenceAndKeepersPanelProps> = (
             </div>
 
             {!memoInspection.result.valid && (
-              <div className="p-4 bg-[#0B0D11] border border-[#EF4444] text-xs text-[#EF4444]">
+              <div className="p-4 bg-[var(--sunken)] border border-[var(--bad)] text-xs text-[var(--bad)]">
                 Decoder Rejection Reason: {memoInspection.result.errorMessage} (
                 {memoInspection.result.errorCode})
               </div>
             )}
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 text-xs">
-              <div className="p-3 bg-[#0B0D11] border border-[#222938]">
-                <div className="text-[#64748B]">[0] ZIP-302 Prefix (1B)</div>
-                <div className="text-[#F59E0B] font-semibold mt-1">
+              <div className="p-3 bg-[var(--sunken)] border border-[var(--line)]">
+                <div className="text-[var(--faint)]">[0] ZIP-302 Prefix (1B)</div>
+                <div className="text-[var(--accent-ink)] font-semibold mt-1">
                   0x{memoInspection.rawBytes[0].toString(16).toUpperCase()}
                 </div>
               </div>
-              <div className="p-3 bg-[#0B0D11] border border-[#222938]">
-                <div className="text-[#64748B]">[1..5] App Magic (4B)</div>
-                <div className="text-[#F8FAFC] font-semibold mt-1">"ZCAN" (5a 43 41 4e)</div>
+              <div className="p-3 bg-[var(--sunken)] border border-[var(--line)]">
+                <div className="text-[var(--faint)]">[1..5] App Magic (4B)</div>
+                <div className="text-[var(--ink)] font-semibold mt-1">"ZCAN" (5a 43 41 4e)</div>
               </div>
-              <div className="p-3 bg-[#0B0D11] border border-[#222938]">
-                <div className="text-[#64748B]">[5..8] Ver / Net / Op (3B)</div>
-                <div className="text-[#10B981] font-semibold mt-1">
+              <div className="p-3 bg-[var(--sunken)] border border-[var(--line)]">
+                <div className="text-[var(--faint)]">[5..8] Ver / Net / Op (3B)</div>
+                <div className="text-[var(--ok)] font-semibold mt-1">
                   v{memoInspection.rawBytes[5]} · Testnet · Op 0x0{memoInspection.rawBytes[7]}
                 </div>
               </div>
-              <div className="p-3 bg-[#0B0D11] border border-[#222938]">
-                <div className="text-[#64748B]">[40..52] Seq (8B LE) & Expiry (4B LE)</div>
-                <div className="text-[#F8FAFC] font-semibold mt-1 tabular-nums">
+              <div className="p-3 bg-[var(--sunken)] border border-[var(--line)]">
+                <div className="text-[var(--faint)]">[40..52] Seq (8B LE) & Expiry (4B LE)</div>
+                <div className="text-[var(--ink)] font-semibold mt-1 tabular-nums">
                   Seq #{selectedTx?.sequence} · Exp #{selectedTx?.requestedExpiryHeight}
                 </div>
               </div>
             </div>
 
-            <div className="p-4 bg-[#0B0D11] border border-[#222938] text-[11px] space-y-2">
-              <div className="flex items-center justify-between text-[#64748B]">
+            <div className="p-4 bg-[var(--sunken)] border border-[var(--line)] text-[11px] space-y-2">
+              <div className="flex items-center justify-between text-[var(--faint)]">
                 <span>Raw 512-byte payload (1,024 hex characters)</span>
                 <span>Total Length: {memoInspection.rawBytes.length} Bytes</span>
               </div>
-              <div className="text-[#94A3B8] break-all leading-relaxed max-h-36 overflow-y-auto">
+              <div className="text-[var(--muted)] break-all leading-relaxed max-h-36 overflow-y-auto">
                 {memoInspection.rawHex}
               </div>
             </div>
@@ -675,11 +675,11 @@ export const EvidenceAndKeepersPanel: React.FC<EvidenceAndKeepersPanelProps> = (
       <details className="native-evidence-disclosure"><summary>Inspect authenticated native evidence <span>+</span></summary><LocalAgentPanel memoHex={memoInspection?.rawHex} /></details>
 
       {/* Section 3: Automated Acceptance Test Suite */}
-      <section className="border border-[#222938] bg-[#141820] p-6 lg:p-8 space-y-6">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#222938] pb-5">
+      <section className="border border-[var(--line)] bg-[var(--card)] rounded-[22px] shadow-[var(--shadow)] p-6 lg:p-8 space-y-6">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[var(--line)] pb-5">
           <div className="space-y-1">
             
-            <h2 className="text-xl font-bold text-[#F8FAFC]">
+            <h2 className="text-xl font-bold text-[var(--ink)]">
               Browser Simulation Checks ({testResults.filter((r) => r.passed).length}/
               {testResults.length} Passing)
             </h2>
@@ -687,14 +687,14 @@ export const EvidenceAndKeepersPanel: React.FC<EvidenceAndKeepersPanelProps> = (
 
           <button
             onClick={handleRunTests}
-            className="px-4 py-2 bg-[#F59E0B] hover:bg-[#D97706] text-[#0B0D11] font-semibold text-xs rounded flex items-center gap-2 self-start cursor-pointer"
+            className="px-4 py-2 bg-[var(--yellow)] hover:bg-[var(--yellow-2)] text-[var(--ink)] font-semibold text-xs rounded flex items-center gap-2 self-start cursor-pointer"
           >
             <Play className="w-3.5 h-3.5" />
             <span>Re-Run All Acceptance Vectors</span>
           </button>
         </div>
 
-        <div className="divide-y divide-[#1E2430] text-xs">
+        <div className="divide-y divide-[var(--line)] text-xs">
           {testResults.map((test) => (
             <div
               key={test.id}
@@ -703,23 +703,23 @@ export const EvidenceAndKeepersPanel: React.FC<EvidenceAndKeepersPanelProps> = (
               <div className="space-y-1">
                 <div className="flex items-center gap-2.5">
                   {test.passed ? (
-                    <CheckCircle2 className="w-4 h-4 text-[#10B981] shrink-0" />
+                    <CheckCircle2 className="w-4 h-4 text-[var(--ok)] shrink-0" />
                   ) : (
-                    <XCircle className="w-4 h-4 text-[#EF4444] shrink-0" />
+                    <XCircle className="w-4 h-4 text-[var(--bad)] shrink-0" />
                   )}
-                  <span className="text-[#F59E0B]">{test.id}</span>
-                  <span className="text-[#64748B]">·</span>
-                  <span className="text-[#94A3B8]">{test.category}</span>
-                  <span className="text-[#64748B]">·</span>
-                  <span className="text-[#F8FAFC] font-semibold">{test.name}</span>
+                  <span className="text-[var(--accent-ink)]">{test.id}</span>
+                  <span className="text-[var(--faint)]">·</span>
+                  <span className="text-[var(--muted)]">{test.category}</span>
+                  <span className="text-[var(--faint)]">·</span>
+                  <span className="text-[var(--ink)] font-semibold">{test.name}</span>
                 </div>
-                <p className="text-[#94A3B8] pl-6">{test.assertionSummary}</p>
-                <div className="text-[11px] text-[#64748B] pl-6">{test.evidenceLog}</div>
+                <p className="text-[var(--muted)] pl-6">{test.assertionSummary}</p>
+                <div className="text-[11px] text-[var(--faint)] pl-6">{test.evidenceLog}</div>
               </div>
 
               <div className="pl-6 lg:pl-0 flex items-center gap-3 shrink-0 tabular-nums">
-                <span className="text-[#64748B]">{test.durationMs} ms</span>
-                <span className={test.passed ? 'text-[#10B981] font-semibold' : 'text-[#EF4444]'}>
+                <span className="text-[var(--faint)]">{test.durationMs} ms</span>
+                <span className={test.passed ? 'text-[var(--ok)] font-semibold' : 'text-[var(--bad)]'}>
                   {test.passed ? 'PASS' : 'FAIL'}
                 </span>
               </div>

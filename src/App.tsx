@@ -10,6 +10,8 @@ import {
   RotateCcw,
   CheckCircle2,
   AlertTriangle,
+  Menu,
+  X,
 } from 'lucide-react';
 import { bytesToHex, sha256Hex } from './crypto/shamir';
 import {
@@ -78,6 +80,7 @@ export default function App() {
     initialData.transactions[0]?.txid || null
   );
   const [toastMessage, setToastMessage] = useState<string | null>(null);
+  const [menuOpen, setMenuOpen] = useState(false);
   const [externalWalletSubmission, setExternalWalletSubmission] = useState<ExternalWalletSubmission | null>(null);
 
   const [supportHistory, setSupportHistory] = useState<ShieldedSupportTransaction[]>([
@@ -409,25 +412,30 @@ export default function App() {
     showToast('Reorg incident: processing suspended. Reset to continue; already delivered shares cannot be recalled.');
   };
 
+  const navItems = [['welcome','Overview'],['break','Break the vault'],['case','Example'],['sentinel','Vault'],['recipient','Inbox'],['evidence','Keepers'],['judge','Judge Proof']] as const;
+  const go = (tab: ActiveTab) => { setMenuOpen(false); setActiveTab(tab); };
+  const modeLabel = activeTab==='native' ? 'Local workspace' : activeTab==='judge' ? 'Recorded testnet proof' : 'Browser lab';
+  const modeText = activeTab==='native' ? 'Actual state is reported by your local agent. Testnet only.' : activeTab==='judge' ? 'Recorded transactions and archived signatures. This page does not report live keeper status.' : 'Real encryption in your browser. Simulated chain and keepers. No transactions sent.';
+
   return (
     <div className="canary-app">
       <a className="skip-link" href="#main-content">Skip to content</a>
-      <header className="canary-header">
-        <button className="canary-wordmark" onClick={() => setActiveTab('welcome')} aria-label="Canary overview"><svg viewBox="0 0 34 34" aria-hidden="true"><path d="M5 25V9l12 8L29 9v16L17 17Z"/><path d="M17 5v24"/></svg><span>canary<span className="wordmark-dot">.</span></span></button>
-        <nav className="canary-navigation" aria-label="Main navigation">
-          {([['welcome','Overview'],['break','Break the vault'],['sentinel','Vault'],['recipient','Inbox'],['support','Support'],['evidence','Keepers'],['judge','Judge Proof']] as const).map(([tab,label])=><button key={tab} onClick={()=>setActiveTab(tab)} aria-current={activeTab===tab?'page':undefined}>{label}</button>)}
+      <header className={`topbar ${menuOpen ? 'open' : ''}`}>
+        <button className="brand" onClick={() => go('welcome')} aria-label="Canary overview"><span className="brand-mark" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M15.6 4.2c-2.4 0-4.2 1.7-4.6 4l-.2 1.1-5.5 2.3c-.8.3-.7 1.4.1 1.6l3.4.9c.6 2.8 3 4.9 6 4.9h.4l-1.6 2.6h2l1.5-2.7c2.3-1 3.9-3.3 3.9-5.9V7.2l1.8-1.4-2-.4c-.8-.8-1.9-1.2-3.2-1.2Zm.3 2.5a.9.9 0 1 1 0 1.8.9.9 0 0 1 0-1.8Z"/></svg></span><span className="brand-word">Canary</span></button>
+        <nav className="nav" aria-label="Main navigation">
+          {navItems.map(([tab,label]) => <button key={tab} onClick={() => go(tab)} aria-current={activeTab===tab ? 'page' : undefined}>{label}</button>)}
         </nav>
-        <button className={`native-nav ${activeTab==='native'?'is-active':''}`} onClick={()=>setActiveTab('native')}><span className="signal-dot"/>Native testnet <span aria-hidden="true">↗</span></button>
+        <div className="topbar-actions">
+          <button className="native-link" onClick={() => go('native')} aria-current={activeTab==='native' ? 'page' : undefined}><span className="dot ok" aria-hidden="true"/>Native testnet</button>
+          <button className="menu-toggle" aria-expanded={menuOpen} onClick={() => setMenuOpen(open => !open)}>{menuOpen ? <X size={16}/> : <Menu size={16}/>}Menu</button>
+        </div>
       </header>
-      <div className={`environment-strip ${activeTab==='native'?'environment-strip--native':''}`} role="note">
-        <span>{activeTab==='native'?'Authenticated local workspace':activeTab==='judge'?'Recorded testnet proof':'Browser lab'}</span>
-        <p>{activeTab==='native'?'Actual state is reported by your local agent. Testnet only.':activeTab==='judge'?'Inspect recorded transactions and verify archived signatures. This page does not report live keeper status.':'Try it safely in your browser: real encryption, simulated chain and keepers, no transactions sent. Open Judge Proof for the recorded testnet run.'}</p>
-        {activeTab!=='case'&&<button onClick={()=>setActiveTab('case')}>Try Maya & Noor's example ↗</button>}
-        {activeTab==='case'&&<button onClick={()=>setActiveTab('demo')}>Protocol tour ↗</button>}
+      <div className="mode-note" role="note"><span className="pill"><span className="dot" aria-hidden="true"/>{modeLabel}</span><p>{modeText}</p>
+        {activeTab!=='case' ? <button onClick={() => go('case')}>Follow Maya &amp; Noor&rsquo;s example</button> : <button onClick={() => go('demo')}>Protocol tour</button>}
       </div>
-      {!['native','welcome','demo','case','judge','break'].includes(activeTab)&&<details className="simulation-tools">
-        <summary><span>Simulation controls</span><span>#{currentBlockHeight.toLocaleString()} · {walletBalanceZatoshi.toLocaleString()} zat</span><span>Expand +</span></summary>
-        <div><button onClick={()=>handleAdvanceBlocks(1)}><Pickaxe size={14}/>Mine +1 block</button><button onClick={()=>handleAdvanceBlocks(6)}>Mine +6 blocks</button><button onClick={handleJumpToGrace}>Enter grace</button><button onClick={handleJumpPastGraceToExpire}><FastForward size={14}/>Evaluate expiry</button><button onClick={handleResetDemo}><RotateCcw size={14}/>Reset harness</button><button onClick={()=>setActiveTab('create')}>New demo vault ↗</button></div>
+      {!['native','welcome','demo','case','judge','break'].includes(activeTab) && <details className="sim-tools">
+        <summary><span>Simulation controls</span><code>Block #{currentBlockHeight.toLocaleString()} · {walletBalanceZatoshi.toLocaleString()} zat</code><span className="chip">Open</span></summary>
+        <div><button onClick={() => handleAdvanceBlocks(1)}><Pickaxe size={14}/>Mine 1 block</button><button onClick={() => handleAdvanceBlocks(6)}>Mine 6 blocks</button><button onClick={handleJumpToGrace}>Enter grace</button><button onClick={handleJumpPastGraceToExpire}><FastForward size={14}/>Evaluate expiry</button><button onClick={handleResetDemo}><RotateCcw size={14}/>Reset</button><button onClick={() => go('create')}>New demo vault</button></div>
       </details>}
 
       {!['judge','break'].includes(activeTab) && <JudgeJourney
@@ -443,26 +451,9 @@ export default function App() {
         onReset={() => { handleResetDemo(); setActiveTab('create'); }}
       />}
 
-      {/* Toast Feedback Banner */}
-      {toastMessage && (
-        <div role="status" aria-live="polite" className="max-w-7xl w-full mx-auto px-6 pt-4">
-          <div className="p-3.5 bg-[#141820] border border-[#2a2b2e] rounded-lg text-[13px] text-[#F8FAFC] flex items-center justify-between gap-4">
-            <div className="flex items-center gap-2.5">
-              <CheckCircle2 className="w-4 h-4 text-[#10B981] shrink-0" />
-              <span>{toastMessage}</span>
-            </div>
-            <button
-              onClick={() => setToastMessage(null)}
-              className="text-[#94A3B8] hover:text-[#F8FAFC] cursor-pointer"
-            >
-              Dismiss
-            </button>
-          </div>
-        </div>
-      )}
+      {toastMessage && <div role="status" aria-live="polite" className="toast"><span><CheckCircle2 size={16} style={{display:'inline',verticalAlign:'-3px',marginRight:8,color:'var(--yellow)'}}/>{toastMessage}</span><button onClick={() => setToastMessage(null)}>Dismiss</button></div>}
 
-      {/* Main Content Viewport */}
-      <main id="main-content" ref={mainRef} tabIndex={-1} className={`canary-main page-${activeTab}`}><div key={activeTab} className="page-reveal">
+      <main id="main-content" ref={mainRef} tabIndex={-1} className={`main page-${activeTab}`}><div key={activeTab} className="page-reveal">
         {activeTab === 'welcome' && (
           <WelcomeScreen
             activeVault={vault}
@@ -604,26 +595,24 @@ export default function App() {
         {activeTab === 'demo' && <Suspense fallback={<div className="scene-loading">Preparing the guided experience…</div>}><GuidedExperience onNative={() => setActiveTab('native')} /></Suspense>}
       </div></main>
 
-      <footer className="canary-footer">
-        <div className="canary-footer-main">
-          <span className="footer-wordmark">canary.</span>
-          <p>Private by design. Deliberate by protocol.<br/><span>Zcash testnet · {vault.manifest.threshold}-of-5 threshold · Signed shielded memos</span></p>
-          <button onClick={()=>setActiveTab('evidence')}>Inspect the evidence ↗</button>
+      <footer className="footer card-dark">
+        <div className="footer-top">
+          <div><div className="footer-word">Canary<span>.</span></div><p>An encrypted safety handoff for reporters and sources. Private while you check in; recoverable by the one person you chose if you go silent.</p></div>
+          <div className="footer-col"><h3>Try it</h3><button onClick={() => go('break')}>Break the vault</button><button onClick={() => go('case')}>Maya &amp; Noor example</button><button onClick={() => go('create')}>Protect your own file</button><button onClick={() => go('demo')}>Protocol tour</button></div>
+          <div className="footer-col"><h3>Proof</h3><button onClick={() => go('judge')}>Judge Proof</button><button onClick={() => go('evidence')}>Keepers &amp; receipts</button><button onClick={() => go('native')}>Native testnet</button><button onClick={() => go('support')}>Support</button></div>
+          <div className="footer-col"><h3>Source</h3><a href="https://github.com/unspecifiedcoder/z-canary" target="_blank" rel="noreferrer">GitHub</a><a href="https://github.com/unspecifiedcoder/z-canary/blob/main/docs/THREAT-MODEL.md" target="_blank" rel="noreferrer">Threat model</a><a href="https://github.com/unspecifiedcoder/z-canary/blob/main/docs/ARCHITECTURE.md" target="_blank" rel="noreferrer">Architecture</a></div>
         </div>
-        {externalWalletSubmission && (
-          <a className="external-proof-link" href={externalWalletSubmission.explorerUrl} target="_blank" rel="noreferrer">
-            Latest external wallet tx · {externalWalletSubmission.txid.slice(0, 12)}… · Check explorer status ↗
-          </a>
-        )}
-        <details className="prototype-boundaries">
-          <summary>Prototype boundaries & trust model <span>Read the technical scope +</span></summary>
-          <div>
+        {externalWalletSubmission && <a className="chip" style={{marginTop:24}} href={externalWalletSubmission.explorerUrl} target="_blank" rel="noreferrer">Latest external wallet tx · {externalWalletSubmission.txid.slice(0, 12)}… · Check explorer status ↗</a>}
+        <details className="footer-bottom">
+          <summary>Prototype boundaries &amp; trust model <span>Read the scope +</span></summary>
+          <div className="boundaries">
             <p><strong>Hosted browser lab.</strong> File encryption, command signatures, threshold reconstruction, recipient-key decryption, and digest checks run for real in your browser. Its block clock, keeper records, and lifecycle confirmations are a resettable simulation.</p>
             <p><strong>External wallet handoff.</strong> Canary creates a ZIP-321 testnet request containing the locally verified signed REGISTER memo. A pasted txid opens the explorer; this static site does not independently query a lightwalletd service or mark it confirmed.</p>
             <p><strong>Native proof.</strong> The recorded native run used real Zcash testnet transactions and five keeper processes with durable state. Those demo processes share one operator and scanner endpoint; they are not five independent organizations.</p>
             <p><strong>Security status.</strong> Testnet prototype, not audited. The threshold assumes fewer than {vault.manifest.threshold} keepers collude; shares already delivered cannot be recalled by a later cancellation.</p>
           </div>
         </details>
+        <div className="footer-legal"><span>Zcash testnet · {vault.manifest.threshold}-of-5 threshold · Signed shielded memos</span><span>Private by design. Deliberate by protocol.</span></div>
       </footer>
     </div>
   );

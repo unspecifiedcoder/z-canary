@@ -114,13 +114,13 @@ export const VaultDetailConsole: React.FC<VaultDetailConsoleProps> = ({
     <div className="space-y-8 pb-16">
       {/* Unconfirmed Transaction Banner */}
       {unconfirmedTxs.length > 0 && (
-        <div className="border border-[#F59E0B]/50 bg-[#141820] p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div className="border border-[var(--yellow-2)]/50 bg-[var(--card)] rounded-[22px] shadow-[var(--shadow)] p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div className="space-y-1">
-            <div className="text-xs text-[#F59E0B]">
+            <div className="text-xs text-[var(--accent-ink)]">
               AWAITING CHAIN CONFIRMATION ({currentBlockHeight - unconfirmedTxs[0].minedAtHeight! + 1}/
               {vault.manifest.confirmationTarget} BLOCKS)
             </div>
-            <p className="text-xs text-[#E2E8F0]">
+            <p className="text-xs text-[var(--ink)]">
               Synthetic command id <span className="font-mono">{unconfirmedTxs[0].txid.slice(0, 16)}…</span> is included
               at simulated height #{unconfirmedTxs[0].minedAtHeight}. Keeper records require {vault.manifest.confirmationTarget}{' '}
               simulated confirmations before updating state.
@@ -128,7 +128,7 @@ export const VaultDetailConsole: React.FC<VaultDetailConsoleProps> = ({
           </div>
           <button
             onClick={() => onMineBlocks(vault.manifest.confirmationTarget)}
-            className="px-3.5 py-2 bg-[#F59E0B] hover:bg-[#D97706] text-[#0B0D11] text-xs font-semibold rounded whitespace-nowrap shrink-0 cursor-pointer"
+            className="px-3.5 py-2 bg-[var(--yellow)] hover:bg-[var(--yellow-2)] text-[var(--ink)] text-xs font-semibold rounded whitespace-nowrap shrink-0 cursor-pointer"
           >
             Mine +{vault.manifest.confirmationTarget} Confirmation Blocks
           </button>
@@ -166,37 +166,37 @@ export const VaultDetailConsole: React.FC<VaultDetailConsoleProps> = ({
       {/* Two-Column Split: Auditable Event Timeline & Keeper Committee Summary */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
         {/* Readable Event Timeline (7 cols) */}
-        <section className="lg:col-span-7 border border-[#222938] bg-[#141820] p-6 space-y-5">
-          <div className="flex items-center justify-between border-b border-[#222938] pb-4">
+        <section className="lg:col-span-7 border border-[var(--line)] bg-[var(--card)] rounded-[22px] shadow-[var(--shadow)] p-6 space-y-5">
+          <div className="flex items-center justify-between border-b border-[var(--line)] pb-4">
             <div>
-              <h2 className="text-base font-semibold text-[#F8FAFC]">
+              <h2 className="text-base font-semibold text-[var(--ink)]">
                 Simulated Continuity Event Timeline
               </h2>
-              <p className="text-xs text-[#94A3B8]">
+              <p className="text-xs text-[var(--muted)]">
                 Local source audit log (never published on unauthenticated public pages).
               </p>
             </div>
-            <span className="text-xs text-[#94A3B8] tabular-nums">
+            <span className="text-xs text-[var(--muted)] tabular-nums">
               {vault.timeline.length} Events
             </span>
           </div>
 
-          <div className="divide-y divide-[#1E2430]">
+          <div className="divide-y divide-[var(--line)]">
             {vault.timeline.map((ev, index) => (
               <div key={ev.id} className="py-3.5 first:pt-0 last:pb-0 flex items-start justify-between gap-4">
                 <div className="space-y-1">
                   <div className="flex items-center gap-2 text-xs">
-                    <span className="text-[#F59E0B]">0{index + 1}.</span>
-                    <span className="font-semibold text-[#F8FAFC]">{ev.title}</span>
-                    <span className="text-[#64748B]">·</span>
-                    <span className="text-[#94A3B8] tabular-nums">Block #{ev.blockHeight}</span>
+                    <span className="text-[var(--accent-ink)]">0{index + 1}.</span>
+                    <span className="font-semibold text-[var(--ink)]">{ev.title}</span>
+                    <span className="text-[var(--faint)]">·</span>
+                    <span className="text-[var(--muted)] tabular-nums">Block #{ev.blockHeight}</span>
                   </div>
-                  <p className="text-xs text-[#94A3B8] leading-relaxed">{ev.detail}</p>
+                  <p className="text-xs text-[var(--muted)] leading-relaxed">{ev.detail}</p>
                   {ev.txid && (
                     <>
                       <button
                         onClick={() => onInspectMemo(ev.txid!)}
-                        className="text-[11px] text-[#F59E0B] hover:underline flex items-center gap-1 pt-0.5 cursor-pointer"
+                        className="text-[11px] text-[var(--accent-ink)] hover:underline flex items-center gap-1 pt-0.5 cursor-pointer"
                       >
                         <span>Verify this memo’s signature (id: {ev.txid.slice(0, 14)}…)</span>
                         <ArrowUpRight className="w-3 h-3" />
@@ -205,7 +205,7 @@ export const VaultDetailConsole: React.FC<VaultDetailConsoleProps> = ({
                     </>
                   )}
                 </div>
-                <span className="text-[11px] text-[#64748B] whitespace-nowrap shrink-0 tabular-nums">
+                <span className="text-[11px] text-[var(--faint)] whitespace-nowrap shrink-0 tabular-nums">
                   {ev.timestamp.slice(11, 19)}
                 </span>
               </div>
@@ -214,41 +214,41 @@ export const VaultDetailConsole: React.FC<VaultDetailConsoleProps> = ({
         </section>
 
         {/* 5-Keeper Committee Consensus Status (5 cols) */}
-        <section className="lg:col-span-5 border border-[#222938] bg-[#141820] p-6 space-y-5">
-          <div className="flex items-center justify-between border-b border-[#222938] pb-4">
+        <section className="lg:col-span-5 border border-[var(--line)] bg-[var(--card)] rounded-[22px] shadow-[var(--shadow)] p-6 space-y-5">
+          <div className="flex items-center justify-between border-b border-[var(--line)] pb-4">
             <div>
-              <h2 className="text-base font-semibold text-[#F8FAFC]">
+              <h2 className="text-base font-semibold text-[var(--ink)]">
                 {vault.manifest.threshold}-of-5 Keeper Committee State
               </h2>
-              <p className="text-xs text-[#94A3B8]">
+              <p className="text-xs text-[var(--muted)]">
                 Five in-memory keeper records processing simulated blocks.
               </p>
             </div>
-            <span className="text-xs text-[#10B981]">Epoch #{vault.manifest.configurationEpoch}</span>
+            <span className="text-xs text-[var(--ok)]">Epoch #{vault.manifest.configurationEpoch}</span>
           </div>
 
-          <div className="divide-y divide-[#1E2430] text-xs">
+          <div className="divide-y divide-[var(--line)] text-xs">
             {vault.keepers.map((k) => (
               <div key={k.id} className="py-3 first:pt-0 last:pb-0 space-y-1">
                 <div className="flex items-center justify-between">
-                  <span className="text-[#F8FAFC] font-medium">{k.name}</span>
+                  <span className="text-[var(--ink)] font-medium">{k.name}</span>
                   <span
                     className={
                       !k.online
-                        ? 'text-[#EF4444]'
+                        ? 'text-[var(--bad)]'
                         : k.lifecycleState === 'ACTIVE'
-                        ? 'text-[#10B981]'
+                        ? 'text-[var(--ok)]'
                         : k.lifecycleState === 'GRACE'
-                        ? 'text-[#F59E0B]'
+                        ? 'text-[var(--accent-ink)]'
                         : k.lifecycleState === 'RELEASED'
-                        ? 'text-[#F59E0B]'
-                        : 'text-[#94A3B8]'
+                        ? 'text-[var(--accent-ink)]'
+                        : 'text-[var(--muted)]'
                     }
                   >
                     {!k.online ? 'OFFLINE' : k.lifecycleState}
                   </span>
                 </div>
-                <div className="flex items-center justify-between text-[11px] text-[#64748B] tabular-nums">
+                <div className="flex items-center justify-between text-[11px] text-[var(--faint)] tabular-nums">
                   <span>
                     Cursor: #{k.scanCursorHeight} · Seq: {k.lastSequence !== null ? k.lastSequence.toString() : '-'}
                   </span>
@@ -260,8 +260,8 @@ export const VaultDetailConsole: React.FC<VaultDetailConsoleProps> = ({
             ))}
           </div>
 
-          <div className="p-3.5 bg-[#0B0D11] border border-[#222938] text-xs text-[#94A3B8] space-y-1">
-            <div className="text-[#F8FAFC]">Delivery Policy Invariant</div>
+          <div className="p-3.5 bg-[var(--sunken)] border border-[var(--line)] text-xs text-[var(--muted)] space-y-1">
+            <div className="text-[var(--ink)]">Delivery Policy Invariant</div>
             <p className="leading-relaxed">
               Keepers release only after scanning through block #{vault.graceDeadlineHeight} with
               healthy chain continuity.
@@ -273,20 +273,20 @@ export const VaultDetailConsole: React.FC<VaultDetailConsoleProps> = ({
       {/* Deliberate Cancellation Confirmation Modal */}
       {showCancelModal && (
         <div className="fixed inset-0 z-50 bg-black/80 flex items-center justify-center p-4">
-          <div ref={cancelDialogRef} role="dialog" aria-modal="true" aria-labelledby="cancel-dialog-title" aria-describedby="cancel-dialog-description" className="max-w-md w-full border border-[#222938] bg-[#141820] p-6 space-y-5">
+          <div ref={cancelDialogRef} role="dialog" aria-modal="true" aria-labelledby="cancel-dialog-title" aria-describedby="cancel-dialog-description" className="max-w-md w-full border border-[var(--line)] bg-[var(--card)] rounded-[22px] shadow-[var(--shadow)] p-6 space-y-5">
             <div className="space-y-2">
-              <div className="text-xs text-[#EF4444]">Simulated cancellation</div>
-              <h3 id="cancel-dialog-title" className="text-lg font-bold text-[#F8FAFC]">
+              <div className="text-xs text-[var(--bad)]">Simulated cancellation</div>
+              <h3 id="cancel-dialog-title" className="text-lg font-bold text-[var(--ink)]">
                 Mark this simulated vault cancelled?
               </h3>
-              <p id="cancel-dialog-description" className="text-xs text-[#94A3B8] leading-relaxed">
+              <p id="cancel-dialog-description" className="text-xs text-[var(--muted)] leading-relaxed">
                 This browser demo changes local simulated state only. It does not broadcast a Zcash
                 transaction or erase keeper keys or shares. Shares already delivered or copied cannot
                 be recalled. Reset the demo to start again.
               </p>
             </div>
 
-            <div className="p-3 bg-[#0B0D11] border border-[#222938] text-xs text-[#CBD5E1] space-y-1">
+            <div className="p-3 bg-[var(--sunken)] border border-[var(--line)] text-xs text-[var(--muted)] space-y-1">
               <div>Switch ID: {vault.manifest.switchIdHex.slice(0, 24)}…</div>
               <div>Next Sequence: #{vault.highestSequence + 1}</div>
               <div>Operation Code: 0x03 (CANCEL)</div>
@@ -296,7 +296,7 @@ export const VaultDetailConsole: React.FC<VaultDetailConsoleProps> = ({
               <button
                 ref={keepActiveRef}
                 onClick={closeCancelDialog}
-                className="px-4 py-2 text-xs font-medium text-[#94A3B8] hover:text-[#F8FAFC] border border-[#222938] rounded cursor-pointer"
+                className="px-4 py-2 text-xs font-medium text-[var(--muted)] hover:text-[var(--ink)] border border-[var(--line)] rounded cursor-pointer"
               >
                 Keep Vault Active
               </button>
@@ -305,7 +305,7 @@ export const VaultDetailConsole: React.FC<VaultDetailConsoleProps> = ({
                   setShowCancelModal(false);
                   onCancelVault();
                 }}
-                className="px-4 py-2 bg-[#EF4444] hover:bg-[#DC2626] text-white text-xs font-semibold rounded cursor-pointer"
+                className="px-4 py-2 bg-[var(--bad)] hover:bg-[var(--bad)] text-[var(--ink)] text-xs font-semibold rounded cursor-pointer"
               >
                 Simulate Cancellation
               </button>

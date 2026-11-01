@@ -2,7 +2,6 @@ import React, { useMemo, useState } from 'react';
 import { ArrowRight, Check, FileText, LockKeyhole, RotateCcw, Download, ShieldCheck, X, Clock3 } from 'lucide-react';
 import { actOnCaseStudy, createCaseStudy, downloadCaseStudy, CASE_FILENAME, type CaseAction, type CaseStep } from '../experience/caseStudy';
 import { downloadBytes } from '../services/nativeVault';
-import './CaseStudyDemo.css';
 
 const chapters: Record<CaseStep, { role: string; number: string; title: string; copy: string }> = {
   intro: { role: 'MAYA / REPORTER', number: '01', title: 'Her reporting should not depend on her being reachable.', copy: 'Maya wants to keep her draft private now, but let her editor Noor recover it if her check-ins stop.' },

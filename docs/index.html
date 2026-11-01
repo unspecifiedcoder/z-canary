@@ -3,46 +3,108 @@
 <head>
   <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="Canary is an encrypted safety handoff for whistleblowers and journalists: keep checking in and evidence stays private; go silent and only the person you chose can recover it after the rules pass.">
-  <meta name="theme-color" content="#101110">
+  <meta name="theme-color" content="#eceef2">
   <meta property="og:title" content="Canary — Evidence should not leak or disappear with you.">
   <meta property="og:description" content="Lock evidence now. Keep it private with check-ins. If you go silent, only the person you chose can recover it after the rules pass.">
-  <meta property="og:image" content="https://unspecifiedcoder.github.io/z-canary/assets/canary-vault.webp">
+  <meta property="og:image" content="https://unspecifiedcoder.github.io/z-canary/assets/press/og.jpg">
+  <meta name="twitter:card" content="summary_large_image">
   <title>Canary — An encrypted safety handoff for whistleblowers</title>
-  <link rel="preload" href="assets/canary-vault.webp" as="image" type="image/webp">
-  <link rel="stylesheet" href="assets/landing.css">
+  <link rel="preload" href="assets/press/hero.webp" as="image" type="image/webp">
+  <link rel="preload" href="assets/fonts/sofia-sans-extra-condensed-latin-800-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="assets/press.css">
   <script src="assets/landing.js" defer></script>
 </head>
 <body>
-  <a class="skip" href="#how">Skip to the handoff</a>
-  <header class="masthead shell"><a class="wordmark" href="./" aria-label="Canary home">canary<span class="brand-dot">.</span></a><nav aria-label="Main navigation"><a href="#how">How it works</a><a href="#watch">Watch</a><a href="app/#judge">Judge Proof ↗</a><a class="nav-app" href="app/#break-vault">Try the challenge ↗</a></nav></header>
-  <main>
-    <section class="opening" aria-labelledby="page-title">
-      <img class="opening-art" src="assets/canary-vault.webp" width="1672" height="941" alt="" fetchpriority="high"><div class="opening-shade"></div>
-      <div class="shell opening-content"><div class="opening-copy"><p class="eyebrow">A SAFETY HANDOFF FOR WHISTLEBLOWERS &amp; JOURNALISTS</p><h1 id="page-title">Evidence should not leak.<br><em>Or disappear with you.</em></h1><p class="lede"><strong>Put a file in a locked box. Press “I’m okay” to keep it locked.</strong> If you stop checking in, several keepers can provide pieces of the key—but only the person you chose can open it.</p><div class="actions"><a class="button gold" href="app/#break-vault">Try the 60-second challenge <span aria-hidden="true">↗</span></a><a class="watch-link" href="app/#create">Try your own file <span aria-hidden="true">↗</span></a></div><p class="opening-note">Browser lab: real local encryption · simulated blocks and keepers · no wallet needed</p></div><div class="object-caption"><span>01 / THE SAFETY HANDOFF</span><p>Private while<br>you check in.</p><small>Recoverable only by the person you chose</small></div></div>
-      <div class="opening-baseline shell"><span>KEEP CHECKING IN: PRIVATE. GO SILENT: CONTROLLED RECOVERY.</span><a href="#how">See how it works ↓</a></div>
+  <a class="skip-link" href="#how">Skip to the handoff</a>
+  <header class="topbar landing-top">
+    <a class="brand" href="./" aria-label="Canary home"><span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M15.6 4.2c-2.4 0-4.2 1.7-4.6 4l-.2 1.1-5.5 2.3c-.8.3-.7 1.4.1 1.6l3.4.9c.6 2.8 3 4.9 6 4.9h.4l-1.6 2.6h2l1.5-2.7c2.3-1 3.9-3.3 3.9-5.9V7.2l1.8-1.4-2-.4c-.8-.8-1.9-1.2-3.2-1.2Zm.3 2.5a.9.9 0 1 1 0 1.8.9.9 0 0 1 0-1.8Z"/></svg></span><span class="brand-word">Canary</span></a>
+    <nav class="nav" aria-label="Main navigation"><a href="#how">How it works</a><a href="#watch">Watch</a><a href="#proof">Why Zcash</a><a href="app/#judge">Judge Proof</a></nav>
+    <div class="topbar-actions"><a class="btn btn-dark btn-sm" href="app/#break-vault">Try the challenge<span class="btn-orb" aria-hidden="true">↗</span></a></div>
+  </header>
+
+  <main class="main landing">
+    <section class="hero" aria-labelledby="page-title">
+      <div class="hero-copy">
+        <span class="kicker"><span class="tag">Zcash</span>Safety handoff for reporters</span>
+        <h1 id="page-title" class="display">Evidence should not leak. <mark>Or disappear with you.</mark></h1>
+        <p class="lede">Put a file in a locked box. Press “I’m okay” to keep it locked. If you stop checking in, keepers each hand over one piece of the key, and only the person you chose can open it.</p>
+        <div class="hero-actions"><a class="btn btn-dark" href="app/#break-vault">Try the 60-second challenge<span class="btn-orb" aria-hidden="true">↗</span></a><a class="btn btn-ghost" href="app/#create">Try your own file →</a></div>
+        <ul class="hero-proof" aria-label="Recorded Zcash testnet proof"><li><b>7</b><span>real testnet transactions</span></li><li><b>7</b><span>memos you can re-verify</span></li><li><b>136&nbsp;B</b><span>recovered byte for byte</span></li></ul>
+      </div>
+      <div class="hero-stage" aria-hidden="true"><div class="hero-halo"></div><img src="assets/press/hero.webp" alt="" width="1024" height="1024" fetchpriority="high"></div>
+      <div class="hero-widgets">
+        <div class="widget widget-status"><span class="widget-icon" aria-hidden="true">✓</span><div><span class="label">Recorded native run</span><strong>Recovered</strong></div></div>
+        <ul class="widget-list" aria-label="What protected the recorded file"><li class="on">Encrypted for one recipient</li><li class="on">Signed check-in, 5 / 5 keepers applied it</li><li class="on">Cancelled vault released 0 shares</li><li>Recipient key always required</li></ul>
+        <div class="widget widget-number"><div><span class="label">Keeper threshold</span><small>plus the recipient’s key</small></div><strong>3<small> of 5</small></strong></div>
+        <p class="hero-tagline display-3">Private today.<br>Recoverable if you go silent.</p>
+      </div>
     </section>
-    <section id="how" class="paper story"><div class="shell"><div class="section-heading"><div><p class="eyebrow">THE PROBLEM / MAYA IS INVESTIGATING CORRUPTION</p><h2>Share now, risk exposure.<br><em>Keep it alone, risk losing it.</em></h2></div><p>Canary gives Maya a third choice. Her evidence stays encrypted while she checks in. If she becomes unreachable, her editor Noor gets a controlled recovery path—not automatic access.</p></div>
-      <div class="handoff-map" role="img" aria-label="Maya prepares an encrypted reporting file for conditional recovery by Noor"><div class="person"><span class="initial">M</span><div><strong>Maya</strong><small>The reporter</small></div></div><div class="connector"><span>Encrypted for Noor</span><i></i></div><div class="dossier"><span class="dossier-tab"></span><span class="dossier-lines">≡</span><strong>Reporting<br>notes</strong><small>SEALED / PRIVATE</small></div><div class="connector"><span>Conditional recovery</span><i></i></div><div class="person"><span class="initial">N</span><div><strong>Noor</strong><small>The chosen editor</small></div></div></div>
-      <div class="steps"><article><span class="step-number">01 / LOCK IT NOW</span><h3>Choose who may recover it.</h3><p>Your file is encrypted locally before the handoff begins. The chosen person’s key protects the inner file.</p></article><article><span class="step-number">02 / SAY “I’M OKAY”</span><h3>Every check-in keeps it locked.</h3><p>A signed check-in moves the deadline. While you keep checking in, recovery stays blocked.</p></article><article><span class="step-number">03 / IF SILENCE CONTINUES</span><h3>Recover only after every rule passes.</h3><p>The deadline and safety window must pass. Enough keepers—and the chosen person’s key—are still required.</p></article></div>
-      <div class="story-bottom"><p>Use a harmless file and run the whole lifecycle yourself.<br>No account or wallet is needed for the browser lab.</p><a class="button ink" href="app/#create">Create your own Canary ↗</a></div>
-    </div></section>
-    <section id="watch" class="watch-section"><div class="shell"><div class="section-heading"><div><p class="eyebrow">THE WORKING EXAMPLE</p><h2>See the plan <em>work.</em></h2></div><p>One story. Every important outcome.<br>Follow the walkthrough or jump to a scenario.</p></div>
+
+    <div class="proof-rail" aria-label="Commands recorded on Zcash testnet"><span class="label">Recorded on Zcash testnet</span><a href="app/#judge">✓ Register</a><a href="app/#judge">✓ Check in</a><a href="app/#judge">✓ Cancel</a><a href="app/#judge">✓ Recover</a></div>
+
+    <section id="how" class="bento" aria-labelledby="problem-title">
+      <article class="card bento-problem">
+        <span class="kicker">The problem · Maya is investigating corruption</span>
+        <h2 id="problem-title" class="display-2">Share now, risk exposure. <mark>Keep it alone, risk losing it.</mark></h2>
+        <p class="lede">Canary gives Maya a third choice. Her evidence stays encrypted while she checks in. If she becomes unreachable, her editor Noor gets a controlled recovery path, not automatic access.</p>
+        <div class="handoff" role="img" aria-label="Maya prepares an encrypted reporting file for conditional recovery by Noor"><div class="person"><span>M</span><div><b>Maya</b><small>Reporter</small></div></div><i></i><span class="chip">Encrypted for Noor</span><i></i><div class="person"><span>N</span><div><b>Noor</b><small>Chosen editor</small></div></div></div>
+      </article>
+      <article class="card-yellow bento-sealed" aria-label="A sealed reporting file">
+        <div class="sealed-doc"><span class="label">Maya → Noor</span><div class="sealed-lines" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="tape" aria-hidden="true"><span>Sealed until silence ·</span><span>Sealed until silence ·</span><span>Sealed until silence ·</span></div><strong class="display-3">Rivergate notes</strong></div>
+        <p class="mono-copy">Fictional file. Real encryption in your browser.</p>
+      </article>
+      <a class="card bento-step" href="app/#create"><img src="assets/press/icon-seal.webp" alt="" width="512" height="512" loading="lazy"><span class="label">01 · Lock it now</span><h3 class="display-3">Choose who may recover it.</h3><p>Your file is encrypted locally before the handoff begins. The chosen person’s key protects the inner file.</p><span class="step-link">Create your own Canary ↗</span></a>
+      <a class="card bento-step" href="app/#maya-noor"><img src="assets/press/icon-pulse.webp" alt="" width="512" height="512" loading="lazy"><span class="label">02 · Say “I’m okay”</span><h3 class="display-3">Every check-in keeps it locked.</h3><p>A signed check-in moves the deadline. While you keep checking in, recovery stays blocked.</p><span class="step-link">Follow Maya’s example ↗</span></a>
+      <a class="card bento-step" href="app/#recipient"><img src="assets/press/icon-folder.webp" alt="" width="512" height="512" loading="lazy"><span class="label">03 · If silence continues</span><h3 class="display-3">Recover only after every rule passes.</h3><p>The deadline and safety window must pass. Enough keepers, and the chosen person’s key, are still required.</p><span class="step-link">See the recipient view ↗</span></a>
+    </section>
+
+    <section id="watch" class="card watch" aria-labelledby="watch-title">
+      <div class="section-head"><div><span class="kicker">The working example</span><h2 id="watch-title" class="display-2">See the plan <mark>work.</mark></h2></div><p class="lede">One story. Every important outcome. Follow the walkthrough or jump to a scenario.</p></div>
       <div class="player-layout">
-                <figure class="film">
+        <figure class="film">
           <video id="canary-video" controls preload="metadata" playsinline poster="assets/canary-demo-poster.jpg" aria-label="Canary demonstration: Maya and Noor’s encrypted handoff">
             <source src="assets/canary-demo-v6.mp4" type="video/mp4">
             <track kind="captions" src="assets/canary-demo.vtt" srclang="en" label="English">
             Your browser does not support embedded video. <a href="assets/canary-demo-v6.mp4">Download the demo MP4</a>.
           </video>
-          <figcaption><span id="film-mode" class="film-mode">MAYA &amp; NOOR / FICTIONAL EXAMPLE</span><span>1:28 · 720p · Narrated</span></figcaption>
+          <figcaption><span id="film-mode" class="film-mode">MAYA &amp; NOOR / FICTIONAL EXAMPLE</span><span>1:28 · 720p · Narrated · records the earlier interface</span></figcaption>
           <p id="player-message" class="player-message" role="status" aria-live="polite"></p>
-          <div class="downloads"><a href="assets/canary-demo-v6.mp4">Download MP4 ↗</a><span aria-hidden="true">/</span><a href="assets/canary-demo.vtt" download>English captions</a><span aria-hidden="true">/</span><a href="https://github.com/unspecifiedcoder/z-canary/blob/main/docs/evidence/VERIFICATION.md">Verification evidence ↗</a></div>
+          <div class="downloads"><a href="assets/canary-demo-v6.mp4">Download MP4 ↗</a><a href="assets/canary-demo.vtt" download>English captions</a><a href="https://github.com/unspecifiedcoder/z-canary/blob/main/docs/evidence/VERIFICATION.md">Verification evidence ↗</a></div>
         </figure>
-        <aside class="chapter-panel" aria-labelledby="chapters-title"><h2 id="chapters-title">JUMP TO A SCENARIO</h2><div id="chapters" class="chapters"></div><noscript><p class="noscript">Chapter shortcuts require JavaScript. The video’s own controls and MP4 download still work.</p></noscript></aside>
+        <aside class="chapter-panel" aria-labelledby="chapters-title"><h2 id="chapters-title" class="label">Jump to a scenario</h2><div id="chapters" class="chapters"></div><noscript><p class="noscript">Chapter shortcuts require JavaScript. The video’s own controls and MP4 download still work.</p></noscript></aside>
+      </div>
+      <p class="scope-note"><strong>88 seconds, one complete story:</strong> Maya protects a file for Noor, proves early recovery is blocked, checks in, then demonstrates controlled recovery and the matching Zcash testnet evidence.</p>
+    </section>
 
-      </div><p class="film-disclosure"><strong>88 seconds, one complete story:</strong> Maya protects a file for Noor, proves early recovery is blocked, checks in, then demonstrates controlled recovery and the matching Zcash testnet evidence.</p>
-    </div></section>
-    <section id="proof" class="paper proof"><div class="shell"><div class="section-heading"><div><p class="eyebrow">WHY ZCASH BELONGS HERE</p><h2>Private check-ins.<br><em>Verifiable recovery.</em></h2></div><p>Canary’s native testnet path carries signed check-ins in Zcash shielded transactions, keeping their contents off the public chain. The evidence file stays off-chain. Inspect the recorded registration, check-in, cancellation and exact-file recovery below.</p></div><div class="proof-numbers"><div><strong>4</strong><span>Confirmed commands</span></div><div><strong>136<small>B</small></strong><span>Recovered, byte for byte</span></div><div><strong>3<small>/5</small></strong><span>Recovery threshold</span></div><a class="proof-link" href="app/#judge">Open Judge Proof ↗</a></div></div></section>
-    <section class="closing"><div class="shell"><p class="eyebrow">PRIVATE NOW. A WAY FORWARD IF YOU GO SILENT.</p><h2>Lock the evidence.<br>Choose the person.<br><em>Test every outcome.</em></h2><a class="button gold" href="app/#break-vault">Try the 60-second challenge ↗</a><p>Challenge Maya’s vault first, then try a harmless file of your own.</p></div></section>
-  </main><footer class="shell footer"><div class="footer-main"><a class="wordmark" href="./">canary<span class="brand-dot">.</span></a><span>Built in the open. Zcash testnet prototype.</span><a href="https://github.com/unspecifiedcoder/z-canary">Inspect the source ↗</a></div><details class="footer-boundaries"><summary>Prototype boundaries &amp; trust model <span aria-hidden="true">Read technical scope +</span></summary><div><p><strong>Hosted browser lab.</strong> Encryption, signatures, threshold reconstruction, recipient-key decryption and digest checks are real. Its blocks, keeper records and confirmations are a resettable simulation.</p><p><strong>External wallet handoff.</strong> The hosted app can prepare a ZIP-321 testnet REGISTER request and open a supplied txid in the explorer; it does not independently query lightwalletd or label that tx confirmed.</p><p><strong>Native proof.</strong> Real testnet transactions and five durable keeper processes were exercised. Those processes currently share one operator and scanner endpoint, not five independent organizations.</p><p><strong>Security status.</strong> Testnet prototype, not audited. Three colluding keepers could release early to the designated recipient; delivered shares cannot be recalled. Canary does not determine whether someone is safe or guarantee anonymity.</p></div></details></footer>
-</body></html>
+    <section id="proof" class="card bento-zcash" aria-labelledby="zcash-title">
+      <div class="zcash-copy">
+        <span class="kicker">Why Zcash belongs here</span>
+        <h2 id="zcash-title" class="display-2">Private check-ins. <mark>Verifiable recovery.</mark></h2>
+        <p class="lede">Canary’s native testnet path carries signed check-ins in Zcash shielded transactions, keeping their contents off the public chain. The evidence file stays off-chain.</p>
+        <div class="zcash-stats"><div><strong>4</strong><span>confirmed commands</span></div><div><strong>136<small>B</small></strong><span>recovered, byte for byte</span></div><div><strong>3<small>/5</small></strong><span>recovery threshold</span></div></div>
+        <div class="hero-actions"><a class="btn btn-dark" href="app/#judge">Open Judge Proof<span class="btn-orb" aria-hidden="true">↗</span></a><a class="btn btn-light" href="https://github.com/unspecifiedcoder/z-canary">Inspect the source</a></div>
+      </div>
+      <img class="zcash-art" src="assets/press/keepers.webp" alt="" width="1024" height="732" loading="lazy">
+    </section>
+
+    <section class="card closing" aria-labelledby="closing-title">
+      <img src="assets/press/vault.webp" alt="" width="512" height="512" loading="lazy">
+      <span class="kicker">Private now. A way forward if you go silent.</span>
+      <h2 id="closing-title" class="display-2">Lock the evidence. Choose the person. <mark>Test every outcome.</mark></h2>
+      <p class="mono-copy">Challenge Maya’s vault first, then try a harmless file of your own.</p>
+      <a class="btn btn-yellow" href="app/#break-vault">Try the 60-second challenge →</a>
+    </section>
+  </main>
+
+  <footer class="footer card-dark">
+    <div class="footer-top">
+      <div><div class="footer-word">Canary<span>.</span></div><p>An encrypted safety handoff for reporters and sources. Built in the open. Zcash testnet prototype.</p></div>
+      <div class="footer-col"><h3>Try it</h3><a href="app/#break-vault">Break the vault</a><a href="app/#maya-noor">Maya &amp; Noor example</a><a href="app/#create">Protect your own file</a></div>
+      <div class="footer-col"><h3>Proof</h3><a href="app/#judge">Judge Proof</a><a href="app/#evidence">Keepers &amp; receipts</a><a href="app/#native">Native testnet</a></div>
+      <div class="footer-col"><h3>Source</h3><a href="https://github.com/unspecifiedcoder/z-canary">GitHub</a><a href="https://github.com/unspecifiedcoder/z-canary/blob/main/docs/THREAT-MODEL.md">Threat model</a><a href="https://github.com/unspecifiedcoder/z-canary/blob/main/docs/ARCHITECTURE.md">Architecture</a></div>
+    </div>
+    <details class="footer-bottom"><summary>Prototype boundaries &amp; trust model <span aria-hidden="true">Read the scope +</span></summary><div class="boundaries"><p><strong>Hosted browser lab.</strong> Encryption, signatures, threshold reconstruction, recipient-key decryption and digest checks are real. Its blocks, keeper records and confirmations are a resettable simulation.</p><p><strong>External wallet handoff.</strong> The hosted app can prepare a ZIP-321 testnet REGISTER request and open a supplied txid in the explorer; it does not independently query lightwalletd or label that tx confirmed.</p><p><strong>Native proof.</strong> Real testnet transactions and five durable keeper processes were exercised. Those processes currently share one operator and scanner endpoint, not five independent organizations.</p><p><strong>Security status.</strong> Testnet prototype, not audited. Three colluding keepers could release early to the designated recipient; delivered shares cannot be recalled. Canary does not determine whether someone is safe or guarantee anonymity.</p></div></details>
+    <div class="footer-legal"><span>Zcash testnet · 3-of-5 threshold · Signed shielded memos</span><span>Private by design. Deliberate by protocol.</span></div>
+  </footer>
+</body>
+</html>
